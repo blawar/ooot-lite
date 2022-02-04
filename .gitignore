@@ -30,6 +30,7 @@ docs/doxygen/
 *.map
 *.dump
 *.out
+*.a
 out.txt
 
 # Tool artifacts
@@ -63,3 +64,5 @@ assets/
 
 # Per-user configuration
 .python-version
+src/code/*_assets.h
+tools/
