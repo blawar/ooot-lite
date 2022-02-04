@@ -3174,7 +3174,6 @@ void KaleidoScope_Update(GlobalContext* globalCtx) {
             } else {
                 pauseCtx->iconItemLangSegment = _icon_item_fra_staticSegmentRomStart;
             }
-            
 
             D_8082AB8C = 255;
             D_8082AB90 = 130;
