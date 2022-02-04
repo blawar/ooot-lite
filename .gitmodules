@@ -1,0 +1,5 @@
+[submodule "subprojects/gliden64"]
+	path = subprojects/gliden64
+	url = https://github.com/mrneo240/gliden64.git
+[submodule "gliden64/"]
+	branch = rough-linux-start
