@@ -297,13 +297,11 @@ void EffectSs_UpdateAll(GlobalContext* globalCtx) {
 
 void EffectSs_Draw(GlobalContext* globalCtx, s32 index) {
     EffectSs* effectSs = &sEffectSsInfo.table[index];
-#if 0
-    /*@Note: Unsure what this is saving us from. */
+    /*@Note: Part of JPEG background fix */
     if(effectSs == 0xCCCCCCCC || effectSs->draw == 0x11110110)
     {
         return;
     }
-#endif
     if (effectSs->draw != NULL) {
         effectSs->draw(globalCtx, index, effectSs);
     }
