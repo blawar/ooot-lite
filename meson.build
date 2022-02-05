@@ -17,6 +17,7 @@ endif
 # libmath for linux
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
+zlib_dep = dependency('zlib', fallback : ['zlib', 'zlib_dep'], native: false)
 sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], native: false)
 libpng_dep = dependency('libpng', required : true, native: false)
 gliden64_dep = dependency('gliden64', fallback : ['gliden64', 'gliden64_dep'], native: false)
@@ -29,7 +30,7 @@ warning_base = [ '-Wno-int-conversion', '-Wno-incompatible-pointer-types' ]
 
 arg_c = [ arg_base, arg_extra, warning_base ]
 arg_cpp = [ arg_base, arg_extra ]
-arg_linker = [ '-m32' ]
+arg_linker = [ '-m32', '-Wl,-Map=oot.map' ]
 
 # oot
 src_libultra = [ 'src/libultra/gu/cosf.c', 'src/libultra/gu/coss.c', 'src/libultra/gu/lookat.c', 'src/libultra/gu/lookathil.c', 'src/libultra/gu/mtxf2l.c', 'src/libultra/gu/normalize.c', 'src/libultra/gu/ortho.c', 'src/libultra/gu/perspective.c', 'src/libultra/gu/position.c', 'src/libultra/gu/rotate.c', 'src/libultra/gu/scale.c', 'src/libultra/gu/sinf.c', 'src/libultra/gu/sins.c', 'src/libultra/gu/sintable.c', 'src/libultra/gu/translate.c', 'src/libultra/gu/us2dex.c', 'src/libultra/rmon/sprintf.c', 'src/libultra/rmon/xldtob.c', 'src/libultra/rmon/xlitob.c', 'src/libultra/rmon/xprintf.c' ]
