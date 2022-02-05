@@ -60,7 +60,7 @@ inc = [ inc_base]
 
 exe = executable('ooot', sources: [src, assets, src_port] , include_directories : inc,
   c_args : arg_c, cpp_args: arg_cpp, link_args : arg_linker,
-  dependencies : [m_dep, sdl2_dep, libpng_dep, gliden64_dep],
+  dependencies : [m_dep, sdl2_dep, libpng_dep, zlib_dep, gliden64_dep],
   install : true)
 
 test('basic', exe)
