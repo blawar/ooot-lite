@@ -66,3 +66,8 @@ assets/
 .python-version
 src/code/*_assets.h
 tools/
+
+# Meson
+subprojects/SDL2-*
+subprojects/freetype-*
+subprojects/packagecache

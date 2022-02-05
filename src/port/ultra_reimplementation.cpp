@@ -85,7 +85,7 @@ void osViSwapBuffer(UNUSED void* vaddr)
 {
 }
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #include <windows.h>
 
 OSTime osGetTime(void) {
@@ -96,6 +96,9 @@ OSTime osGetTime(void)
 {
 	return 0;
 }
+#endif
+#if defined(_WIN32)
+#include <debugapi.h>
 #endif
 
 void osWritebackDCacheAll(void)
@@ -410,7 +413,7 @@ void osSyncPrintf(const char* fmt, ...) {
 
 	auto s = utf8_to_utf16(buffer);
 	//OutputDebugStringA(buffer);
-	OutputDebugString(s.c_str());
+	OutputDebugStringW(s.c_str());
 #endif
 }
 

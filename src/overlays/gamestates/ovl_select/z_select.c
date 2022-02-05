@@ -658,7 +658,7 @@ void Select_PrintCutsceneSetting(SelectContext* this, GfxPrint* printer, u16 csI
 
 void Select_DrawMenu(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
-    GfxPrint* printer;
+    GfxPrint printer[1];
 
     OPEN_DISPS(gfxCtx, "../z_select.c", 930);
 
@@ -668,7 +668,6 @@ void Select_DrawMenu(SelectContext* this) {
     func_800AAA50(&this->view, 0xF);
     func_80094140(gfxCtx);
 
-    printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, POLY_OPA_DISP);
     Select_PrintMenu(this, printer);
@@ -682,7 +681,7 @@ void Select_DrawMenu(SelectContext* this) {
 
 void Select_DrawLoadingScreen(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
-    GfxPrint* printer;
+    GfxPrint printer[1];
 
     OPEN_DISPS(gfxCtx, "../z_select.c", 977);
 
@@ -692,7 +691,6 @@ void Select_DrawLoadingScreen(SelectContext* this) {
     func_800AAA50(&this->view, 0xF);
     func_80094140(gfxCtx);
 
-    printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, POLY_OPA_DISP);
     Select_PrintLoadingMessage(this, printer);

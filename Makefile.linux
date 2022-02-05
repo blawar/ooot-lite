@@ -7,6 +7,8 @@ MAKEFLAGS += --no-builtin-rules
 # Building GLideN64
 # cd in terminal GLideN64/projects/cmake
 # execute: cmake -DCMAKE_TOOLCHAIN_FILE=linux_i686.toolchain.cmake  -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DSDL=1 -DNOHQ=1 ../../src/
+# OR
+# execute: cmake -DCMAKE_TOOLCHAIN_FILE=linux_i686.toolchain.cmake  -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DSDL=1 -DNOHQ=1 ../../src/
 # execute: make
 # copy GLideNHQ/GLideNHQd.a and plugin/Debug/GLideN64.so to the external/linux/ folder in the ooot folder
 # then for ooot execute: make -f Makefile.linux
@@ -32,11 +34,11 @@ else
 endif
 
 #### Tools ####
-CC			 := gcc
+CC			 		:= gcc
+CPP      		:= cpp
+STRIP				:= strip
 
-INC        := -Iinclude -Isrc -Iassets -Ibuild -I.
-
-CPP        := cpp
+INC        	:= -Iinclude -Isrc -Iassets -Ibuild -I.
 
 OPTFLAGS := -ggdb -fno-omit-frame-pointer -O1 -DFIX_ORIGINAL_UB -DSAFE_MEMORY_ACCESS
 OPT_LDFLAGS := -lc -lstdc++ -lgcc
@@ -114,11 +116,12 @@ $(shell mkdir -p build/ build/assets/text $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_
 all: $(ELF)
 
 $(ELF): build/$(ELF)
+	$(STRIP) -o build/$(ELF:.elf=) build/$(ELF)
 
 build/$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES)
 #	Debug: external/linux/GLideN64.so -lGLideNHQd
 #	Release: external/linux/GLideN64.so -lGLideNHQ
-	@$(CC) $(O_FILES) -Wl,-Ttools/linux_elf_32.xc -m32  -Wl,-Map=build/oot.map  -o $@ -Lexternal/linux external/linux/GLideN64.so -lGLideNHQ -Wl,-rpath=/usr/local/lib -g -lpng -lz -lm -lSDL2 `sdl-config --cflags --libs` $(OPT_LDFLAGS)
+	@$(CC) $(O_FILES) -Wl,-Ttools/linux_elf_32.xc -m32  -Wl,-Map=build/oot.map  -o $@ subprojects/gliden64/projects/cmake/plugin/Release/GLideN64.so subprojects/gliden64/projects/cmake/GLideNHQ/libGLideNHQ.a  -Wl,-rpath=/usr/local/lib -g -lpng -lz -lm -lSDL2 $(OPT_LDFLAGS)
 	@echo $(CC) -o $@
 
 clean:

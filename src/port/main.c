@@ -50,6 +50,7 @@ struct DebugDispObject* xxxDebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, 
     return NULL;
 }
 
+struct GlobalContext;
 void xxxDebugDisplay_DrawObjects(struct GlobalContext* globalCtx)
 {
 }
@@ -178,7 +179,7 @@ int main() {
     main_func();
 }
 
-#if defined(OS_DESKTOP) && !defined(__GNUC___)
+#if defined(OS_WINDOWS) && (defined(_MSC_VER) || defined(__MINGW32__))
 #include <string.h>
 
 void bzero(void* __s, size_t __n)

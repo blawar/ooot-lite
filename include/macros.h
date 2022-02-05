@@ -152,7 +152,10 @@ MES(n30), MES(n31), MES(n32), MES(n33)}
 #define M_SQRT2 1.41421356237309504880f
 #endif
 
+#ifndef FLT_MAX
 #define FLT_MAX 340282346638528859811704183484516925440.0f
+#endif
+
 #define SHT_MAX 32767.0f
 #define SHT_MINV (1.0f / SHT_MAX)
 #define DEGTORAD(x) (x * M_PI / 180.0f)

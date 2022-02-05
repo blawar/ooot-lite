@@ -11,7 +11,11 @@
 #include <algorithm>
 
 #if !defined(DISABLE_SDL_CONTROLLER)
+#ifdef __MINGW32__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 #endif
 #include "../player/players.h"
 #include "../options.h"

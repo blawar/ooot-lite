@@ -7,7 +7,11 @@
 #include <ctype.h>
 
 #include "configfile.h"
+#ifdef __MINGW32__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 #define ARRAY_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 

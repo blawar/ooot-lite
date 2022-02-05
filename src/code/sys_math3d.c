@@ -2152,6 +2152,7 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z) {
     return false;
 }
 
+struct GlobalContext;
 void Math3D_DrawSphere(struct GlobalContext* globalCtx, Sphere16* sph) {
 }
 

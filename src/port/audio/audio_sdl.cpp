@@ -1,9 +1,9 @@
 #if defined(ENABLE_SDL_AUDIO)
 
 #ifdef __MINGW32__
-#include "SDL.h"
+#include <SDL.h>
 #else
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
 #endif
 
 #ifdef _MSC_VER

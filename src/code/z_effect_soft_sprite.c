@@ -37,8 +37,6 @@ void EffectSs_InitInfo(GlobalContext* globalCtx, s32 tableSize) {
         EffectSs_Reset(effectSs);
     }
 
-    auto x = &sEffectSsInfo.table[1];
-
     overlay = &gEffectSsOverlayTable[0];
     for (i = 0; i < ARRAY_COUNT(gEffectSsOverlayTable); i++) {
         overlay->loadedRamAddr = NULL;
@@ -299,11 +297,13 @@ void EffectSs_UpdateAll(GlobalContext* globalCtx) {
 
 void EffectSs_Draw(GlobalContext* globalCtx, s32 index) {
     EffectSs* effectSs = &sEffectSsInfo.table[index];
-    EffectSs* effectSs2 = &sEffectSsInfo.table[2];
+#if 0
+    /*@Note: Unsure what this is saving us from. */
     if(effectSs == 0xCCCCCCCC || effectSs->draw == 0x11110110)
     {
         return;
     }
+#endif
     if (effectSs->draw != NULL) {
         effectSs->draw(globalCtx, index, effectSs);
     }

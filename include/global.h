@@ -16,12 +16,11 @@ void osSyncPrintf(const char* fmt, ...);
 #define osRecvMesg(a, b, c) 0
 #define osSendMesg(a, b, c) 0
 
-#if defined(_MSC_VER)
-#define bcopy(b1, b2, len) (memmove((b2), (b1), (len)), (void)0)
-#define bzero(b, len) (memset((b), '\0', (len)), (void)0)
+#if defined(OS_WINDOWS) && (defined(_MSC_VER) || defined(__MINGW32__))
+void bzero(void* __s, size_t __n);
+void bcopy(void* __s, void* __d, size_t __n);
 #else
-//void bzero(void* __s, size_t __n);
-//void bcopy(void* __s, void* __d, size_t __n);
+#include <strings.h>
 #endif
 
 u64 osGetTime();

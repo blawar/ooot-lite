@@ -4,7 +4,7 @@
 #include "z64global.h"
 #include "z64save.h"
 #include "sfx.h"
-#include "gfx_align.h""
+#include "gfx_align.h"
 #include "textures/parameter_static/parameter_static.h"
 #include "def/graph.h"
 #include "def/sys_matrix.h"

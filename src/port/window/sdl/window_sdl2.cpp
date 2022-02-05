@@ -1,11 +1,14 @@
-#ifdef _WIN32
-#include <GL/glew.h>
-#include "SDL2/SDL.h"
-#define GL_GLEXT_PROTOTYPES 1
-#include "SDL2/SDL_opengl.h"
+
+#ifdef __MINGW32__
+#include <SDL.h>
 #else
 #include <SDL2/SDL.h>
+#endif
 #define GL_GLEXT_PROTOTYPES 1
+#ifdef _WIN32
+#include <GL/glew.h>
+/* #include <SDL2/SDL_opengl.h> */
+#else
 #include <SDL2/SDL_opengles2.h>
 #endif
 #include "port/window.h"
@@ -14,12 +17,11 @@
 #include <chrono>
 #include <memory>
 
-extern void WindowsWGL_GrabWindow(SDL_Window *wnd);
-
 extern "C"
 {
 	void quit();
 }
+void WindowsWGL_GrabWindow(void *wnd);
 
 namespace platform::window
 {
@@ -249,6 +251,7 @@ namespace platform::window
 			set_vsync();
 			WindowsWGL_GrabWindow(wnd);
 			gfx_resize(window_width, window_height);
+			SDL_RaiseWindow(wnd);
 		}
 
 		void set_fullscreen(bool on, bool call_callback)

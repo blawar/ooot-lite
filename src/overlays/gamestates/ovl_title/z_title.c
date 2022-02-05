@@ -31,11 +31,10 @@ extern u8 gBuildDate[];
 
 void Title_PrintBuildInfo(Gfx** gfxp) {
     Gfx* g;
-    GfxPrint* printer;
+    GfxPrint printer[1];
 
     g = *gfxp;
     g = func_8009411C(g);
-    printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, g);
     GfxPrint_SetColor(printer, 255, 155, 255, 255);

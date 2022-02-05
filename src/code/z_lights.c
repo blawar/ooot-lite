@@ -360,6 +360,7 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
                 if (1) {}
                 if (1) {}
 
+                extern s32 func_8006F0A0(s32 a0);
                 if (wZ < (func_8006F0A0(zBuf) >> 3)) {
                     params->drawGlow = true;
                 }
