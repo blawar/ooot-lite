@@ -16,6 +16,8 @@
 
           sudo pacman -S ???
 
+## Setting up extracted assets
+
 1. Install python3, pip3 for asset extraction, also install python dependencies
 
         pip3 install -r requirements.txt
