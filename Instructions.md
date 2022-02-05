@@ -1,12 +1,17 @@
 # Instruction Steps:
+### How to properly clone this repo
+
+        git clone --depth 1 --recursive https://github.com/mrneo240/ooot-lite.git
 ### Install 32bit prequisites for gcc (libpng, SDL, freetype, mesa-gl)
 ### **NOTE**: This section is evolving with community feedback
   Fedora:
 
-        sudo dnf install gcc-c++ libpng-devel.i686 freetype-devel.i686 SDL2-devel.i686 libx11-devel.i686 mesa-libGL-devel.i686 pkgconf-pkg-config.i686
+        sudo dnf install gcc-c++ libpng-devel.i686 freetype-devel.i686 SDL2-devel.i686 \
+          libx11-devel.i686 mesa-libGL-devel.i686 pkgconf-pkg-config.i686
   Debian:
 
-        sudo apt-get install gcc-multilib libpng-dev:i386 libfreetype6-dev:i386 libsdl-dev:i386 libgl1-mesa-dev:i386
+        sudo apt-get install gcc-multilib libpng-dev:i386 libfreetype6-dev:i386 libsdl-dev:i386 \
+          libgl1-mesa-dev:i386
   Arch:
 
           sudo pacman -S ???
