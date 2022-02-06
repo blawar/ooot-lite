@@ -27,8 +27,9 @@ typedef enum {
 
 typedef struct {
     u16 textId;
-    u8 typePos;
+    u16 textLen;
     const char* segment;
+    u8 typePos;
 } MessageTableEntry;
 
 /* 

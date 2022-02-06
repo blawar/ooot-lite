@@ -83,7 +83,8 @@ typedef struct {
     /* 0x14 */ s32 totalDays;
     /* 0x18 */ s32 unk_18;    // increments with totalDays, gets reset by goron for bgs and one other use
     /* 0x1C */ SaveInfo info; // "information"
-} Save;                       // size = 0x1354
+ /* 0x1354 *///u8 padding[0x28];
+} Save;                       // size = 0x1354+0x28
 
 #define SAVE_PLAYER_DATA (*((SavePlayerData*)&gSaveContext.newf))
 #define SAVE_INFO (*((SaveInfo*)&gSaveContext.newf))

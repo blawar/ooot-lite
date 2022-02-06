@@ -67,15 +67,34 @@ s16 sMessageHasSetSfx = false;
 
 u16 sOcarinaSongBitFlags = 0; // ocarina bit flags
 
+#undef MESSAGE_DATA_FMT_H
+#define MESSAGE_DATA_STATIC
+#include "message_data_fmt.h"
 MessageTableEntry sNesMessageEntryTable[] = {
 #define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) \
-    { textId, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)), _message_##textId##_nes },
+    { textId, sizeof(nesMessage), _message_##textId##_nes, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
 #define DEFINE_MESSAGE_FFFC
 #include "text/message_data.h"
 #undef DEFINE_MESSAGE_FFFC
 #undef DEFINE_MESSAGE
     { 0xFFFF, 0, NULL },
 };
+/* Cleanup */
+#undef HS_HORSE_ARCHERY
+#undef HS_POE_POINTS
+#undef HS_LARGEST_FISH
+#undef HS_HORSE_RACE
+#undef HS_MARATHON
+#undef HS_DAMPE_RACE
+#undef COLOR
+#undef DEFAULT
+#undef RED
+#undef ADJUSTABLE
+#undef BLUE
+#undef LIGHTBLUE
+#undef PURPLE
+#undef YELLOW
+#undef BLACK
 
 const char* sGerMessageEntryTable[] = {
 #define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) _message_##textId##_ger,
@@ -93,7 +112,7 @@ const char* sFraMessageEntryTable[] = {
 
 MessageTableEntry sStaffMessageEntryTable[] = {
 #define DEFINE_MESSAGE(textId, type, yPos, staffMessage) \
-    { textId, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)), _message_##textId##_staff },
+    { textId, sizeof(staffMessage), _message_##textId##_staff, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
 #include "text/message_data_staff.h"
 #undef DEFINE_MESSAGE
     { 0xFFFF, 0, NULL },
@@ -324,24 +343,6 @@ void Message_GrowTextbox(MessageContext* msgCtx) {
     R_TEXTBOX_X = (R_TEXTBOX_X_TARGET + R_TEXTBOX_WIDTH_TARGET) - (R_TEXTBOX_WIDTH / 2);
 }
 
-#if defined(OS_DESKTOP)
-static s32 Message_FindLength(const char *msg) {
-    s32 length = 0;
-    const char *prevChar;
-    while (true) {
-        if( *msg == '\02'){
-            /* Ensure we dont stop on a HIGHSCORE(HS_LARGEST_FISH) */
-            if(*(msg - 1) !=  0x1E) {
-                length++;
-                 break;
-            }
-        }
-        msg++;
-        length++;
-    }
-    return length;
-}
-#endif
 
 void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
     const char* foundSeg;
@@ -360,10 +361,10 @@ void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
             if (messageTableEntry->textId == textId) {
                 foundSeg = messageTableEntry->segment;
                 font->charTexBuf[0] = messageTableEntry->typePos;
+                font->msgLength = messageTableEntry->textLen;
                 messageTableEntry++;
                 nextSeg = messageTableEntry->segment;
                 font->msgOffset = MSG_GET_OFFSET(foundSeg, seg);
-                font->msgLength = Message_FindLength(foundSeg);
                 // "Message found!!!"
                 osSyncPrintf(" メッセージが,見つかった！！！ = %x  "
                              "(data=%x) (data0=%x) (data1=%x) (data2=%x) (data3=%x)\n",
