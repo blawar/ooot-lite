@@ -1,6 +1,6 @@
 #if defined(ENABLE_SDL_AUDIO)
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(USE_SDL2_INCLUDE_PATH_SHORT)
 #include <SDL.h>
 #else
 #include <SDL2/SDL.h>

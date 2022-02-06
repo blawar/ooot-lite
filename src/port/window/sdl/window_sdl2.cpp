@@ -1,15 +1,15 @@
-
-#ifdef __MINGW32__
-#include <SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
 #define GL_GLEXT_PROTOTYPES 1
-#ifdef _WIN32
-#include <GL/glew.h>
-/* #include <SDL2/SDL_opengl.h> */
+
+#if defined(__MINGW32__) || defined(USE_SDL2_INCLUDE_PATH_SHORT)
+	#include <SDL.h>
+	#include <SDL_opengl.h>
+	#ifdef _WIN32
+		#include <GL/glew.h>
+		/* #include <SDL2/SDL_opengl.h> */
+	#endif
 #else
-#include <SDL2/SDL_opengles2.h>
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_opengles2.h>
 #endif
 #include "port/window.h"
 #include "ultra64/types.h"

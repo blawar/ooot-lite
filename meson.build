@@ -14,10 +14,33 @@ if build_os == 'linux'
   pkg_config_libdir = '/usr/lib/pkgconfig'
 endif
 
-# libmath for linux
+# Dependencies
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
 sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], native: false, default_options: ['default_library=static'])
+
+# Compiler detection
+args_sdl = []
+sdl_include_path_full = '''#include<SDL2/SDL.h>
+void func() { SDL_Init(0); }
+'''
+sdl_include_path_short = '''#include<SDL.h>
+void func() { SDL_Init(0); }
+'''
+result_sdl_path_long = cc.compiles( sdl_include_path_full, name : 'sdl_include_long', dependencies : [ sdl2_dep ] )
+if result_sdl_path_long
+  message('Using SDL2 include path <SDL2/SDL.h>')
+else
+  result_sdl_path_short = cc.compiles( sdl_include_path_short, name : 'sdl_include_short', dependencies : [ sdl2_dep ] )
+  if result_sdl_path_short
+    args_sdl += [ '-DUSE_SDL2_INCLUDE_PATH_SHORT' ]
+    message('Using SDL2 include path  <SDL.h>')
+  else
+    error('Could not find SDL2 include path')
+  endif
+endif
+
+# GLideN64
 gliden64_dep = dependency('gliden64', fallback : ['gliden64', 'gliden64_dep'], native: false)
 
 arg_base = [ '-D_LANGUAGE_C', '-DEARLY=', '-DNON_MATCHING', '-DENABLE_OPENGL', '-DOS_WINDOWS', '-DOS_LINUX', '-DOS_DESKTOP', '-DUSE_NATIVE_MALLOC' ]
@@ -26,8 +49,8 @@ arg_extra = [ '-DENABLE_MOUSE' ]
 # These are in a lot of generated code and not worth being told about
 warning_base = [ '-Wno-int-conversion', '-Wno-incompatible-pointer-types' ]
 
-arg_c = [ arg_base, arg_extra, warning_base ]
-arg_cpp = [ arg_base, arg_extra ]
+arg_c = [ arg_base, arg_extra, args_sdl, warning_base ]
+arg_cpp = [ arg_base, arg_extra, args_sdl ]
 arg_linker = [ '-m32', '-Wl,-Map=oot.map' ]
 
 # oot
