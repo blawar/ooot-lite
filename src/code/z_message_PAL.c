@@ -67,9 +67,11 @@ s16 sMessageHasSetSfx = false;
 
 u16 sOcarinaSongBitFlags = 0; // ocarina bit flags
 
+/* Setup for MessageTableEntry arrays */
 #undef MESSAGE_DATA_FMT_H
 #define MESSAGE_DATA_STATIC
 #include "message_data_fmt.h"
+
 MessageTableEntry sNesMessageEntryTable[] = {
 #define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) \
     { textId, sizeof(nesMessage), _message_##textId##_nes, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
@@ -79,6 +81,32 @@ MessageTableEntry sNesMessageEntryTable[] = {
 #undef DEFINE_MESSAGE
     { 0xFFFF, 0, NULL },
 };
+
+MessageTableEntry sGerMessageEntryTable[] = {
+#define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) \
+    { textId, sizeof(gerMessage), _message_##textId##_ger, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
+#include "text/message_data.h"
+#undef DEFINE_MESSAGE
+    { 0xFFFF, 0, NULL },
+};
+
+
+MessageTableEntry sFraMessageEntryTable[] = {
+    #define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) \
+    { textId, sizeof(fraMessage), _message_##textId##_fra, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
+#include "text/message_data.h"
+#undef DEFINE_MESSAGE
+    { 0xFFFF, 0, NULL },
+};
+
+MessageTableEntry sStaffMessageEntryTable[] = {
+#define DEFINE_MESSAGE(textId, type, yPos, staffMessage) \
+    { textId, sizeof(staffMessage), _message_##textId##_staff, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
+#include "text/message_data_staff.h"
+#undef DEFINE_MESSAGE
+    { 0xFFFF, 0, NULL },
+};
+
 /* Cleanup */
 #undef HS_HORSE_ARCHERY
 #undef HS_POE_POINTS
@@ -96,31 +124,9 @@ MessageTableEntry sNesMessageEntryTable[] = {
 #undef YELLOW
 #undef BLACK
 
-const char* sGerMessageEntryTable[] = {
-#define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) _message_##textId##_ger,
-#include "text/message_data.h"
-#undef DEFINE_MESSAGE
-    NULL,
-};
-
-const char* sFraMessageEntryTable[] = {
-#define DEFINE_MESSAGE(textId, type, yPos, nesMessage, gerMessage, fraMessage) _message_##textId##_fra,
-#include "text/message_data.h"
-#undef DEFINE_MESSAGE
-    NULL,
-};
-
-MessageTableEntry sStaffMessageEntryTable[] = {
-#define DEFINE_MESSAGE(textId, type, yPos, staffMessage) \
-    { textId, sizeof(staffMessage), _message_##textId##_staff, (_SHIFTL(type, 4, 8) | _SHIFTL(yPos, 0, 8)) },
-#include "text/message_data_staff.h"
-#undef DEFINE_MESSAGE
-    { 0xFFFF, 0, NULL },
-};
-
 MessageTableEntry* sNesMessageEntryTablePtr = sNesMessageEntryTable;
-const char** sGerMessageEntryTablePtr = sGerMessageEntryTable;
-const char** sFraMessageEntryTablePtr = sFraMessageEntryTable;
+MessageTableEntry* sGerMessageEntryTablePtr = sGerMessageEntryTable;
+MessageTableEntry* sFraMessageEntryTablePtr = sFraMessageEntryTable;
 MessageTableEntry* sStaffMessageEntryTablePtr = sStaffMessageEntryTable;
 
 s16 sTextboxBackgroundForePrimColors[][3] = {
@@ -347,77 +353,67 @@ void Message_GrowTextbox(MessageContext* msgCtx) {
 void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
     const char* foundSeg;
     const char* nextSeg;
-    MessageTableEntry* messageTableEntry = sNesMessageEntryTablePtr;
+    MessageTableEntry* messageTableEntry;
     const char** languageSegmentTable;
     Font* font;
     const char* seg;
 
-    if (gSaveContext.language == LANGUAGE_ENG) {
-        seg = messageTableEntry->segment;
-
-        while (messageTableEntry->textId != 0xFFFF) {
-            font = &globalCtx->msgCtx.font;
-
-            if (messageTableEntry->textId == textId) {
-                foundSeg = messageTableEntry->segment;
-                font->charTexBuf[0] = messageTableEntry->typePos;
-                font->msgLength = messageTableEntry->textLen;
-                messageTableEntry++;
-                nextSeg = messageTableEntry->segment;
-                font->msgOffset = MSG_GET_OFFSET(foundSeg, seg);
-                // "Message found!!!"
-                osSyncPrintf(" メッセージが,見つかった！！！ = %x  "
-                             "(data=%x) (data0=%x) (data1=%x) (data2=%x) (data3=%x)\n",
-                             textId, font->msgOffset, font->msgLength, foundSeg, seg, nextSeg);
-                return;
-            }
-            messageTableEntry++;
-        }
-    } else {
-        languageSegmentTable =
-            (gSaveContext.language == LANGUAGE_GER) ? sGerMessageEntryTablePtr : sFraMessageEntryTablePtr;
-        seg = messageTableEntry->segment;
-
-        while (messageTableEntry->textId != 0xFFFF) {
-            font = &globalCtx->msgCtx.font;
-
-            if (messageTableEntry->textId == textId) {
-                foundSeg = *languageSegmentTable;
-                font->charTexBuf[0] = messageTableEntry->typePos;
-                languageSegmentTable++;
-                nextSeg = *languageSegmentTable;
-                font->msgOffset = MSG_GET_OFFSET(foundSeg, seg);
-                font->msgLength = Message_FindLength(foundSeg);
-                // "Message found!!!"
-                osSyncPrintf(" メッセージが,見つかった！！！ = %x  "
-                             "(data=%x) (data0=%x) (data1=%x) (data2=%x) (data3=%x)\n",
-                             textId, font->msgOffset, font->msgLength, foundSeg, seg, nextSeg);
-                return;
-            }
-            messageTableEntry++;
-            languageSegmentTable++;
-        }
+    switch(gSaveContext.language) {
+        case LANGUAGE_ENG:
+            messageTableEntry = sNesMessageEntryTablePtr;
+            break;
+        case LANGUAGE_GER:
+            messageTableEntry = sGerMessageEntryTablePtr;
+            break;
+        case LANGUAGE_FRA:
+            messageTableEntry = sFraMessageEntryTablePtr;
+            break;
     }
+
+    seg = messageTableEntry->segment;
+
+    while (messageTableEntry->textId != 0xFFFF) {
+        font = &globalCtx->msgCtx.font;
+
+        if (messageTableEntry->textId == textId) {
+            foundSeg = messageTableEntry->segment;
+            font->charTexBuf[0] = messageTableEntry->typePos;
+            font->msgLength = messageTableEntry->textLen;
+            messageTableEntry++;
+            nextSeg = messageTableEntry->segment;
+            font->msgOffset = MSG_GET_OFFSET(foundSeg, seg);
+            // "Message found!!!"
+            osSyncPrintf(" メッセージが,見つかった！！！ = %x  "
+                            "(data=%x) (data0=%x) (data1=%x) (data2=%x) (data3=%x)\n",
+                            textId, font->msgOffset, font->msgLength, foundSeg, seg, nextSeg);
+            return;
+        }
+        messageTableEntry++;
+    }
+
     // "Message not found!!!"
     osSyncPrintf(" メッセージが,見つからなかった！！！ = %x\n", textId);
     font = &globalCtx->msgCtx.font;
-    messageTableEntry = sNesMessageEntryTablePtr;
 
-    if (gSaveContext.language == LANGUAGE_ENG) {
-        foundSeg = messageTableEntry->segment;
-        font->charTexBuf[0] = messageTableEntry->typePos;
-        messageTableEntry++;
-        nextSeg = messageTableEntry->segment;
-    } else {
-        languageSegmentTable =
-            (gSaveContext.language == LANGUAGE_GER) ? sGerMessageEntryTablePtr : sFraMessageEntryTablePtr;
-        foundSeg = *languageSegmentTable;
-        font->charTexBuf[0] = messageTableEntry->typePos;
-        languageSegmentTable++;
-        nextSeg = *languageSegmentTable;
+    switch(gSaveContext.language) {
+        case LANGUAGE_ENG:
+            messageTableEntry = sNesMessageEntryTablePtr;
+            break;
+        case LANGUAGE_GER:
+            messageTableEntry = sGerMessageEntryTablePtr;
+            break;
+        case LANGUAGE_FRA:
+            messageTableEntry = sFraMessageEntryTablePtr;
+            break;
     }
+
+    foundSeg = messageTableEntry->segment;
+    font->charTexBuf[0] = messageTableEntry->typePos;
+    messageTableEntry++;
+    nextSeg = messageTableEntry->segment;
+
     font->msgOffset = MSG_GET_OFFSET(foundSeg, seg);
-    font->msgLength = Message_FindLength(foundSeg);
+    font->msgLength = messageTableEntry->textLen;
 }
 
 void Message_FindCreditsMessage(GlobalContext* globalCtx, u16 textId) {
@@ -434,10 +430,10 @@ void Message_FindCreditsMessage(GlobalContext* globalCtx, u16 textId) {
         if (messageTableEntry->textId == textId) {
             foundSeg = messageTableEntry->segment;
             font->charTexBuf[0] = messageTableEntry->typePos;
+            font->msgLength = messageTableEntry->textLen;
             messageTableEntry++;
             nextSeg = messageTableEntry->segment;
             font->msgOffset = MSG_GET_OFFSET(foundSeg, seg);
-            font->msgLength = nextSeg - foundSeg;
             // "Message found!!!"
             osSyncPrintf(" メッセージが,見つかった！！！ = %x  (data=%x) (data0=%x) (data1=%x) (data2=%x) (data3=%x)\n",
                          textId, font->msgOffset, font->msgLength, foundSeg, seg, nextSeg);
