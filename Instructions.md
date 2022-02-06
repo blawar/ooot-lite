@@ -14,7 +14,8 @@
           libgl1-mesa-dev:i386
   Arch:
 
-          sudo pacman -S ???
+        sudo pacman -S  gcc gcc-libs pkgconf python-pip cmake meson \
+          lib32-libpng lib32-freetype2 lib32-sdl2 lib32-sdl_mixer lib32-sdl2_ttf lib32-libx11 lib32-liblvnd
 
 ## Setting up extracted assets
 
@@ -37,6 +38,7 @@
 ## Meson
 1. Install Meson+Ninja on your system
 1. Build OpenOoT
+1. **NOTE**: There are multiple cross files present, start with the one closest to your system, but you may need to further modify.
 
         meson builddir --cross-file x86-linux-gnu
         cd builddir
