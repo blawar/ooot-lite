@@ -644,6 +644,17 @@ void Audio_StopSfxByPosAndId(Vec3f* pos, u16 sfxId) {
 
     while (entryIndex != 0xFF) {
         entry = &gSoundBanks[SFX_BANK(sfxId)][entryIndex];
+        /* Hack: Needed to bypass sfx bank loop */
+        if ( entryIndex == 0 ) {
+            u32 test_val = 0;
+            u8 *start = (u8*)entry, *current, *end = start + sizeof(SoundBankEntry);
+            for(current = start; current!=end; current++) {
+                test_val |= *current;
+            }
+            if(!test_val){
+                break;
+            }
+        }
         if (entry->posX == &pos->x && entry->sfxId == sfxId) {
             if (entry->state >= SFX_STATE_PLAYING_REFRESH) {
                 Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | ((entry->channelIdx & 0xFF) << 8), 0);
