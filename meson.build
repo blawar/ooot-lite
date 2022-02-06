@@ -17,9 +17,7 @@ endif
 # libmath for linux
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
-zlib_dep = dependency('zlib', fallback : ['zlib', 'zlib_dep'], native: false)
-sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], native: false)
-libpng_dep = dependency('libpng', required : true, native: false)
+sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], native: false, default_options: ['default_library=static'])
 gliden64_dep = dependency('gliden64', fallback : ['gliden64', 'gliden64_dep'], native: false)
 
 arg_base = [ '-D_LANGUAGE_C', '-DEARLY=', '-DNON_MATCHING', '-DENABLE_OPENGL', '-DOS_WINDOWS', '-DOS_LINUX', '-DOS_DESKTOP', '-DUSE_NATIVE_MALLOC' ]
@@ -60,7 +58,7 @@ inc = [ inc_base]
 
 exe = executable('ooot', sources: [src, assets, src_port] , include_directories : inc,
   c_args : arg_c, cpp_args: arg_cpp, link_args : arg_linker,
-  dependencies : [m_dep, sdl2_dep, libpng_dep, zlib_dep, gliden64_dep],
+  dependencies : [m_dep, sdl2_dep, gliden64_dep],
   install : true)
 
 test('basic', exe)

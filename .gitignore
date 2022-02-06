@@ -68,6 +68,8 @@ src/code/*_assets.h
 tools/
 
 # Meson
-subprojects/SDL2-*
-subprojects/freetype-*
-subprojects/packagecache
+*subprojects/SDL2-*
+*subprojects/freetype-*
+*subprojects/zlib-*
+*subprojects/libpng-*
+*subprojects/packagecache
