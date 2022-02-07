@@ -429,7 +429,6 @@ static char buffer[0x10000];
 
 void osSyncPrintf(const char *fmt, ...)
 {
-#if defined(_WIN32)
 	memset(buffer, 0, sizeof(buffer));
 	va_list arg;
 	int done;
@@ -437,9 +436,12 @@ void osSyncPrintf(const char *fmt, ...)
 	vsprintf(buffer, fmt, arg);
 	va_end(arg);
 
+#if defined(_WIN32)
 	auto s = utf8_to_utf16(buffer);
 	// OutputDebugStringA(buffer);
 	OutputDebugStringW(s.c_str());
+#else
+	printf("%s", buffer);
 #endif
 }
 
