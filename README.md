@@ -1,5 +1,12 @@
 # Open Ocarina - The Master Port
 
+## Installation
+Compilation primarily focuses native linux but also supports mingw.
+Please see [Instructions.md](Instructions.md) for more information.
+
+Currently this project only supports compiling for 32bit platforms.
+
+# Original Readme.md Preserved Below
 ```diff
 - WARNING! -
 
