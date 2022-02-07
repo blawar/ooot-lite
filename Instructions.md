@@ -10,12 +10,19 @@
           libx11-devel.i686 mesa-libGL-devel.i686 pkgconf-pkg-config.i686
   Debian:
 
-        sudo apt-get install gcc-multilib libpng-dev:i386 libfreetype6-dev:i386 libsdl-dev:i386 \
-          libgl1-mesa-dev:i386
+        dpkg --add-architecture i386
+        apt-get update
+        sudo apt-get install gcc-multilib g++-multilib libpng-dev:i386 libfreetype6-dev:i386 \
+          libsdl2-dev:i386 libgl1-mesa-dev:i386
   Arch:
 
         sudo pacman -S  gcc gcc-libs pkgconf python-pip cmake meson \
           lib32-libpng lib32-freetype2 lib32-sdl2 lib32-sdl_mixer lib32-sdl2_ttf lib32-libx11 lib32-liblvnd
+
+  Mingw (Fedora):
+
+        sudo dnf install mingw32-libpng-static mingw32-gcc mingw-g++ mingw-w64-tools mingw32-brotli \
+          mingw32-angleproject
 
 ## Setting up extracted assets
 
