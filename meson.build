@@ -17,30 +17,31 @@ endif
 # Dependencies
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
-sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], native: false, default_options: ['default_library=static'])
+sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], native: false, default_options : ['default_library=static', 'buildtype=debugoptimized'])
 
 # Compiler detection
 args_sdl = []
-sdl_compile_deps = []
-sdl_include_path_full = '''#include<SDL2/SDL.h>
+sdl_include_path_full = '''#include <SDL2/SDL.h>
 void func() { SDL_Init(0); }
 '''
-sdl_include_path_short = '''#include<SDL.h>
+sdl_include_path_short = '''#include <SDL.h>
 void func() { SDL_Init(0); }
 '''
-if sdl2_dep.type_name() != 'internal'
-  sdl_compile_deps += sdl2_dep
-endif
-result_sdl_path_long = cc.compiles( sdl_include_path_full, name : 'sdl_include_long', dependencies : sdl_compile_deps )
-if result_sdl_path_long
-  message('Using SDL2 include path <SDL2/SDL.h>')
+if sdl2_dep.type_name() == 'internal'
+  args_sdl += [ '-DUSE_SDL2_INCLUDE_PATH_SHORT' ]
+  message('Using SDL2 include path  <SDL.h>')
 else
-  result_sdl_path_short = cc.compiles( sdl_include_path_short, name : 'sdl_include_short', dependencies : sdl_compile_deps )
-  if result_sdl_path_short
-    args_sdl += [ '-DUSE_SDL2_INCLUDE_PATH_SHORT' ]
-    message('Using SDL2 include path  <SDL.h>')
+  result_sdl_path_long = cc.compiles( sdl_include_path_full, name : 'sdl_include_long', dependencies : sdl2_dep )
+  if result_sdl_path_long
+    message('Using SDL2 include path <SDL2/SDL.h>')
   else
-    error('Could not find SDL2 include path')
+    result_sdl_path_short = cc.compiles( sdl_include_path_short, name : 'sdl_include_short', dependencies : sdl2_dep )
+    if result_sdl_path_short
+      args_sdl += [ '-DUSE_SDL2_INCLUDE_PATH_SHORT' ]
+      message('Using SDL2 include path  <SDL.h>')
+    else
+      error('Could not find SDL2 include path')
+    endif
   endif
 endif
 
