@@ -128,8 +128,12 @@ protected:
 	void GenerateSourceHeaderFiles();
 	bool AddDeclarationChecks(uint32_t address, const std::string& varName);
 	std::string ProcessDeclarations();
+	std::string ProcessStructDeclaration();
 	void ProcessDeclarationText(Declaration* decl);
 	std::string ProcessExterns();
+	std::string ProcessStructHeader();
+	std::string ProcessHeaderLut();
+	std::string AddLUT();
 
 	std::string ProcessTextureIntersections(const std::string& prefix);
 	void HandleUnaccountedData();

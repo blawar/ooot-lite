@@ -133,6 +133,45 @@ std::string Declaration::GetNormalDeclarationStr() const
 	return output;
 }
 
+std::string Declaration::GetStructMemberDeclarationStr() const
+{
+	std::string output;
+
+	if (preText != "")
+		output += preText + "\n";
+
+	output += StringHelper::Sprintf("%s %s[%i];\n", STR(varType), STR(varName), arrayItemCnt);
+
+	return output;
+}
+
+std::string Declaration::GetLutMemberDeclarationStr() const
+{
+	std::string output;
+
+	if (preText != "")
+		output += preText + "\n";
+
+	int numItems = isArray ? arrayItemCnt : 1;
+	std::string addTakeAddr = isArray ? "" : "&";
+	output += StringHelper::Sprintf("{%s%s, (sizeof(%s)*%i)},\n",addTakeAddr.c_str(), STR(varName), STR(varType), numItems);
+
+	return output;
+}
+
+std::string Declaration::GetExternalStructInitializationStr() const
+{
+	std::string output;
+
+	if (preText != "")
+		output += preText + "\n";
+
+	output += StringHelper::Sprintf("  .%s = ", STR(varName));
+	output += StringHelper::Sprintf("{\n    #include \"%s\"\n  },\n", STR(includePath));
+
+	return output;
+}
+
 std::string Declaration::GetExternalDeclarationStr() const
 {
 	std::string output;

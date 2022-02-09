@@ -74,6 +74,10 @@ public:
 
 	std::string GetStaticForwardDeclarationStr() const;
 
+	std::string GetStructMemberDeclarationStr() const;
+	std::string GetExternalStructInitializationStr() const;
+	std::string GetLutMemberDeclarationStr() const;
+
 protected:
 	Declaration(offset_t nAddress, DeclarationAlignment nAlignment, size_t nSize,
 	            const std::string& nText);

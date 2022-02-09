@@ -757,7 +757,11 @@ void ZFile::GenerateSourceFiles()
 		res->GetSourceOutputCode(name);
 	}
 
-	sourceOutput += ProcessDeclarations();
+	if (Globals::Instance->structMode){
+		sourceOutput += ProcessStructDeclaration();
+	} else {
+		sourceOutput += ProcessDeclarations();
+	}
 
 	fs::path outPath = GetSourceOutputFolderPath() / outName.stem().concat(".c");
 
@@ -790,7 +794,18 @@ void ZFile::GenerateSourceHeaderFiles()
 		formatter.Write(sym.second->GetSourceOutputHeader(""));
 	}
 
-	formatter.Write(ProcessExterns());
+	if (Globals::Instance->structMode){
+		formatter.Write(ProcessStructHeader());
+	} else {
+		formatter.Write(ProcessExterns());
+		if (Globals::Instance->addLUT && GetName() != "code"){
+			formatter.Write(StringHelper::Sprintf("extern LutEntry %s_lut[%d];\n", GetName().c_str(), declarations.size()));
+			Declaration *decl = declarations.cbegin()->second;
+			std::string addTakeAddr = decl->isArray ? "" : "&";
+			formatter.Write(StringHelper::Sprintf("#define _%sSegmentRomStart ((u8*)%s%s)\n", GetName().c_str(), addTakeAddr.c_str(), decl->varName.c_str()));
+			formatter.Write(StringHelper::Sprintf("#define _%sSegmentRomEnd ((u8*)%s_lut)\n", GetName().c_str(), GetName().c_str()));
+		}
+	}
 
 	fs::path headerFilename = GetSourceOutputFolderPath() / outName.stem().concat(".h");
 
@@ -993,8 +1008,9 @@ std::string ZFile::ProcessDeclarations()
 		lastItem = curItem;
 	}
 
-	for (std::pair<uint32_t, Declaration*> item : declarations)
+	for (std::pair<uint32_t, Declaration*> item : declarations) {
 		ProcessDeclarationText(item.second);
+	}
 
 	for (std::pair<uint32_t, Declaration*> item : declarations)
 	{
@@ -1045,6 +1061,121 @@ std::string ZFile::ProcessDeclarations()
 		}
 	}
 
+	if (Globals::Instance->addLUT && GetName() != "code"){
+		output += AddLUT();
+	}
+
+	return output;
+}
+
+std::string ZFile::ProcessStructDeclaration()
+{
+	std::string output;
+
+	if (declarations.size() == 0)
+		return output;
+
+	defines += ProcessTextureIntersections(name);
+
+	// printf("RANGE START: 0x%06X - RANGE END: 0x%06X\n", rangeStart, rangeEnd);
+
+	// Optimization: See if there are any arrays side by side that can be merged...
+	std::vector<std::pair<int32_t, Declaration*>> declarationKeys(declarations.begin(),
+	                                                              declarations.end());
+
+	std::pair<int32_t, Declaration*> lastItem = declarationKeys.at(0);
+
+	for (size_t i = 1; i < declarationKeys.size(); i++)
+	{
+		std::pair<int32_t, Declaration*> curItem = declarationKeys[i];
+
+		if (curItem.second->isArray && lastItem.second->isArray)
+		{
+			if (curItem.second->varType == lastItem.second->varType)
+			{
+				if (!curItem.second->declaredInXml && !lastItem.second->declaredInXml)
+				{
+					// TEST: For now just do Vtx declarations...
+					if (lastItem.second->varType == "Vtx")
+					{
+						int32_t sizeDiff = curItem.first - (lastItem.first + lastItem.second->size);
+
+						// Make sure there isn't an unaccounted inbetween these two
+						if (sizeDiff == 0)
+						{
+							lastItem.second->size += curItem.second->size;
+							lastItem.second->arrayItemCnt += curItem.second->arrayItemCnt;
+							lastItem.second->text += "\n" + curItem.second->text;
+							declarations.erase(curItem.first);
+							declarationKeys.erase(declarationKeys.begin() + i);
+							delete curItem.second;
+							i--;
+							continue;
+						}
+					}
+				}
+			}
+		}
+
+		lastItem = curItem;
+	}
+
+	for (std::pair<uint32_t, Declaration*> item : declarations){
+		ProcessDeclarationText(item.second);
+	}
+
+	for (std::pair<uint32_t, Declaration*> item : declarations)
+	{
+		while (item.second->size % 4 != 0)
+			item.second->size++;
+	}
+
+	HandleUnaccountedData();
+
+	// Go through include declarations
+	// First, handle the prototypes (static only for now)
+	for (std::pair<uint32_t, Declaration*> item : declarations)
+	{
+		output += item.second->GetStaticForwardDeclarationStr();
+	}
+
+	output += "\n";
+
+	output += StringHelper::Sprintf(" _%sSegment _%sSegmentRom = {\n", GetName().c_str());
+	// Next, output the actual declarations
+	for (const auto& item : declarations)
+	{
+		if (!IsOffsetInFileRange(item.first))
+			continue;
+
+		if (item.second->includePath != "")
+		{
+			if (item.second->isExternal)
+			{
+				// HACK
+				std::string extType;
+
+				if (item.second->varType == "Gfx")
+					extType = "dlist";
+				else if (item.second->varType == "Vtx")
+					extType = "vtx";
+
+				auto filepath = outputPath / item.second->varName;
+				File::WriteAllText(
+					StringHelper::Sprintf("%s.%s.inc", filepath.string().c_str(), STR(extType)),
+					item.second->text);
+			}
+
+			output += item.second->GetExternalStructInitializationStr();
+		}
+		else if (item.second->varType != "")
+		{
+			/* Probably Error */
+			output += item.second->GetNormalDeclarationStr();
+		}
+	}
+	output += "};\n";
+
 	return output;
 }
 
@@ -1092,6 +1223,38 @@ std::string ZFile::ProcessExterns()
 	output += "\n";
 
 	output += defines;
+
+	return output;
+}
+
+std::string ZFile::ProcessStructHeader()
+{
+	std::string output;
+	output += StringHelper::Sprintf("typedef struct _%sSegment {\n", GetName().c_str());
+	// Build Struct declaration
+	for (std::pair<uint32_t, Declaration*> item : declarations){
+		output += "  " + item.second->GetStructMemberDeclarationStr();
+	}
+	output += StringHelper::Sprintf("} _%sSegment;\n\n", GetName().c_str());
+	output += StringHelper::Sprintf("extern _%sSegment _%sSegmentRom;\n", GetName().c_str(),
+	                                GetName().c_str());
+	output += StringHelper::Sprintf("\n#define _%sSegmentRomStart ((u8*)_%sSegmentRom)\n", GetName().c_str());
+
+	return output;
+}
+
+std::string ZFile::AddLUT()
+{
+	std::string output;
+	output += "\n";
+	if(GetName() == "ovl_Boss_Ganon2" || GetName() == "ovl_Boss_Dodongo")
+		output += "static ";
+	output += StringHelper::Sprintf("LutEntry %s_lut[%d] = {\n", GetName().c_str(), declarations.size());
+	// Build Struct declaration
+	for (std::pair<uint32_t, Declaration*> item : declarations){
+		output += "  " + item.second->GetLutMemberDeclarationStr();
+	}
+	output += StringHelper::Sprintf("};\n\n");
 
 	return output;
 }

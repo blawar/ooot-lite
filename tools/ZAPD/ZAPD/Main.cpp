@@ -220,6 +220,14 @@ int main(int argc, char* argv[])
 		{
 			Globals::Instance->forceUnaccountedStatic = true;
 		}
+		else if (arg == "-st")  // Output as a fixed struct....
+		{
+			Globals::Instance->structMode = true;
+		}
+		else if (arg == "-lut")  // Add a LUT to the header
+		{
+			Globals::Instance->addLUT = true;
+		}
 	}
 
 	// Parse File Mode

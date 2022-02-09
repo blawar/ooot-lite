@@ -59,6 +59,8 @@ public:
 	bool gccCompat = false;
 	bool forceStatic = false;
 	bool forceUnaccountedStatic = false;
+	bool structMode = false;
+	bool addLUT = false;
 
 	std::vector<ZFile*> files;
 	std::vector<ZFile*> externalFiles;
