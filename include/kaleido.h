@@ -13,11 +13,20 @@ typedef struct KaleidoMgrOverlay {
     /* 0x18 */ const char* name;
 } KaleidoMgrOverlay; // size = 0x1C
 
+#if defined(KEEP_OVERLAYS)
 typedef enum {
     /* 0x00 */ KALEIDO_OVL_KALEIDO_SCOPE,
     /* 0x01 */ KALEIDO_OVL_PLAYER_ACTOR,
-    /* 0x02 */ KALEIDO_OVL_MAX
+    /* 0x03 */ KALEIDO_OVL_MAX
 } KaleidoOverlayType;
+#else
+typedef enum {
+    /* 0x00 */ KALEIDO_OVL_KALEIDO_SCOPE,
+    /* 0x01 */ KALEIDO_OVL_PLAYER_ACTOR,
+    /* 0x02 */ KALEIDO_OVL_NULL,
+    /* 0x03 */ KALEIDO_OVL_MAX
+} KaleidoOverlayType;
+#endif
 
 #define PAUSE_ITEM_NONE 999
 

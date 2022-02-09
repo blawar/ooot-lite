@@ -65,6 +65,7 @@ DECLARE_ROM_SEGMENT(map_i_static)
 DECLARE_ROM_SEGMENT(map_48x85_static)
 */
 
+#if 0
 DECLARE_SEGMENT(code)
 DECLARE_ROM_SEGMENT(code)
 DECLARE_BSS_SEGMENT(code)
@@ -76,6 +77,7 @@ DECLARE_OVERLAY_SEGMENT(file_choose)
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)
 DECLARE_OVERLAY_SEGMENT(map_mark_data)
+#endif
 
 /*
 DECLARE_ROM_SEGMENT(g_pn_01)
@@ -136,7 +138,9 @@ DECLARE_ROM_SEGMENT(g_pn_55)
 DECLARE_ROM_SEGMENT(g_pn_56)
 DECLARE_ROM_SEGMENT(g_pn_57)
 */
+#if 0
 DECLARE_ROM_SEGMENT(z_select_static)
+#endif
 /*DECLARE_ROM_SEGMENT(nintendo_rogo_static)
 DECLARE_ROM_SEGMENT(title_static)
 DECLARE_ROM_SEGMENT(parameter_static)
