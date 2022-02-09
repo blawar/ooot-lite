@@ -1292,20 +1292,20 @@ void func_800849EC(GlobalContext* globalCtx) {
 
 void Interface_LoadItemIcon1(GlobalContext* globalCtx, u16 button) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
-    
+
     switch(button)
     {
         case 0:
-            interfaceCtx->iconItemSegment1 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]];
+            interfaceCtx->iconItemSegment1 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]].data;
             break;
         case 1:
-            interfaceCtx->iconItemSegment2 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]];
+            interfaceCtx->iconItemSegment2 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]].data;
             break;
         case 2:
-            interfaceCtx->iconItemSegment3 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]];
+            interfaceCtx->iconItemSegment3 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]].data;
             break;
         case 3:
-            interfaceCtx->iconItemSegment4 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]];
+            interfaceCtx->iconItemSegment4 = icon_item_static_lut[gSaveContext.equips.buttonItems[button]].data;
             break;
         default:
             return;
@@ -1352,10 +1352,11 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     s16 slot;
     s16 temp;
 
-    slot = SLOT(item);
     if (item >= ITEM_STICKS_5) {
         slot = SLOT(sExtraItemBases[item - ITEM_STICKS_5]);
     }
+    /* This is awful, indexes 155 into 56 space array */
+    slot = SLOT(item);
 
     osSyncPrintf(VT_FGCOL(YELLOW));
     osSyncPrintf("item_get_setting=%d  pt=%d  z=%x\n", item, slot, gSaveContext.inventory.items[slot]);
@@ -1826,12 +1827,14 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
 
 u8 Item_CheckObtainability(u8 item) {
     s16 i;
-    s16 slot = SLOT(item);
+    s16 slot;
     s32 temp;
 
     if (item >= ITEM_STICKS_5) {
         slot = SLOT(sExtraItemBases[item - ITEM_STICKS_5]);
     }
+    /* This is awful, indexes 155 into 56 space array */
+    slot = SLOT(item);
 
     osSyncPrintf(VT_FGCOL(GREEN));
     osSyncPrintf("item_get_non_setting=%d  pt=%d  z=%x\n", item, slot, gSaveContext.inventory.items[slot]);
@@ -2097,10 +2100,10 @@ void Interface_LoadActionLabel(InterfaceContext* interfaceCtx, u16 action, s16 l
         switch(loadOffset) // TODO CHECK
         {
             case 0:
-                interfaceCtx->doActionSegment1 = do_action_static_lut[action];
+                interfaceCtx->doActionSegment1 = do_action_static_lut[action].data;
                 break;
             case 1:
-                interfaceCtx->doActionSegment2 = do_action_static_lut[action];
+                interfaceCtx->doActionSegment2 = do_action_static_lut[action].data;
                 break;
             default:
                 break;
@@ -2161,7 +2164,7 @@ void Interface_LoadActionLabelB(GlobalContext* globalCtx, u16 action) {
 
     interfaceCtx->unk_1FC = action;
 
-    interfaceCtx->doActionSegment2 = do_action_static_lut[action];
+    interfaceCtx->doActionSegment2 = do_action_static_lut[action].data;
 
     interfaceCtx->unk_1FA = 1;
 }

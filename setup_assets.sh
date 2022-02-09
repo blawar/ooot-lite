@@ -11,7 +11,7 @@ python3 tools/msgenc.py assets/text/charmap.txt assets/text/message_data.h build
 python3 tools/msgenc.py assets/text/charmap.txt assets/text/message_data_staff.h build/assets/text/message_data_staff.enc.h && \
 \
 python3 tools/extract_missing_assets.py && \
-python3 tools/create_luts.py && \
+python3 tools/clean_headers.py && \
 python3 tools/mark_segments.py
 
 

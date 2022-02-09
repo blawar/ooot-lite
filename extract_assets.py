@@ -12,8 +12,8 @@ def ExtractFile(xmlPath: Path, outputPath: Path, outputSourcePath: Path, unaccou
 
     zapd = Path("tools/ZAPD/ZAPD.out")
     zapdConfig = Path("tools/ZAPDConfigs/MqDbg/Config.xml")
-    execStr = f"{zapd} e -i {xmlPath} -b baserom -o {outputPath} -osf {outputSourcePath} -gsf 1 -rconf {zapdConfig}"
-    
+    execStr = f"{zapd} e -i {xmlPath} -b baserom -o {outputPath} -osf {outputSourcePath} -gsf 1 -rconf {zapdConfig} -lut"
+
     # Use error handler only if non-windows environment, because it's not supported in windows
     if os.name != 'nt':
         execStr += " -eh"
@@ -23,7 +23,7 @@ def ExtractFile(xmlPath: Path, outputPath: Path, outputSourcePath: Path, unaccou
 
     if unaccounted == True:
         execStr += " --warn-unaccounted"
-    
+
     # print(f"Extracting {xmlPath.stem}")
     # print(execStr)
 
@@ -80,7 +80,7 @@ def ExtractXMLAssets(xmlFiles, force: bool, unaccounted: bool):
     print(f"Start extracting {len(xmlFiles)} assets with %d threads" % thread_count)
     success = skipped = failed = 0
     errors = []
-    # Multithreading instead of multiprocessing, because of IO heavy operation 
+    # Multithreading instead of multiprocessing, because of IO heavy operation
     with ThreadPoolExecutor(max_workers = thread_count) as executor:
         with tqdm(total=len(xmlFiles)) as progress:
             for result in executor.map(ExtractFunc, xmlFiles, repeat(force), repeat(unaccounted)):
@@ -116,7 +116,7 @@ def main():
         # Example: objects/gameplay_keep  -->  assets/xml/objects/gameplay_keep.xml
         xmlFiles = [Path('assets/xml').joinpath(file).with_suffix('.xml') for file in args.assets]
     else:
-        # Get list of all xml files in assets/xml/ subdirectories recursivly 
+        # Get list of all xml files in assets/xml/ subdirectories recursivly
         xmlFiles = sorted(Path('.').glob('assets/xml/**/*.xml'))
 
     start = time.perf_counter()

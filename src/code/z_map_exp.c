@@ -156,7 +156,9 @@ void Map_InitData(GlobalContext* globalCtx, s16 room) {
             osSyncPrintf(VT_RST);
             sEntranceIconMapIndex = extendedMapIndex;
 
-            interfaceCtx->mapSegment1 = POINTER_ADD(_map_grand_staticSegmentRomStart, gMapData->owMinimapTexOffset[extendedMapIndex]);
+            /*@Note: unsure */
+            //interfaceCtx->mapSegment1 = POINTER_ADD(_map_grand_staticSegmentRomStart, gMapData->owMinimapTexOffset[extendedMapIndex]);
+            interfaceCtx->mapSegment1 = map_grand_static_lut[extendedMapIndex].data;
 
             //interfaceCtx->mapSegment = map_grand_static_lut[extendedMapIndex];
             interfaceCtx->unk_258 = mapIndex;
@@ -184,7 +186,7 @@ void Map_InitData(GlobalContext* globalCtx, s16 room) {
             osSyncPrintf("デクの樹ダンジョンＭＡＰ テクスチャＤＭＡ(%x) scene_id_offset=%d  VREG(30)=%d\n", room,
                          mapIndex, VREG(30));
             osSyncPrintf(VT_RST);
-            globalCtx->interfaceCtx.mapSegment1 = map_i_static_lut[gMapData->dgnMinimapTexIndexOffset[mapIndex] + room];
+            globalCtx->interfaceCtx.mapSegment1 = map_i_static_lut[gMapData->dgnMinimapTexIndexOffset[mapIndex] + room].data;
             R_COMPASS_OFFSET_X = gMapData->roomCompassOffsetX[mapIndex][room];
             R_COMPASS_OFFSET_Y = gMapData->roomCompassOffsetY[mapIndex][room];
             Map_SetFloorPalettesData(globalCtx, VREG(30));

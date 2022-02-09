@@ -1206,7 +1206,7 @@ void Message_LoadItemIcon(GlobalContext* globalCtx, u16 itemId, s16 y) {
         R_TEXTBOX_ICON_YPOS = y + 6;
         R_TEXTBOX_ICON_SIZE = 32;
         DmaMgr_SendRequest1(POINTER_ADD(msgCtx->textboxSegment, MESSAGE_STATIC_TEX_SIZE),
-                            icon_item_static_lut[itemId], 0x1000, "../z_message_PAL.c",
+                            icon_item_static_lut[itemId].data, 0x1000, "../z_message_PAL.c",
                             1473);
         // "Item 32-0"
         osSyncPrintf("アイテム32-0\n");
@@ -1215,7 +1215,7 @@ void Message_LoadItemIcon(GlobalContext* globalCtx, u16 itemId, s16 y) {
         R_TEXTBOX_ICON_YPOS = y + 10;
         R_TEXTBOX_ICON_SIZE = 24;
         DmaMgr_SendRequest1(POINTER_ADD(msgCtx->textboxSegment, MESSAGE_STATIC_TEX_SIZE),
-                            icon_item_24_static_lut[itemId - ITEM_MEDALLION_FOREST], 0x900,
+                            icon_item_24_static_lut[itemId - ITEM_MEDALLION_FOREST].data, 0x900,
                             "../z_message_PAL.c", 1482);
         // "Item 24"
         osSyncPrintf("アイテム24＝%d (%d) {%d}\n", itemId, itemId - ITEM_KOKIRI_EMERALD, 84);
@@ -1574,10 +1574,10 @@ void Message_Decode(GlobalContext* globalCtx) {
             msgCtx->textboxBackgroundYOffsetIdx = (font->msgBuf[msgCtx->msgBufPos + 3] & 0xF0) >> 4;
             msgCtx->textboxBackgroundUnkArg = font->msgBuf[msgCtx->msgBufPos + 3] & 0xF;
             DmaMgr_SendRequest1(POINTER_ADD(msgCtx->textboxSegment, MESSAGE_STATIC_TEX_SIZE),
-                                message_texture_static_lut[msgCtx->textboxBackgroundIdx],
+                                message_texture_static_lut[msgCtx->textboxBackgroundIdx].data,
                                 0x900, "../z_message_PAL.c", 1830); // TODO FIX seems out of bounds?  lut only has two elements
             DmaMgr_SendRequest1(POINTER_ADD(msgCtx->textboxSegment, MESSAGE_STATIC_TEX_SIZE + 0x900),
-                                message_texture_static_lut[msgCtx->textboxBackgroundIdx + 1],
+                                message_texture_static_lut[msgCtx->textboxBackgroundIdx + 1].data,
                                 0x900, "../z_message_PAL.c", 1834); // TODO FIX seems out of bounds?  lut only has two elements
             msgCtx->msgBufPos += 3;
             R_TEXTBOX_BG_YPOS = R_TEXTBOX_Y + 8;
@@ -1702,7 +1702,7 @@ void Message_OpenText(GlobalContext* globalCtx, u16 textId) {
     if (textBoxType < TEXTBOX_TYPE_NONE_BOTTOM) {
         DmaMgr_SendRequest1(
             msgCtx->textboxSegment,
-            message_static_lut[messageStaticIndices[textBoxType]],
+            (u32)(message_static_lut[messageStaticIndices[textBoxType]].data),
             MESSAGE_STATIC_TEX_SIZE, "../z_message_PAL.c", 2006);
         if (textBoxType == TEXTBOX_TYPE_BLACK) {
             msgCtx->textboxColorRed = 0;

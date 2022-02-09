@@ -92,10 +92,10 @@ void Sample_SetupView(SampleContext* this) {
 }
 
 void Sample_LoadTitleStatic(SampleContext* this) {
-    u32 size = _title_staticSegmentRomEnd - _title_staticSegmentRomStart;
+    u32 size = lutGetTotalSize(title_static_lut, ARRAY_COUNTU(title_static_lut));
 
     this->staticSegment = GameState_Alloc(&this->state, size, "../z_sample.c", 163);
-    DmaMgr_SendRequest1(this->staticSegment, _title_staticSegmentRomStart, size, "../z_sample.c", 164);
+    lutDma(this->staticSegment, title_static_lut, ARRAY_COUNTU(title_static_lut), "../z_sample.c", 164);
 }
 
 void Sample_Init(GameState* thisx) {

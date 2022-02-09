@@ -948,7 +948,7 @@ EntranceInfo gEntranceTable[] = {
 
 #define TITLED_SCENE(name, title, unk_10, config, unk_12)                                            \
     {                                                                                                \
-        (uintptr_t) _##name##SegmentRomStart, (uintptr_t)_##name##SegmentRomEnd, (uintptr_t)title, \
+        (uintptr_t) _##name##SegmentRomStart, (uintptr_t)name##_lut, (uintptr_t)title, \
             (uintptr_t)title + sizeof(title), unk_10, config, unk_12, 0, name##Commands                                  \
     }
 
@@ -959,7 +959,7 @@ EntranceInfo gEntranceTable[] = {
     }
 
 #define UNTITLED_SCENE(name, unk_10, config, unk_12) \
-    { (uintptr_t) _##name##SegmentRomStart, (uintptr_t)_##name##SegmentRomEnd, 0, 0, unk_10, config, unk_12, 0, name##Commands }
+    { (uintptr_t) _##name##SegmentRomStart, (uintptr_t)name##_lut, 0, 0, unk_10, config, unk_12, 0, name##Commands }
 
 #define SCENE_EXTERN(name) extern SceneCmd name##Commands[]
 
