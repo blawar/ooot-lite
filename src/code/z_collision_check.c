@@ -863,7 +863,7 @@ s32 Collider_InitQuadDim(GlobalContext* globalCtx, ColliderQuadDim* dim) {
         { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },
         { 0, 0, 0 },
         { 0, 0, 0 },
-        1.0E38f,
+        FLT_MAX,
     };
 
     *dim = init;
@@ -875,7 +875,7 @@ s32 Collider_DestroyQuadDim(GlobalContext* globalCtx, ColliderQuadDim* dim) {
 }
 
 s32 Collider_ResetQuadACDist(GlobalContext* globalCtx, ColliderQuadDim* dim) {
-    dim->acDist = 1.0E38f;
+    dim->acDist = FLT_MAX;
     return 1;
 }
 
@@ -2246,9 +2246,6 @@ void CollisionCheck_AC_CylVsQuad(GlobalContext* globalCtx, CollisionCheckContext
     }
 }
 
-static s8 sBssDummy0;
-static s8 sBssDummy1;
-
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
@@ -2299,11 +2296,6 @@ void CollisionCheck_AC_QuadVsCyl(GlobalContext* globalCtx, CollisionCheckContext
     }
 }
 
-static s8 sBssDummy3;
-static s8 sBssDummy4;
-static s8 sBssDummy5;
-static s8 sBssDummy6;
-
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
@@ -2345,11 +2337,6 @@ void CollisionCheck_AC_TrisVsTris(GlobalContext* globalCtx, CollisionCheckContex
         }
     }
 }
-
-static s8 sBssDummy7;
-static s8 sBssDummy8;
-static s8 sBssDummy9;
-static s8 sBssDummy10;
 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
@@ -3262,21 +3249,12 @@ void Collider_SetTrisDim(GlobalContext* globalCtx, ColliderTris* collider, s32 i
     Collider_SetTrisElementDim(globalCtx, &element->dim, src);
 }
 
-// Due to an unknown reason, bss ordering changed between the 2 static Vec3f variables in the function below.
-// In order to reproduce this behavior, we need a specific number of bss variables in the file before that point.
-// For this, we introduce a certain amount of dummy variables throughout the file, which we fit inside padding added
-// by the compiler between structs like TriNorm and/or Vec3f, so they don't take space in bss.
-static s8 sBssDummy11;
-static s8 sBssDummy12;
-static s8 sBssDummy13;
-static s8 sBssDummy14;
-
 /**
  * Updates the world spheres for all of the collider's JntSph elements attached to the specified limb
  */
 void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
     static Vec3f D_8015E648;
-    static Vec3f D_8015CF00; // bss ordering changes here
+    static Vec3f D_8015CF00;
     s32 i;
 
     for (i = 0; i < collider->count; i++) {

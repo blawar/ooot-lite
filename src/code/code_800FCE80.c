@@ -5,13 +5,19 @@
 #include "def/cosf.h"
 #include "def/sinf.h"
 
+#define HLE_MATH
+
 s32 gUseAtanContFrac;
 
 f32 Math_FTanF(f32 x) {
+#if defined(HLE_MATH)
+    return tan(x);
+#else
     f32 sin = sinf(x);
     f32 cos = cosf(x);
 
     return sin / cos;
+#endif
 }
 
 f32 Math_FFloorF(f32 x) {
@@ -129,14 +135,21 @@ f32 Math_FAtanContFracF(f32 x) {
 }
 
 f32 Math_FAtanF(f32 x) {
+#if defined(HLE_MATH)
+    return atanf(x);
+#else
     if (!gUseAtanContFrac) {
         return Math_FAtanTaylorF(x);
     } else {
         return Math_FAtanContFracF(x);
     }
+#endif
 }
 
 f32 Math_FAtan2F(f32 y, f32 x) {
+#if defined(HLE_MATH)
+    return atan2f(y, x);
+#else
     if (x == 0.0f) {
         if (y == 0.0f) {
             return 0.0f;
@@ -154,12 +167,21 @@ f32 Math_FAtan2F(f32 y, f32 x) {
     } else {
         return M_PI - Math_FAtanF(-(y / x));
     }
+#endif
 }
 
 f32 Math_FAsinF(f32 x) {
+#if defined(HLE_MATH)
+    return asinf(x);
+#else
     return Math_FAtan2F(x, sqrtf(1.0f - SQ(x)));
+#endif
 }
 
 f32 Math_FAcosF(f32 x) {
+#if defined(HLE_MATH)
+    return acosf(x);
+#else
     return M_PI / 2 - Math_FAsinF(x);
+#endif
 }

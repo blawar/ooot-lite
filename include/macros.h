@@ -153,7 +153,11 @@ MES(n30), MES(n31), MES(n32), MES(n33)}
 #endif
 
 #ifndef FLT_MAX
-#define FLT_MAX 340282346638528859811704183484516925440.0f
+#define FLT_MAX 3.402823466e+38F
+#endif
+
+#ifndef NAN
+#define NAN (0.0f / 0.0f)
 #endif
 
 #define SHT_MAX 32767.0f
