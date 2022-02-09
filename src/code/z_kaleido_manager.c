@@ -10,6 +10,7 @@
 #include "def/logutils.h"
 #include "def/z_kaleido_manager.h"
 
+#if defined(KEEP_OVERLAYS)
 #define KALEIDO_OVERLAY(name)                                                                                \
     {                                                                                                        \
         NULL, (uintptr_t)_ovl_##name##SegmentRomStart, (uintptr_t)_ovl_##name##SegmentRomEnd, _ovl_##name##SegmentStart, \
@@ -20,11 +21,21 @@ KaleidoMgrOverlay gKaleidoMgrOverlayTable[] = {
     KALEIDO_OVERLAY(kaleido_scope),
     KALEIDO_OVERLAY(player_actor),
 };
-
 void* sKaleidoAreaPtr = NULL;
 KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
+#else
+KaleidoOverlayType gKaleidoMgrOverlayTable[] = {
+    KALEIDO_OVL_KALEIDO_SCOPE,
+    KALEIDO_OVL_PLAYER_ACTOR,
+};
+
+KaleidoOverlayType gKaleidoMgrCurOvl = KALEIDO_OVL_NULL;
+#endif
+
+
 u8 gBossMarkState = 0;
 
+#if defined(KEEP_OVERLAYS)
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
     ovl->loadedRamAddr = ovl->vromStart;
     Overlay_Load(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
@@ -76,7 +87,31 @@ void KaleidoManager_Destroy() {
     sKaleidoAreaPtr = NULL;
 }
 
+#else
+void KaleidoManager_LoadOvl(KaleidoOverlayType ovl) {
+    gKaleidoMgrCurOvl = ovl;
+}
+
+void KaleidoManager_ClearOvl(KaleidoOverlayType ovl) {
+    gKaleidoMgrOverlayTable[ovl] = KALEIDO_OVL_NULL;
+    gKaleidoMgrCurOvl = KALEIDO_OVL_NULL;
+}
+
+void KaleidoManager_Init(GlobalContext* globalCtx) {
+    gKaleidoMgrCurOvl = KALEIDO_OVL_KALEIDO_SCOPE;
+}
+
+void KaleidoManager_Destroy() {
+    if (gKaleidoMgrCurOvl != KALEIDO_OVL_NULL) {
+        KaleidoManager_ClearOvl(gKaleidoMgrCurOvl);
+        gKaleidoMgrCurOvl = KALEIDO_OVL_NULL;
+    }
+}
+
+#endif
+
 // NOTE: this function looks messed up and probably doesn't work how it was intended to
+#if 0
 void* KaleidoManager_GetRamAddr(void* vram) {
     return vram; // TODO FIX
     KaleidoMgrOverlay* iter = gKaleidoMgrCurOvl;
@@ -105,3 +140,4 @@ KaleidoManager_GetRamAddr_end:
 
     return (void*)((uintptr_t)vram + ovl->offset);
 }
+#endif

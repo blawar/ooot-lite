@@ -37,10 +37,17 @@ void Player_Draw(Actor* thisx, GlobalContext* globalCtx);
 };
 
 void PlayerCall_InitFuncPtrs(void) {
+#if defined(KEEP_OVERLAYS)
     sPlayerCallInitFunc = KaleidoManager_GetRamAddr(Player_Init);
     sPlayerCallDestroyFunc = KaleidoManager_GetRamAddr(Player_Destroy);
     sPlayerCallUpdateFunc = KaleidoManager_GetRamAddr(Player_Update);
     sPlayerCallDrawFunc = KaleidoManager_GetRamAddr(Player_Draw);
+#else
+    sPlayerCallInitFunc = Player_Init;
+    sPlayerCallDestroyFunc = Player_Destroy;
+    sPlayerCallUpdateFunc = Player_Update;
+    sPlayerCallDrawFunc = Player_Draw;
+#endif
 }
 
 void PlayerCall_Init(Actor* thisx, GlobalContext* globalCtx) {

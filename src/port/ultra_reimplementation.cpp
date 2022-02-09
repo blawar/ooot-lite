@@ -445,6 +445,13 @@ void osSyncPrintf(const char *fmt, ...)
 #endif
 }
 
+extern "C"
+{
+	s32 _CONST osRecvMesg(void* mq, void* msg, s32 flag) { return 0; }
+	s32 _CONST osSendMesg(void* mq, void* msg, s32 flag) { return 0; }
+	void osCreateMesgQueue(void* mq, void* msg, s32 count) { /*nothing */; }
+}
+
 #include "color.h"
 #include <memory>
 #include "ultra64/gbi.h"
