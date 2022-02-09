@@ -199,12 +199,13 @@ void Title_Destroy(GameState* thisx) {
 }
 
 void Title_Init(GameState* thisx) {
-    size_t size = POINTER_SUB(_nintendo_rogo_staticSegmentRomEnd, _nintendo_rogo_staticSegmentRomStart);
+    size_t size = lutGetTotalSize(nintendo_rogo_static_lut, ARRAY_COUNTU(nintendo_rogo_static_lut));
     TitleContext* this = (TitleContext*)thisx;
 
-    //this->staticSegment = GameState_Alloc(&this->state, size, "../z_title.c", 611);
+    this->staticSegment = GameState_Alloc(&this->state, size, "../z_title.c", 611);
     osSyncPrintf("z_title.c\n");
-    this->staticSegment = _nintendo_rogo_staticSegmentRomStart;
+    ASSERT(this->staticSegment != NULL, "this->staticSegment != NULL", "../z_title.c", 614);
+    lutDma(this->staticSegment, nintendo_rogo_static_lut, ARRAY_COUNTU(nintendo_rogo_static_lut), "../z_title.c", 615);
     R_UPDATE_RATE = 1;
     Matrix_Init(&this->state);
     View_Init(&this->view, this->state.gfxCtx);

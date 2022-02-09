@@ -30,6 +30,7 @@
 #include "def/z_std_dma.h"
 #include "def/z_view.h"
 #include "def/z_play.h" // FORCE
+#include "assets/misc/z_select_static/z_select_static.h"
 
 void Select_LoadTitle(SelectContext* this) {
     this->state.running = false;
@@ -757,7 +758,7 @@ void Select_Init(GameState* thisx) {
     this->lockDown = 0;
     this->unk_234 = 0;
 
-    size = POINTER_SUB(_z_select_staticSegmentRomEnd, _z_select_staticSegmentRomStart);
+    size = lutGetTotalSize(z_select_static_lut, ARRAY_COUNT(z_select_static_lut));
 
     if ((dREG(80) >= 0) && (dREG(80) < this->count)) {
         this->currentScene = dREG(80);
@@ -767,7 +768,7 @@ void Select_Init(GameState* thisx) {
     R_UPDATE_RATE = 1;
 
     this->staticSegment = GameState_Alloc(&this->state, size, "../z_select.c", 1114);
-    DmaMgr_SendRequest1(this->staticSegment, _z_select_staticSegmentRomStart, size, "../z_select.c", 1115);
+    lutDma(this->staticSegment, z_select_static_lut, ARRAY_COUNT(z_select_static_lut), "../z_select.c", 1115);
     gSaveContext.cutsceneIndex = 0x8000;
     gSaveContext.linkAge = 1;
 }

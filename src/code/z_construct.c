@@ -24,7 +24,9 @@ void func_80110990(GlobalContext* globalCtx) {
 
 void func_801109B0(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+    u32 parameterSize;
     u16 doActionOffset;
+    u16 doActionLutIdx;
     u8 temp;
 
     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
@@ -43,29 +45,51 @@ void func_801109B0(GlobalContext* globalCtx) {
         interfaceCtx->cDownAlpha = interfaceCtx->cRightAlpha = interfaceCtx->healthAlpha = interfaceCtx->startAlpha =
             interfaceCtx->magicAlpha = 0;
 
-    interfaceCtx->parameterSegment = _parameter_staticSegmentRomStart;
+    parameterSize =lutGetTotalSize(parameter_static_lut, ARRAY_COUNTU(parameter_static_lut));
 
+    // "Permanent PARAMETER Segment = %x"
+    osSyncPrintf("常駐ＰＡＲＡＭＥＴＥＲセグメント=%x\n", parameterSize);
+
+    osSyncPrintf("parameter->parameterSegment=%x\n", interfaceCtx->parameterSegment);
+
+    /*@Note: not sure why this existed or what we do now, code changed previously */
+    //ASSERT(interfaceCtx->parameterSegment != NULL, "parameter->parameterSegment != NULL", "../z_construct.c", 161);
+    //lutDma(interfaceCtx->parameterSegment, parameter_static_lut, ARRAY_COUNTU(parameter_static_lut),
+    //                    "../z_construct.c", 162);
+
+    //interfaceCtx->doActionSegment = GameState_Alloc(&globalCtx->state, 0x480, "../z_construct.c", 166);
+
+    osSyncPrintf("ＤＯアクション テクスチャ初期=%x\n", 0x480); // "DO Action Texture Initialization"
 
     if (gSaveContext.language == LANGUAGE_ENG) {
         doActionOffset = 0;
+        doActionLutIdx = 0;
     } else if (gSaveContext.language == LANGUAGE_GER) {
         doActionOffset = 0x2B80;
+        doActionLutIdx = 29;
     } else {
         doActionOffset = 0x5700;
+        doActionLutIdx = 58;
     }
 
-    interfaceCtx->doActionSegment1 = do_action_static_lut[doActionOffset / 0x180];
-    interfaceCtx->doActionSegment2 = do_action_static_lut[(doActionOffset / 0x180) + 1];
+    //lutDma(interfaceCtx->doActionSegment, do_action_static_lut + doActionOffset, 0x300,
+    //                    "../z_construct.c", 174);
+
+    interfaceCtx->doActionSegment1 = do_action_static_lut[doActionLutIdx].data;
+    interfaceCtx->doActionSegment2 = do_action_static_lut[doActionLutIdx + 1].data;
 
     if (gSaveContext.language == LANGUAGE_ENG) {
         doActionOffset = 0x480;
+        doActionLutIdx = 0;
     } else if (gSaveContext.language == LANGUAGE_GER) {
         doActionOffset = 0x3000;
+        doActionLutIdx = 32;
     } else {
         doActionOffset = 0x5B80;
+        doActionLutIdx = 61;
     }
 
-    interfaceCtx->doActionSegment3 = do_action_static_lut[doActionOffset / 0x180];
+    interfaceCtx->doActionSegment3 = do_action_static_lut[doActionLutIdx].data;
 
     osSyncPrintf("Register_Item[%x, %x, %x, %x]\n", gSaveContext.equips.buttonItems[0],
                  gSaveContext.equips.buttonItems[1], gSaveContext.equips.buttonItems[2],
@@ -77,21 +101,21 @@ void func_801109B0(GlobalContext* globalCtx) {
     interfaceCtx->iconItemSegment4 = NULL;
 
     if (gSaveContext.equips.buttonItems[0] < 0xF0) {
-        interfaceCtx->iconItemSegment1 = icon_item_static_lut[gSaveContext.equips.buttonItems[0]];
+        interfaceCtx->iconItemSegment1 = icon_item_static_lut[gSaveContext.equips.buttonItems[0]].data;
     } else if (gSaveContext.equips.buttonItems[0] != 0xFF) {
-        interfaceCtx->iconItemSegment1 = icon_item_static_lut[gSaveContext.equips.buttonItems[0]];
+        interfaceCtx->iconItemSegment1 = icon_item_static_lut[gSaveContext.equips.buttonItems[0]].data;
     }
 
     if (gSaveContext.equips.buttonItems[1] < 0xF0) {
-        interfaceCtx->iconItemSegment2 = icon_item_static_lut[gSaveContext.equips.buttonItems[1]];
+        interfaceCtx->iconItemSegment2 = icon_item_static_lut[gSaveContext.equips.buttonItems[1]].data;
     }
 
     if (gSaveContext.equips.buttonItems[2] < 0xF0) {
-        interfaceCtx->iconItemSegment3 = icon_item_static_lut[gSaveContext.equips.buttonItems[2]];
+        interfaceCtx->iconItemSegment3 = icon_item_static_lut[gSaveContext.equips.buttonItems[2]].data;
     }
 
     if (gSaveContext.equips.buttonItems[3] < 0xF0) {
-        interfaceCtx->iconItemSegment4 = icon_item_static_lut[gSaveContext.equips.buttonItems[3]];
+        interfaceCtx->iconItemSegment4 = icon_item_static_lut[gSaveContext.equips.buttonItems[3]].data;
     }
 
     osSyncPrintf("EVENT=%d\n", ((void)0, gSaveContext.timer1State));

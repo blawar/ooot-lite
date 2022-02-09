@@ -445,6 +445,30 @@ void osSyncPrintf(const char *fmt, ...)
 #endif
 }
 
+extern "C"
+{
+	size_t lutGetTotalSize(LutEntry *entries, size_t count)
+	{
+		size_t total = 0;
+		for (size_t i = 0; i < count; ++i)
+		{
+			total += entries[i].size;
+		}
+		return total;
+	}
+
+	void lutDma(void* ram0, LutEntry *entries, size_t count, const char* file, s32 line)
+	{
+		uintptr_t ram0_addr = (uintptr_t)ram0;
+		for (size_t i = 0; i < count; ++i)
+		{
+			extern s32 DmaMgr_SendRequest0(void* ram, const void* vrom, uintptr_t size);
+			DmaMgr_SendRequest0((void*)ram0_addr, (const void*)entries[i].data, entries[i].size);
+			ram0_addr += entries[i].size;
+		}
+	}
+}
+
 #include "color.h"
 #include <memory>
 #include "ultra64/gbi.h"

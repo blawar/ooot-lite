@@ -1899,7 +1899,7 @@ void FileChoose_Destroy(GameState* thisx) {
 #include <stdio.h>
 void FileChoose_Init(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
-    u32 size = POINTER_SUB(_title_staticSegmentRomEnd, _title_staticSegmentRomStart);
+    u32 size = lutGetTotalSize(title_static_lut, ARRAY_COUNTU(title_static_lut));
     s32 pad;
 
     SREG(30) = 1;
@@ -1907,13 +1907,12 @@ void FileChoose_Init(GameState* thisx) {
 
     this->staticSegment = GameState_Alloc(&this->state, size, "../z_file_choose.c", 3392);
     ASSERT(this->staticSegment != NULL, "this->staticSegment != NULL", "../z_file_choose.c", 3393);
-    //DmaMgr_SendRequest1(this->staticSegment, (u32)_title_staticSegmentRomStart, size, "../z_file_choose.c", 3394);
+    lutDma(this->staticSegment, title_static_lut, ARRAY_COUNTU(title_static_lut), "../z_file_choose.c", 3394);
 
-    size = POINTER_SUB(_parameter_staticSegmentRomEnd, _parameter_staticSegmentRomStart);
+    size = lutGetTotalSize(parameter_static_lut, ARRAY_COUNTU(parameter_static_lut));
     this->parameterSegment = GameState_Alloc(&this->state, size, "../z_file_choose.c", 3398);
     ASSERT(this->parameterSegment != NULL, "this->parameterSegment != NULL", "../z_file_choose.c", 3399);
-    //DmaMgr_SendRequest1(this->parameterSegment, (u32)_parameter_staticSegmentRomStart, size, "../z_file_choose.c",
-    //                    3400);
+    lutDma(this->parameterSegment, parameter_static_lut, ARRAY_COUNTU(parameter_static_lut), "../z_file_choose.c", 3400);
 
     Matrix_Init(&this->state);
     View_Init(&this->view, this->state.gfxCtx);
