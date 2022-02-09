@@ -9,9 +9,7 @@
 #include "def/code_800FC620.h"
 #include "def/z_debug.h"
 
-//f32 qNaN0x3FFFFF;
-f32 qNaN0x10000;
-//f32 sNaN0x3FFFFF;
+f32 qNaN0x10000 = NAN;
 
 PreNmiBuff* gAppNmiBufferPtr;
 SchedContext gSchedContext;

@@ -13,8 +13,11 @@
 
 #include <stdarg.h>
 void osSyncPrintf(const char* fmt, ...);
-#define osRecvMesg(a, b, c) 0
-#define osSendMesg(a, b, c) 0
+#if defined(__GNUC__)
+#define _CONST __attribute__((const))
+#else
+#define _CONST
+#endif
 
 #if defined(OS_WINDOWS) && (defined(_MSC_VER) || defined(__MINGW32__))
 void bzero(void* __s, size_t __n);

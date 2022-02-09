@@ -1,11 +1,14 @@
 #pragma once
 
+#if defined(_MSC_VER)
 #pragma warning (error: 4715)
 #pragma warning (error: 4716)
 #pragma warning (error: 4013)
+#endif
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <float.h>
 
 typedef signed char            s8;
 typedef unsigned char          u8;
