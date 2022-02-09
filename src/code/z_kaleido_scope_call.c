@@ -14,14 +14,23 @@ f32 gBossMarkScale;
 u32 D_8016139C;
 PauseMapMarksData* gLoadedPauseMarkDataTable;
 
+#if defined(KEEP_OVERLAYS)
 extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[];
 extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
+#else
+extern KaleidoOverlayType gKaleidoMgrOverlayTable[];
+extern KaleidoOverlayType gKaleidoMgrCurOvl;
+#endif
 
 extern void KaleidoScope_Update(GlobalContext* globalCtx);
 extern void KaleidoScope_Draw(GlobalContext* globalCtx);
 
 void KaleidoScopeCall_LoadPlayer() {
+#if defined(KEEP_OVERLAYS)
     KaleidoMgrOverlay* playerActorOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_PLAYER_ACTOR];
+#else
+    KaleidoOverlayType playerActorOvl = KALEIDO_OVL_PLAYER_ACTOR;
+#endif
 
     if (gKaleidoMgrCurOvl != playerActorOvl) {
         if (gKaleidoMgrCurOvl != NULL) {
@@ -43,9 +52,13 @@ void KaleidoScopeCall_LoadPlayer() {
 void KaleidoScopeCall_Init(GlobalContext* globalCtx) {
     // "Kaleidoscope replacement construction"
     osSyncPrintf("Kaleidoscope replacement construction \n");
-
+#if defined(KEEP_OVERLAYS)
     sKaleidoScopeUpdateFunc = KaleidoManager_GetRamAddr(KaleidoScope_Update);
     sKaleidoScopeDrawFunc = KaleidoManager_GetRamAddr(KaleidoScope_Draw);
+#else
+    sKaleidoScopeUpdateFunc = KaleidoScope_Update;
+    sKaleidoScopeDrawFunc = KaleidoScope_Draw;
+#endif
 
     KaleidoSetup_Init(globalCtx);
 }
@@ -58,7 +71,11 @@ void KaleidoScopeCall_Destroy(GlobalContext* globalCtx) {
 }
 
 void KaleidoScopeCall_Update(GlobalContext* globalCtx) {
+#if defined(KEEP_OVERLAYS)
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
+#else
+    KaleidoOverlayType kaleidoScopeOvl = KALEIDO_OVL_KALEIDO_SCOPE;
+#endif
     PauseContext* pauseCtx = &globalCtx->pauseCtx;
 
     if ((pauseCtx->state != 0) || (pauseCtx->debugState != 0)) {
@@ -121,7 +138,11 @@ void KaleidoScopeCall_Update(GlobalContext* globalCtx) {
 }
 
 void KaleidoScopeCall_Draw(GlobalContext* globalCtx) {
+#if defined(KEEP_OVERLAYS)
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
+#else
+    KaleidoOverlayType kaleidoScopeOvl = KALEIDO_OVL_KALEIDO_SCOPE;
+#endif
 
     if (R_PAUSE_MENU_MODE >= 3) {
         if (((globalCtx->pauseCtx.state >= 4) && (globalCtx->pauseCtx.state <= 7)) ||

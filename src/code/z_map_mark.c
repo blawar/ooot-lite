@@ -58,6 +58,7 @@ static MapMarkInfo sMapMarkInfoTable[] = {
     { gMapBossIconTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 32, 32, 1 << 10, 1 << 10 },     // Boss Skull Icon
 };
 
+#if defined(KEEP_OVERLAYS)
 static MapMarkDataOverlay sMapMarkDataOvl = {
     NULL,
     _ovl_map_mark_dataSegmentRomStart,
@@ -66,10 +67,12 @@ static MapMarkDataOverlay sMapMarkDataOvl = {
     _ovl_map_mark_dataSegmentEnd,
     gMapMarkDataTable,
 };
+#endif
 
 static MapMarkData** sLoadedMarkDataTable;
 
 void MapMark_Init(GlobalContext* globalCtx) {
+#if defined(KEEP_OVERLAYS)
     MapMarkDataOverlay* overlay = &sMapMarkDataOvl;
     u32 overlaySize = POINTER_SUB(overlay->vramEnd, overlay->vramStart);
 
@@ -78,12 +81,15 @@ void MapMark_Init(GlobalContext* globalCtx) {
 
     Overlay_Load(overlay->vromStart, overlay->vromEnd, overlay->vramStart, overlay->vramEnd, overlay->loadedRamAddr);
 
-    sLoadedMarkDataTable = gMapMarkDataTable;
     sLoadedMarkDataTable = overlay->vramTable;
+#endif
+    sLoadedMarkDataTable = gMapMarkDataTable;
 }
 
 void MapMark_ClearPointers(GlobalContext* globalCtx) {
+#if defined(KEEP_OVERLAYS)
     sMapMarkDataOvl.loadedRamAddr = NULL;
+#endif
     sLoadedMarkDataTable = NULL;
 }
 
