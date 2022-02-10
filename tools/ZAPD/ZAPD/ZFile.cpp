@@ -799,7 +799,7 @@ void ZFile::GenerateSourceHeaderFiles()
 	} else {
 		formatter.Write(ProcessExterns());
 		if (Globals::Instance->addLUT && GetName() != "code"){
-			if(GetName() == "ovl_Boss_Ganon2" || GetName() == "ovl_Boss_Dodongo") {
+			if( !(GetName().compare("ovl_Boss_Ganon2") == 0 || GetName().compare("ovl_Boss_Dodongo") == 0 ) ) {
 				formatter.Write(StringHelper::Sprintf("extern LutEntry %s_lut[%d];\n", GetName().c_str(), declarations.size()));
 			}
 			Declaration *decl = declarations.cbegin()->second;
