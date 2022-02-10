@@ -291,8 +291,8 @@ void KaleidoScope_SetupPlayerPreRender(GlobalContext* globalCtx) {
 
 void KaleidoScope_ProcessPlayerPreRender(void) {
     Sleep_Msec(50);
-    PreRender_Calc(&sPlayerPreRender);
-    PreRender_Destroy(&sPlayerPreRender);
+    //PreRender_Calc(&sPlayerPreRender);
+    //PreRender_Destroy(&sPlayerPreRender);
 }
 
 Gfx* KaleidoScope_QuadTextureIA4(Gfx* gfx, void* texture, s16 width, s16 height, u16 point) {
@@ -472,6 +472,8 @@ void KaleidoScope_DrawCursor(GlobalContext* globalCtx, u16 pageIndex) {
         if (pauseCtx->pageIndex == pageIndex) {
             s16 i;
             s16 j;
+
+            KaleidoScope_UpdateCursorSize(globalCtx);
 
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
@@ -1172,9 +1174,12 @@ void KaleidoScope_DrawInfoPanel(GlobalContext* globalCtx) {
         if (pauseCtx->pageIndex == PAUSE_MAP) {
             if (YREG(7) != 0) {
                 osSyncPrintf(VT_FGCOL(YELLOW));
+                /* AddressSanitizer: global-buffer-overflow on address, gAreaGsFlags has 22 elements */
+                if (YREG(6) < 22) {
                 osSyncPrintf("キンスタ数(%d) Get_KIN_STA=%x (%x)  (%x)\n", YREG(6), GET_GS_FLAGS(YREG(6)),
                              gAreaGsFlags[YREG(6)], gSaveContext.gsFlags[YREG(6) >> 2]);
                 osSyncPrintf(VT_RST);
+                }
 
                 YREG(7) = 0;
                 SET_GS_FLAGS(D_8082AE30[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]],
@@ -2332,22 +2337,22 @@ void KaleidoScope_Draw(GlobalContext* globalCtx) {
 }
 
 void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
-    u32 rgb;
+    u32 bgr;
     u16 gray;
     u16 i;
 
     for (i = 0; i < pixelCount; i++) {
-        if ((texture[i] & 0xFFFFFF00) != 0) {
-            rgb = texture[i] >> 8;
-            gray = ((((rgb & 0xFF0000) >> 16) + ((rgb & 0xFF00) >> 7) + (rgb & 0xFF)) / 7) & 0xFF;
+        if ((texture[i] & 0x00FFFFFF) != 0) {
+            bgr = texture[i] & 0x00FFFFFF;
+            gray = ((((bgr & 0xFF0000) >> 16) + ((bgr & 0xFF00) >> 7) + (bgr & 0xFF)) / 7) & 0xFF;
 
-            rgb = gray;
-            rgb <<= 8;
-            rgb |= gray;
-            rgb <<= 8;
-            rgb |= gray;
+            bgr = gray;
+            bgr <<= 8;
+            bgr |= gray;
+            bgr <<= 8;
+            bgr |= gray;
 
-            texture[i] = (rgb << 8) | (texture[i] & 0xFF);
+            texture[i] = 0xFF000000 | bgr;
         }
     }
 }
@@ -2557,7 +2562,12 @@ void KaleidoScope_Update(GlobalContext* globalCtx) {
             osSyncPrintf("icon_item size0=%x\n", size0);
             lutDma(pauseCtx->iconItemSegment, icon_item_static_lut, ARRAY_COUNTU(icon_item_static_lut),
                                 "../z_kaleido_scope_PAL.c", 3662);
-
+            /* Update gItemIcons pointers to within segment */
+            uintptr_t itemOffset = 0;
+            for (i = 0; i < 90 /* matching */; i++) {
+                gItemIcons[i] = (void*)((uintptr_t)pauseCtx->iconItemSegment + itemOffset);
+                itemOffset += icon_item_static_lut[i].size;
+            }
 
             gSegments[8] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
 

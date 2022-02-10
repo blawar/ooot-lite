@@ -2,6 +2,7 @@
 #include "global.h"
 #include "ultra64/printf.h"
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include "def/string.h"
 #include "def/xlitob.h"

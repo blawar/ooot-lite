@@ -3098,16 +3098,8 @@ _DW({                                   \
  *      TEXEL0, 0, SHADE, 0, TEXEL0, 0, SHADE, 0)
  */
 
-#ifdef _MSC_VER
-#define CALL_2(A, B) A B
-#define CALL_3(A, B, C) A B C
-
-#define gDPSetCombineMode(pkt, a, b) CALL_3(gDPSetCombineLERP, (pkt, a, b))
-#define gsDPSetCombineMode(a, b) CALL_2(gsDPSetCombineLERP, (a, b))
-#else
 #define gDPSetCombineMode(pkt, a, b) gDPSetCombineLERP(pkt, a, b)
 #define gsDPSetCombineMode(a, b) gsDPSetCombineLERP(a, b)
-#endif
 
 #define gDPSetColor(pkt, c, d)                      \
 _DW({                                   \

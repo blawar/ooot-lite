@@ -4,7 +4,11 @@ project('ooot', 'c', 'cpp',
 
 ## Globals Must be first
 # 32 bit
-add_global_arguments('-m32', language : ['c', 'cpp'])
+arch_bits = '-m32'
+if get_option('x64')
+  arch_bits = []
+endif
+add_global_arguments(arch_bits, language : ['c', 'cpp'])
 # change elf file layout
 add_global_arguments('-fno-zero-initialized-in-bss', language : ['c', 'cpp'])
 
@@ -50,13 +54,16 @@ gliden64_dep = dependency('gliden64', fallback : ['gliden64', 'gliden64_dep'], n
 
 arg_base = [ '-D_LANGUAGE_C', '-DEARLY=', '-DNON_MATCHING', '-DENABLE_OPENGL', '-DOS_WINDOWS', '-DOS_LINUX', '-DOS_DESKTOP', '-DUSE_NATIVE_MALLOC' ]
 arg_extra = [ '-DENABLE_MOUSE' ]
+if get_option('x64')
+  arg_base += [ '-D_64BIT' ]
+endif
 
 # These are in a lot of generated code and not worth being told about
-warning_base = [ '-Wno-int-conversion', '-Wno-incompatible-pointer-types' ]
+warning_base = [ '-Wno-int-conversion', '-Wno-incompatible-pointer-types', '-Wno-missing-braces', '-Wno-unused-parameter', '-Wno-unused-variable', '-O0', '-ftrapv' ]
 
 arg_c = [ arg_base, arg_extra, args_sdl, warning_base ]
 arg_cpp = [ arg_base, arg_extra, args_sdl ]
-arg_linker = [ '-m32', '-Wl,-Map=oot.map' ]
+arg_linker = [ '-Wl,-Map=oot.map' ] + [ arch_bits ]
 
 # oot
 src_libultra = [ 'src/libultra/gu/cosf.c', 'src/libultra/gu/coss.c', 'src/libultra/gu/lookat.c', 'src/libultra/gu/lookathil.c', 'src/libultra/gu/mtxf2l.c', 'src/libultra/gu/normalize.c', 'src/libultra/gu/ortho.c', 'src/libultra/gu/perspective.c', 'src/libultra/gu/position.c', 'src/libultra/gu/rotate.c', 'src/libultra/gu/scale.c', 'src/libultra/gu/sinf.c', 'src/libultra/gu/sins.c', 'src/libultra/gu/sintable.c', 'src/libultra/gu/translate.c', 'src/libultra/gu/us2dex.c', 'src/libultra/rmon/sprintf.c', 'src/libultra/rmon/xldtob.c', 'src/libultra/rmon/xlitob.c', 'src/libultra/rmon/xprintf.c' ]

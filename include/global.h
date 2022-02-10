@@ -28,6 +28,7 @@ void bcopy(void* __s, void* __d, size_t __n);
 #else
 #include <strings.h>
 #endif
+#include <string.h>
 
 u64 osGetTime();
 void __assert(const char* exp, const char* file, s32 line);

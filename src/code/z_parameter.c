@@ -2063,7 +2063,7 @@ s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
                     break;
                 }
             }
-            osSyncPrintf("Fairy Usage＝%d\n", bottleSlot); // "Fairy Usage＝%d"
+            osSyncPrintf("Fairy Usage=%d\n", bottleSlot); // "Fairy Usage=%d"
             gSaveContext.inventory.items[bottleSlot + i] = ITEM_BOTTLE;
             return 1;
         }
@@ -2173,8 +2173,8 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
     u16 heartCount;
     u16 healthLevel;
 
-    // "＊＊＊＊＊ Fluctuation=%d (now=%d, max=%d) ＊＊＊"
-    osSyncPrintf("＊＊＊＊＊  Fluctuation=%d (now=%d, max=%d)  ＊＊＊", healthChange, gSaveContext.health,
+    // "***** Fluctuation=%d (now=%d, max=%d) ***"
+    osSyncPrintf("*****  Fluctuation=%d (now=%d, max=%d)  ***", healthChange, gSaveContext.health,
                  gSaveContext.healthCapacity);
 
     // clang-format off
@@ -2205,8 +2205,8 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
         }
     }
 
-    // "Life=%d ＊＊＊  %d ＊＊＊＊＊＊"
-    osSyncPrintf("  Life=%d  ＊＊＊  %d  ＊＊＊＊＊＊\n", gSaveContext.health, healthLevel);
+    // "Life=%d ***  %d *****"
+    osSyncPrintf("  Life=%d  ***  %d  *****\n", gSaveContext.health, healthLevel);
 
     if (gSaveContext.health <= 0) {
         gSaveContext.health = 0;

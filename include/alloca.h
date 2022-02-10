@@ -1,6 +1,2 @@
-#ifndef ALLOCA_H
-#define ALLOCA_H
-
+#pragma once
 /* Nothing to do. */
-
-#endif

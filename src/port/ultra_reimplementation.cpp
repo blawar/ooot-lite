@@ -447,6 +447,10 @@ void osSyncPrintf(const char *fmt, ...)
 
 extern "C"
 {
+	s32 _CONST osRecvMesg(void* mq, void* msg, s32 flag) { return 0; }
+	s32 _CONST osSendMesg(void* mq, void* msg, s32 flag) { return 0; }
+	void osCreateMesgQueue(void* mq, void* msg, s32 count) { /*nothing */; }
+
 	size_t lutGetTotalSize(LutEntry *entries, size_t count)
 	{
 		size_t total = 0;
@@ -467,10 +471,6 @@ extern "C"
 			ram0_addr += entries[i].size;
 		}
 	}
-
-	s32 _CONST osRecvMesg(void* mq, void* msg, s32 flag) { return 0; }
-	s32 _CONST osSendMesg(void* mq, void* msg, s32 flag) { return 0; }
-	void osCreateMesgQueue(void* mq, void* msg, s32 count) { /*nothing */; }
 }
 
 #include "color.h"

@@ -45,8 +45,6 @@ const ActorInit Bg_Mjin_InitVars = {
     NULL,
 };
 
-extern UNK_TYPE D_06000000;
-
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -121,7 +119,7 @@ void BgMjin_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSegments[6] = gObjectTable[objBankIndex].vromStart;
         }
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(&D_06000000));
+        gSPSegment(POLY_OPA_DISP++, 0x08, gObjectTable[objBankIndex].vromStart);
         dlist = gWarpPadBaseDL;
     } else {
         dlist = gOcarinaWarpPadDL;

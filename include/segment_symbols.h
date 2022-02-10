@@ -19,15 +19,17 @@
     DECLARE_SEGMENT(ovl_##name)       \
     DECLARE_ROM_SEGMENT(ovl_##name)
 
+/* Not sure we need anymore */
+#if 0
 DECLARE_SEGMENT(boot)
 DECLARE_ROM_SEGMENT(boot)
 
 DECLARE_SEGMENT(dmadata)
 DECLARE_ROM_SEGMENT(dmadata)
-
 DECLARE_ROM_SEGMENT(Audiobank)
 DECLARE_ROM_SEGMENT(Audioseq)
 DECLARE_ROM_SEGMENT(Audiotable)
+#endif
 
 /*
 DECLARE_SEGMENT(link_animetion)

@@ -1896,7 +1896,7 @@ void FileChoose_InitContext(GameState* thisx) {
 
 void FileChoose_Destroy(GameState* thisx) {
 }
-#include <stdio.h>
+
 void FileChoose_Init(GameState* thisx) {
     FileChooseContext* this = (FileChooseContext*)thisx;
     u32 size = lutGetTotalSize(title_static_lut, ARRAY_COUNTU(title_static_lut));

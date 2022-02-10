@@ -5,6 +5,7 @@
 #include "overlays/effects/ovl_Effect_Ss_HitMark/z_eff_ss_hitmark.h"
 #include "z64global.h"
 #include "z64effect.h"
+#include "z64player.h"
 #include "sfx.h"
 #include "def/code_800F7260.h"
 #include "def/graph.h"
@@ -1124,11 +1125,21 @@ void Collider_Draw(GlobalContext* globalCtx, Collider* collider) {
             for (i = 0; i < jntSph->count; i++) {
                 Math3D_DrawSphere(globalCtx, &jntSph->elements[i].dim.worldSphere);
             }
-            break;
+            break;*/
         case COLSHAPE_CYLINDER:
             cylinder = (ColliderCylinder*)collider;
             Math3D_DrawCylinder(globalCtx, &cylinder->dim);
-            break;*/
+            Vec3f temp_player_pos = GET_PLAYER(globalCtx)->actor.world.pos;
+            Vec3f center;
+            Math_Vec3s_ToVec3f(&center, &cylinder->dim.pos);
+            center.y = temp_player_pos.y+10;
+            Vec3f center_plus_xz = { center.x + cylinder->dim.radius, center.y, center.z + cylinder->dim.radius };
+            Vec3f center_plus_x = { center.x + cylinder->dim.radius, center.y, center.z };
+            Vec3f center_minus_x = { center.x - cylinder->dim.radius, center.y, center.z };
+            Vec3f center_minus_xz = { center.x - cylinder->dim.radius, center.y, center.z - cylinder->dim.radius };
+            Collider_DrawRedPoly(globalCtx->state.gfxCtx, &center, &center_plus_x, &center_plus_xz);
+            Collider_DrawRedPoly(globalCtx->state.gfxCtx, &center, &center_minus_x, &center_minus_xz);
+            break;
         case COLSHAPE_TRIS:
             tris = (ColliderTris*)collider;
             for (i = 0; i < tris->count; i++) {
