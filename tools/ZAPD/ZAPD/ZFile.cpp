@@ -799,7 +799,9 @@ void ZFile::GenerateSourceHeaderFiles()
 	} else {
 		formatter.Write(ProcessExterns());
 		if (Globals::Instance->addLUT && GetName() != "code"){
-			formatter.Write(StringHelper::Sprintf("extern LutEntry %s_lut[%d];\n", GetName().c_str(), declarations.size()));
+			if(GetName() == "ovl_Boss_Ganon2" || GetName() == "ovl_Boss_Dodongo") {
+				formatter.Write(StringHelper::Sprintf("extern LutEntry %s_lut[%d];\n", GetName().c_str(), declarations.size()));
+			}
 			Declaration *decl = declarations.cbegin()->second;
 			std::string addTakeAddr = decl->isArray ? "" : "&";
 			formatter.Write(StringHelper::Sprintf("#define _%sSegmentRomStart ((u8*)%s%s)\n", GetName().c_str(), addTakeAddr.c_str(), decl->varName.c_str()));

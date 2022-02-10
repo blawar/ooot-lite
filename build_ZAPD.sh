@@ -3,4 +3,4 @@
 #Prerequisites: libpng, libjpeg
 
 make -C tools/ZAPD/ clean
-make -C tools/ZAPD/ all -j
+make -C tools/ZAPD/ all "$@"
