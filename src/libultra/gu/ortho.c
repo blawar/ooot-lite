@@ -24,9 +24,13 @@ void guOrthoF(f32 mf[4][4], f32 left, f32 right, f32 bottom, f32 top, f32 near, 
 }
 
 void guOrtho(Mtx* mtx, f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far, f32 scale) {
+#ifndef GBI_FLOATS
     f32 mf[4][4];
 
     guOrthoF(mf, left, right, bottom, top, near, far, scale);
 
     guMtxF2L((MtxF*)mf, mtx);
+#else
+    guOrthoF(mtx, left, right, bottom, top, near, far, scale);
+#endif
 }

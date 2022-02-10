@@ -59,11 +59,14 @@ void guLookAtF(f32 mf[4][4], f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32
     mf[2][3] = 0;
     mf[3][3] = 1;
 }
-
 void guLookAt(Mtx* m, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp) {
+#ifndef GBI_FLOATS
     f32 mf[4][4];
 
     guLookAtF(mf, xEye, yEye, zEye, xAt, yAt, zAt, xUp, yUp, zUp);
 
     guMtxF2L((MtxF*)mf, m);
+#else
+    guLookAtF(m, xEye, yEye, zEye, xAt, yAt, zAt, xUp, yUp, zUp);
+#endif
 }

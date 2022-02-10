@@ -8,12 +8,8 @@
 void guMtxF2L(MtxF* mf, Mtx* m) {
     Matrix_MtxFToMtx(mf, m);
 }
-
-void guMtxL2F(MtxF* mf, Mtx* m) {
-    Matrix_MtxToMtxF(mf, m);
-}
 #else
-void guMtxF2L(float mf[4][4], Mtx* m) {
+void guMtxF2L(MtxF* mf, Mtx* m) {
     memcpy(m, mf, sizeof(Mtx));
 }
 #endif

@@ -2221,7 +2221,7 @@ _DW({                                   \
  * num   = new element (32 bit value replacing 2 int or 2 frac matrix
  *                                 componants
  */
-#ifdef  F3DEX_GBI_2
+#if defined(F3DEX_GBI_2) || defined(GBI_FLOATS)
 #define gSPInsertMatrix(pkt, where, num)                \
     ERROR!! gSPInsertMatrix is no longer supported.
 #define gsSPInsertMatrix(where, num)                    \

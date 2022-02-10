@@ -28,9 +28,9 @@ const f64 D_800122E0[] = { 10e0L, 10e1L, 10e3L, 10e7L, 10e15L, 10e31L, 10e63L, 1
 #define _CSIGN 1
 #define _ILONG 0
 #define _MBMAX 8
-#define NAN 2
-#define INF 1
-#define FINITE -1
+#define _NAN 2
+#define _INF 1
+#define _FINITE -1
 #define _DFRAC ((1 << _DOFF) - 1)
 #define _DMASK (0x7FFF & ~_DFRAC)
 #define _DMAX ((1 << (15 - _DOFF)) - 1)
@@ -160,16 +160,16 @@ s16 _Ldunscale(s16* pex, _Pft* px) {
     u16* ps = (u16*)px;
     s16 xchar = (ps[_D0] & _DMASK) >> _DOFF;
 
-    if (xchar == _DMAX) { /* NaN or INF */
+    if (xchar == _DMAX) { /* NaN or _INF */
         *pex = 0;
-        return (s16)(ps[_D0] & _DFRAC || ps[_D1] || ps[_D2] || ps[_D3] ? NAN : INF);
+        return (s16)(ps[_D0] & _DFRAC || ps[_D1] || ps[_D2] || ps[_D3] ? _NAN : _INF);
     } else if (0 < xchar) {
         ps[_D0] = (ps[_D0] & ~_DMASK) | (_DBIAS << _DOFF);
         *pex = xchar - (_DBIAS - 1);
-        return FINITE;
+        return _FINITE;
     }
     if (0 > xchar) {
-        return NAN;
+        return _NAN;
     } else {
         *pex = 0;
         return 0;

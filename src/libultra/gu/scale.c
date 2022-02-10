@@ -10,8 +10,13 @@ void guScaleF(float mf[4][4], float x, float y, float z) {
     mf[2][2] = z;
     mf[3][3] = 1.0;
 }
+
 void guScale(Mtx *m, float x, float y, float z) {
+#ifndef GBI_FLOATS
     float mf[4][4];
     guScaleF(mf, x, y, z);
     guMtxF2L(mf, m);
+#else
+    guScaleF(m, x, y, z);
+#endif
 }

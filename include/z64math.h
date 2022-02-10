@@ -269,7 +269,10 @@ f32 Math_FAsinF(f32 x);
 f32 Math_FAcosF(f32 x);
 */
 
-
+#ifndef GBI_FLOATS
 extern Mtx gMtxClear;
+#else
+#define gMtxClear gMtxFClear
+#endif
 extern MtxF gMtxFClear;
 

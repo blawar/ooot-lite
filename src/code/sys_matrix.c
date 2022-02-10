@@ -20,11 +20,13 @@
 #define ENDIAN_SWAP_BIT 0
 
 // clang-format off
+#ifndef GBI_FLOATS
 Mtx gMtxClear = MTX(65536,     0,     1,     0,
         0, 65536,     0,     1,
         0,     0,     0,     0,
         0,     0,     0,     0
 );
+#endif
 
 MtxF gMtxFClear = {
     1.0f, 0.0f, 0.0f, 0.0f,
@@ -547,6 +549,7 @@ void func_800D1694(f32 x, f32 y, f32 z, Vec3s* vec) {
 }
 
 Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest) {
+#ifndef GBI_FLOATS
     s32 temp;
     u16* m1 = (u16*)&dest->m[0][0];
     u16* m2 = (u16*)&dest->m[2][0];
@@ -614,7 +617,9 @@ Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest) {
     temp = src->ww * 0x10000;
     m1[15 ^ ENDIAN_SWAP_BIT] = (temp >> 0x10);
     m2[15 ^ ENDIAN_SWAP_BIT] = temp & 0xFFFF;
-
+#else
+    Matrix_MtxFCopy(dest, src);
+#endif
     return dest;
 }
 
@@ -674,6 +679,7 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
 }
 
 void Matrix_MtxToMtxF(Mtx* src, MtxF* dest) {
+#ifndef GBI_FLOATS
     u16* m1 = (u16*)&src->m[0][0];
     u16* m2 = (u16*)&src->m[2][0];
 
@@ -693,6 +699,9 @@ void Matrix_MtxToMtxF(Mtx* src, MtxF* dest) {
     dest->yw = ((m1[13 ^ ENDIAN_SWAP_BIT] << 0x10) | m2[13 ^ ENDIAN_SWAP_BIT]) * (1 / 65536.0f);
     dest->zw = ((m1[14 ^ ENDIAN_SWAP_BIT] << 0x10) | m2[14 ^ ENDIAN_SWAP_BIT]) * (1 / 65536.0f);
     dest->ww = ((m1[15 ^ ENDIAN_SWAP_BIT] << 0x10) | m2[15 ^ ENDIAN_SWAP_BIT]) * (1 / 65536.0f);
+#else
+    Matrix_MtxFCopy(dest, (MtxF*)src);
+#endif
 }
 
 void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* mf) {
@@ -991,6 +1000,7 @@ void func_800D2A98(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
     guMtxF2L(&mf, mtx);
 }
 
+#ifndef GBI_FLOATS
 void func_800D2AE4(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
     u16* m1 = (u16*)&mtx->m[0][0];
     u16* m2 = (u16*)&mtx->m[2][0];
@@ -1094,8 +1104,10 @@ void func_800D2BD0(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f
     m2[11] = 0;
     m2[15] = 0;
 }
+#endif
 
 void func_800D2CEC(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
+#ifndef GBI_FLOATS
     Mtx_t* m = &mtx->m;
     u16* m1 = (u16*)(*m)[0];
     u16* m2 = (u16*)(*m)[2];
@@ -1136,4 +1148,19 @@ void func_800D2CEC(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f
     m1[14] = (temp >> 16) & 0xFFFF;
     m1[15] = 1;
     (*m)[3][3] = temp << 16;
+#else
+    /* Set translation and scale */
+    mtx->m[0][0] = arg1;
+    mtx->m[0][1] = 0;
+    mtx->m[0][2] = arg2;
+    mtx->m[0][3] = 0;
+    mtx->m[1][0] = 0;
+    mtx->m[1][1] = arg3;
+    mtx->m[2][1] = 0;
+    mtx->m[2][3] = 0;
+    mtx->m[3][0] = arg4;
+    mtx->m[3][1] = arg5;
+    mtx->m[3][2] = arg6;
+    mtx->m[3][3] = 1.0f;
+#endif
 }

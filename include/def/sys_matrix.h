@@ -3,7 +3,11 @@
 struct GameState;
 struct GraphicsContext;
 
+#ifndef GBI_FLOATS
 extern Mtx gMtxClear;
+#else
+#define gMtxClear gMtxFClear
+#endif
 extern MtxF gMtxFClear;
 
 #ifdef INTERNAL_SRC_CODE_SYS_MATRIX_C

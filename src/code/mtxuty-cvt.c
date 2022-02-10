@@ -1,4 +1,5 @@
 #define INTERNAL_SRC_CODE_MTXUTY_CVT_C
+#ifndef GBI_FLOATS
 #include "global.h"
 #include "def/logutils.h"
 #include "def/mtxuty-cvt.h"
@@ -19,4 +20,7 @@ void MtxConv_F2L(Mtx* m1, MtxF* m2) {
         }
     }
 }
+#else
+/* Nothing to do. */
+#endif
 

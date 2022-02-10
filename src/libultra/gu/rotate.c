@@ -50,8 +50,12 @@ void guRotateF(f32 m[4][4], f32 a, f32 x, f32 y, f32 z) {
 }
 
 void guRotate(Mtx* m, f32 a, f32 x, f32 y, f32 z) {
+#ifndef GBI_FLOATS
     f32 mf[4][4];
 
     guRotateF(mf, a, x, y, z);
     guMtxF2L((MtxF*)mf, m);
+#else
+    guRotateF(m, a, x, y, z);
+#endif
 }

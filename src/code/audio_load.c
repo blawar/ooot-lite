@@ -1164,9 +1164,15 @@ void AudioLoad_Init(void* heap, u32 heapSize) {
     gAudioContext.resetStatus = 1;
 
     AudioHeap_ResetStep();
+#if defined(ENABLE_AUDIO)
     AudioLoad_InitTable(gAudioContext.sequenceTable, _AudioseqSegmentRomStart, 0);
     AudioLoad_InitTable(gAudioContext.soundFontTable, _AudiobankSegmentRomStart, 0);
     AudioLoad_InitTable(gAudioContext.sampleBankTable, _AudiotableSegmentRomStart, 0);
+#else
+    AudioLoad_InitTable(gAudioContext.sequenceTable, NULL, 0);
+    AudioLoad_InitTable(gAudioContext.soundFontTable, NULL, 0);
+    AudioLoad_InitTable(gAudioContext.sampleBankTable, NULL, 0);
+#endif
     numFonts = gAudioContext.soundFontTable->numEntries;
     gAudioContext.soundFonts = AudioHeap_Alloc(&gAudioContext.audioInitPool, numFonts * sizeof(SoundFont));
 

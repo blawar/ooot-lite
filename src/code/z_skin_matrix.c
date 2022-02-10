@@ -530,6 +530,7 @@ void SkinMatrix_Vec3sToVec3f(Vec3s* src, Vec3f* dest) {
 }
 
 void SkinMatrix_MtxFToMtx(MtxF* src, Mtx* dest) {
+#ifndef GBI_FLOATS
     s32 temp;
     u16* m1 = (u16*)&dest->m[0][0];
     u16* m2 = (u16*)&dest->m[2][0];
@@ -597,6 +598,9 @@ void SkinMatrix_MtxFToMtx(MtxF* src, Mtx* dest) {
     temp = src->ww * 0x10000;
     m1[15] = (temp >> 0x10);
     m2[15] = temp & 0xFFFF;
+#else
+    SkinMatrix_MtxFCopy(src, dest);
+#endif
 }
 
 Mtx* SkinMatrix_MtxFToNewMtx(GraphicsContext* gfxCtx, MtxF* src) {
