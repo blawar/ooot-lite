@@ -52,14 +52,14 @@ endif
 # GLideN64
 gliden64_dep = dependency('gliden64', fallback : ['gliden64', 'gliden64_dep'], native: false)
 
-arg_base = [ '-D_LANGUAGE_C', '-DEARLY=', '-DNON_MATCHING', '-DENABLE_OPENGL', '-DOS_WINDOWS', '-DOS_LINUX', '-DOS_DESKTOP', '-DUSE_NATIVE_MALLOC' ]
+arg_base = [ '-D_LANGUAGE_C', '-DEARLY=', '-DNON_MATCHING', '-DENABLE_OPENGL', '-DOS_WINDOWS', '-DOS_LINUX', '-DOS_DESKTOP', '-DUSE_NATIVE_MALLOC', '-DGBI_FLOATS' ]
 arg_extra = [ '-DENABLE_MOUSE' ]
 if get_option('x64')
   arg_base += [ '-D_64BIT' ]
 endif
 
 # These are in a lot of generated code and not worth being told about
-warning_base = [ '-Wno-int-conversion', '-Wno-incompatible-pointer-types', '-Wno-missing-braces', '-Wno-unused-parameter', '-Wno-unused-variable', '-O0', '-ftrapv' ]
+warning_base = [ '-Wno-int-conversion', '-Wno-incompatible-pointer-types', '-Wno-missing-braces', '-Wno-unused-parameter', '-Wno-unused-variable' ]
 
 arg_c = [ arg_base, arg_extra, args_sdl, warning_base ]
 arg_cpp = [ arg_base, arg_extra, args_sdl ]
