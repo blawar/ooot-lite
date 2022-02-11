@@ -1156,7 +1156,11 @@ void func_800D2CEC(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f
     mtx->m[0][3] = 0;
     mtx->m[1][0] = 0;
     mtx->m[1][1] = arg3;
+    mtx->m[1][2] = 0;
+    mtx->m[1][3] = 0;
+    mtx->m[2][0] = 0;
     mtx->m[2][1] = 0;
+    mtx->m[2][2] = 0;
     mtx->m[2][3] = 0;
     mtx->m[3][0] = arg4;
     mtx->m[3][1] = arg5;
