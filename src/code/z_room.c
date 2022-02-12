@@ -8,6 +8,7 @@
 #include "z64player.h"
 #include "z64save.h"
 #include "rsp.h"
+#include "gfx_align.h"
 #include "def/code_800EC960.h"
 #include "def/createmesgqueue.h"
 #include "def/game.h"
@@ -365,14 +366,21 @@ void func_80096680(GlobalContext* globalCtx, Room* room, u32 flags) {
         if (sp94) {
             func_80093D18(globalCtx->state.gfxCtx);
             gSPMatrix(POLY_OPA_DISP++, &gMtxClear, G_MTX_MODELVIEW | G_MTX_LOAD);
+            gDPPipeSync(POLY_OPA_DISP++);
+            const f32 wndW= (float)gfx_width();
+            const f32 wndH= (float)gfx_height();
+            const f32 wndDiff = (wndW-(wndH*(4.0f/3.0f)))/2.0f/wndW*320.0f;
+            const f32 overscanAdjust = 2.0f;
+            gDPSetScissor(POLY_OPA_DISP++, G_SC_NON_INTERLACE, 0+overscanAdjust+wndDiff, 0, 320-wndDiff-overscanAdjust, 240);
             gSPDisplayList(POLY_OPA_DISP++, polygonDlist->opa);
+            gDPSetScissor(POLY_OPA_DISP++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
         }
 
         if (sp98) {
             // gSPLoadUcodeL(POLY_OPA_DISP++, rspS2DEX)?
             gSPLoadUcodeEx(POLY_OPA_DISP++, OS_K0_TO_PHYSICAL(D_80113070), OS_K0_TO_PHYSICAL(D_801579A0), 0x800);
-
             {
+                gDPPipeSync(POLY_OPA_DISP++);
                 Vec3f sp60;
                 spA8 = POLY_OPA_DISP;
                 Camera_GetSkyboxOffset(&sp60, camera);

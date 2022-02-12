@@ -30,7 +30,7 @@ void KaleidoScope_ProcessPlayerPreRender();
 void KaleidoScope_SetupPlayerPreRender(GlobalContext* globalCtx);
 void KaleidoScope_DrawCursor(GlobalContext* globalCtx, u16 pageIndex);
 void KaleidoScope_UpdateDungeonMap(GlobalContext* globalCtx);
-
+void KaleidoScope_UpdateCursorSize(GlobalContext* globalCtx);
 void PauseMapMark_Draw(GlobalContext* globalCtx);
 
 #endif
