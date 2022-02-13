@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_KUSA_Z_EN_KUSA_C
 #include "actor_common.h"
 /*
@@ -29,6 +33,7 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnKusa_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnKusa_SetupLiftedUp(EnKusa* this);
 void EnKusa_SetupWaitObject(EnKusa* this);
@@ -62,6 +67,7 @@ const ActorInit En_Kusa_InitVars = {
     (ActorFunc)EnKusa_Destroy,
     (ActorFunc)EnKusa_Update,
     NULL,
+    (ActorFunc)EnKusa_OnLoad,
 };
 
 static s16 sObjectIds[] = { OBJECT_GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA };
@@ -236,6 +242,13 @@ void EnKusa_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
+}
+
+void EnKusa_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    rotSpeedXtarget = 0;
+    rotSpeedX = 0;
+    rotSpeedYtarget = 0;
+    rotSpeedY = 0;
 }
 
 void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {

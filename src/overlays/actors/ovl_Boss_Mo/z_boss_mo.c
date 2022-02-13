@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BOSS_MO_Z_BOSS_MO_C
 #include "actor_common.h"
 /*
@@ -73,6 +77,7 @@ void BossMo_UpdateCore(Actor* thisx, GlobalContext* globalCtx);
 void BossMo_UpdateTent(Actor* thisx, GlobalContext* globalCtx);
 void BossMo_DrawCore(Actor* thisx, GlobalContext* globalCtx);
 void BossMo_DrawTent(Actor* thisx, GlobalContext* globalCtx);
+void BossMo_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BossMo_UpdateEffects(BossMo* this, GlobalContext* globalCtx);
 void BossMo_DrawEffects(BossMoEffect* effect, GlobalContext* globalCtx);
@@ -151,6 +156,7 @@ const ActorInit Boss_Mo_InitVars = {
     (ActorFunc)BossMo_Destroy,
     (ActorFunc)BossMo_UpdateTent,
     (ActorFunc)BossMo_DrawTent,
+    (ActorFunc)BossMo_OnLoad,
 };
 
 static BossMo* sMorphaCore = NULL;
@@ -346,6 +352,15 @@ static f32 sDropletWidth[41] = {
     7.794229f, 7.483315f, 7.123903f, 6.708204f, 6.22495f,  5.656854f, 4.974937f, 4.123106f, 2.95804f,
     0.0f,      0.0f,      0.0f,      0.0f,      0.0f,
 }; // These are sqrt(9^2 - (i/2 - 9)^2), a sphere of radius 9.
+
+void BossMo_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    sMorphaCore = NULL;
+    sMorphaTent1 = NULL;
+    sMorphaTent2 = NULL;
+    sSeed1 = 0;
+    sSeed2 = 0;
+    sSeed3 = 0;
+}
 
 void BossMo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;

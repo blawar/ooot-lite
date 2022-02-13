@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_CODE_Z_ACTOR_C
 #include "global.h"
 #include "vt.h"
@@ -2681,6 +2685,7 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
     ActorOverlay* overlayEntry;
     uintptr_t temp;
     char* name;
+    bool wasFreshLoaded = false;
 
     overlayEntry = &gActorOverlayTable[actorId];
     ASSERT(actorId < ACTOR_ID_MAX, "profile < ACTOR_DLF_MAX", "../z_actor.c", 6883);
@@ -2704,11 +2709,13 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
         }
 
         actorInit = overlayEntry->initInfo;
+        wasFreshLoaded = false;
     } else {
         if (overlayEntry->loadedRamAddr != NULL) {
             if (HREG(20) != 0) {
                 osSyncPrintf("Already loaded\n"); // "Already loaded"
             }
+            wasFreshLoaded = false;
         } else {
             if (overlayEntry->allocType & ALLOCTYPE_ABSOLUTE) {
 
@@ -2745,6 +2752,7 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
             osSyncPrintf(VT_RST);
 
             overlayEntry->numLoaded = 0;
+            wasFreshLoaded = true;
         }
 
         actorInit = overlayEntry->initInfo;
@@ -2804,6 +2812,12 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
     actor->home.rot.y = rotY;
     actor->home.rot.z = rotZ;
     actor->params = params;
+
+    if(wasFreshLoaded) {
+        if(actorInit->onload) {
+            actorInit->onload(actor, globalCtx);
+        }
+    }
 
     Actor_AddToCategory(actorCtx, actor, actorInit->category);
 

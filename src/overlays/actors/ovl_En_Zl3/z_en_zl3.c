@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_ZL3_Z_EN_ZL3_C
 #include "actor_common.h"
 /*
@@ -42,6 +46,7 @@ void EnZl3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnZl3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl3_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnZl3_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 void func_80B59AD0(EnZl3* this, GlobalContext* globalCtx);
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -2676,6 +2681,13 @@ void EnZl3_Update(Actor* thisx, GlobalContext* globalCtx) {
     sActionFuncs[this->action](this, globalCtx);
 }
 
+void EnZl3_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80B5A468 = 0;
+    D_80B5A484 = 0.0f;
+    D_80B5A494 = -1;
+    D_80B5A4BC = 0;
+}
+
 void EnZl3_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnZl3* this = (EnZl3*)thisx;
     ActorShape* shape = &this->actor.shape;
@@ -2795,4 +2807,5 @@ const ActorInit En_Zl3_InitVars = {
     (ActorFunc)EnZl3_Destroy,
     (ActorFunc)EnZl3_Update,
     (ActorFunc)EnZl3_Draw,
+    (ActorFunc)EnZl3_OnLoad,
 };

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #pragma once
 
 #include "z64dma.h"
@@ -45,7 +49,8 @@ typedef struct {
     /* 0x14 */ ActorFunc destroy; // Destructor
     /* 0x18 */ ActorFunc update; // Update Function
     /* 0x1C */ ActorFunc draw; // Draw function
-} ActorInit; // size = 0x20
+    /* 0x20 */ ActorFunc onload; // Draw function
+} ActorInit; // size = 0x24
 
 typedef enum {
     /* 0 */ ALLOCTYPE_NORMAL,

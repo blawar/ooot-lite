@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_SPOT15_RRBOX_Z_BG_SPOT15_RRBOX_C
 #include "actor_common.h"
 /*
@@ -22,6 +26,7 @@ void BgSpot15Rrbox_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot15Rrbox_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot15Rrbox_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot15Rrbox_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgSpot15Rrbox_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808B4084(BgSpot15Rrbox* this, GlobalContext* globalCtx);
 void func_808B40AC(BgSpot15Rrbox* this, GlobalContext* globalCtx);
@@ -44,6 +49,7 @@ const ActorInit Bg_Spot15_Rrbox_InitVars = {
     (ActorFunc)BgSpot15Rrbox_Destroy,
     (ActorFunc)BgSpot15Rrbox_Update,
     (ActorFunc)BgSpot15Rrbox_Draw,
+    (ActorFunc)BgSpot15Rrbox_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -124,6 +130,10 @@ s32 func_808B3AAC(BgSpot15Rrbox* this, GlobalContext* globalCtx) {
     }
 
     return true;
+}
+
+void BgSpot15Rrbox_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_808B4590 = 0;
 }
 
 void BgSpot15Rrbox_Init(Actor* thisx, GlobalContext* globalCtx) {

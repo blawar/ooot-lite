@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MIZU_WATER_Z_BG_MIZU_WATER_C
 #include "actor_common.h"
 /*
@@ -48,10 +52,8 @@ const ActorInit Bg_Mizu_Water_InitVars = {
     (ActorFunc)BgMizuWater_Destroy,
     (ActorFunc)BgMizuWater_Update,
     (ActorFunc)BgMizuWater_Draw,
+    (ActorFunc)NULL,
 };
-
-static f32 sUnused1 = 0;
-static f32 sUnused2 = 110.0f;
 
 static u32 sWaterBoxIndexes[] = { 2, 3, 5, 7, 12, 20, 21, 22 };
 

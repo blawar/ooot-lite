@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_IN_Z_EN_IN_C
 #include "actor_common.h"
 #include "z_en_in.h"
@@ -27,6 +31,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnIn_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A79FB0(EnIn* this, GlobalContext* globalCtx);
 void func_80A7A304(EnIn* this, GlobalContext* globalCtx);
@@ -53,6 +58,7 @@ const ActorInit En_In_InitVars = {
     (ActorFunc)EnIn_Destroy,
     (ActorFunc)EnIn_Update,
     (ActorFunc)EnIn_Draw,
+    (ActorFunc)EnIn_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -480,7 +486,11 @@ void func_80A79C78(EnIn* this, GlobalContext* globalCtx) {
     Interface_ChangeAlpha(2);
 }
 
-static s32 D_80A7B998 = 0;
+static bool D_80A7B998 = false;
+
+void EnIn_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80A7B998 = false;
+}
 
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnIn* this = (EnIn*)thisx;

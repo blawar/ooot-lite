@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_DOOR_WARP1_Z_DOOR_WARP1_C
 #include "actor_common.h"
 #include "z_door_warp1.h"
@@ -22,6 +26,7 @@ void DoorWarp1_Init(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DoorWarp1_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void DoorWarp1_WarpAppear(DoorWarp1* this, GlobalContext* globalCtx);
 void DoorWarp1_Destination(DoorWarp1* this, GlobalContext* globalCtx);
@@ -57,6 +62,7 @@ const ActorInit Door_Warp1_InitVars = {
     (ActorFunc)DoorWarp1_Destroy,
     (ActorFunc)DoorWarp1_Update,
     (ActorFunc)DoorWarp1_Draw,
+    (ActorFunc)DoorWarp1_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -67,9 +73,15 @@ static InitChainEntry sInitChain[] = {
 };
 
 static s16 sWarpTimerTarget;
+static s16 sRutoWarpSubCamId;
 
 void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
+}
+
+void DoorWarp1_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sWarpTimerTarget = 0;
+    sRutoWarpSubCamId = 0;
 }
 
 void DoorWarp1_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -564,7 +576,6 @@ void DoorWarp1_RutoWarpIdle(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 }
 
-static s16 sRutoWarpSubCamId;
 
 void func_80999EE0(DoorWarp1* this, GlobalContext* globalCtx) {
     Vec3f at;

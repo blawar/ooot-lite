@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_GOMA_Z_EN_GOMA_C
 #include "actor_common.h"
 #include "z_en_goma.h"
@@ -26,6 +30,7 @@ void EnGoma_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnGoma_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGoma_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGoma_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGoma_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnGoma_Flee(EnGoma* this, GlobalContext* globalCtx);
 void EnGoma_EggFallToGround(EnGoma* this, GlobalContext* globalCtx);
@@ -68,6 +73,7 @@ const ActorInit En_Goma_InitVars = {
     (ActorFunc)EnGoma_Destroy,
     (ActorFunc)EnGoma_Update,
     (ActorFunc)EnGoma_Draw,
+    (ActorFunc)EnGoma_OnLoad,
 };
 
 static ColliderCylinderInit D_80A4B7A0 = {
@@ -119,6 +125,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 20, ICHAIN_STOP),
 };
+
+void EnGoma_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sSpawnNum = 0;
+}
 
 void EnGoma_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGoma* this = (EnGoma*)thisx;

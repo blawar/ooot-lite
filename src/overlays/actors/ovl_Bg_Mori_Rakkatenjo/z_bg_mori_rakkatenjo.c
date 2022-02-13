@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MORI_RAKKATENJO_Z_BG_MORI_RAKKATENJO_C
 #include "actor_common.h"
 /*
@@ -25,6 +29,7 @@ void BgMoriRakkatenjo_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriRakkatenjo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriRakkatenjo_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriRakkatenjo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgMoriRakkatenjo_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgMoriRakkatenjo_SetupWaitForMoriTex(BgMoriRakkatenjo* this);
 void BgMoriRakkatenjo_WaitForMoriTex(BgMoriRakkatenjo* this, GlobalContext* globalCtx);
@@ -49,6 +54,7 @@ const ActorInit Bg_Mori_Rakkatenjo_InitVars = {
     (ActorFunc)BgMoriRakkatenjo_Destroy,
     (ActorFunc)BgMoriRakkatenjo_Update,
     NULL,
+    (ActorFunc)BgMoriRakkatenjo_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -56,6 +62,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(minVelocityY, -11, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
+
+void BgMoriRakkatenjo_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sCamSetting = 0;
+}
 
 void BgMoriRakkatenjo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

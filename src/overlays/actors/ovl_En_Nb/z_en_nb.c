@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_NB_Z_EN_NB_C
 #include "actor_common.h"
 /*
@@ -71,6 +75,7 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnNb_Onload(Actor* thisx, GlobalContext* globalCtx);
 
 static ColliderCylinderInitType1 sCylinderInit = {
     {
@@ -97,7 +102,7 @@ static void* sEyeTextures[] = {
     gNabooruEyeClosedTex,
 };
 
-static s32 D_80AB4318 = 0;
+static bool D_80AB4318 = false;
 
 #include "z_en_nb_cutscene_data.c" EARLY
 
@@ -216,20 +221,17 @@ void func_80AB11EC(EnNb* this) {
 }
 
 void func_80AB1210(EnNb* this, GlobalContext* globalCtx) {
-    s32 one; // required to match
-
-    if (globalCtx->csCtx.state == CS_STATE_IDLE) {
+   if (globalCtx->csCtx.state == CS_STATE_IDLE) {
         if (D_80AB4318) {
             if (this->actor.params == NB_TYPE_DEMO02) {
                 func_80AB11EC(this);
             }
 
-            D_80AB4318 = 0;
+            D_80AB4318 = false;
         }
     } else {
-        one = 1;
         if (!D_80AB4318) {
-            D_80AB4318 = one;
+            D_80AB4318 = true;
         }
     }
 }
@@ -1435,6 +1437,10 @@ void EnNb_Update(Actor* thisx, GlobalContext* globalCtx) {
     sActionFuncs[this->action](this, globalCtx);
 }
 
+void EnNb_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80AB4318 = false;
+}
+
 void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnNb* this = (EnNb*)thisx;
@@ -1552,4 +1558,5 @@ const ActorInit En_Nb_InitVars = {
     (ActorFunc)EnNb_Destroy,
     (ActorFunc)EnNb_Update,
     (ActorFunc)EnNb_Draw,
+    (ActorFunc)EnNb_OnLoad,
 };

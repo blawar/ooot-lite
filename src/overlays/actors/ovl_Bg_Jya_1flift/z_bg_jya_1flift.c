@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_JYA_1FLIFT_Z_BG_JYA_1FLIFT_C
 #include "actor_common.h"
 /*
@@ -22,6 +26,7 @@ void BgJya1flift_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgJya1flift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJya1flift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJya1flift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgJya1flift_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgJya1flift_SetupWaitForSwitch(BgJya1flift* this);
 void BgJya1flift_WaitForSwitch(BgJya1flift* this, GlobalContext* globalCtx);
@@ -32,7 +37,7 @@ void BgJya1flift_SetupDoNothing(BgJya1flift* this);
 void BgJya1flift_ResetMoveDelay(BgJya1flift* this);
 void BgJya1flift_DelayMove(BgJya1flift* this, GlobalContext* globalCtx);
 
-static u8 sIsSpawned = false;
+static bool sIsSpawned = false;
 
 const ActorInit Bg_Jya_1flift_InitVars = {
     ACTOR_BG_JYA_1FLIFT,
@@ -44,6 +49,7 @@ const ActorInit Bg_Jya_1flift_InitVars = {
     (ActorFunc)BgJya1flift_Destroy,
     (ActorFunc)BgJya1flift_Update,
     (ActorFunc)BgJya1flift_Draw,
+    (ActorFunc)BgJya1flift_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -97,6 +103,10 @@ void BgJya1flift_InitCollision(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
+}
+
+void BgJya1flift_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsSpawned = false;
 }
 
 void BgJya1flift_Init(Actor* thisx, GlobalContext* globalCtx) {

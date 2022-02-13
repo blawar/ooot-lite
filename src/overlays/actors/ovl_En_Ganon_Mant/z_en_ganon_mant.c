@@ -103,8 +103,6 @@ static u16 sVerticesMap[GANON_MANT_NUM_STRANDS * GANON_MANT_NUM_JOINTS] = {
 #define MANT_TEX_WIDTH 32
 #define MANT_TEX_HEIGHT 64
 
-static u64 sForceAlignment = 0;
-
 #include "overlays/ovl_En_Ganon_Mant/ovl_En_Ganon_Mant.c"
 
 void EnGanonMant_Init(Actor* thisx, GlobalContext* globalCtx) {

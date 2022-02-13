@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_G_SWITCH_Z_EN_G_SWITCH_C
 #include "actor_common.h"
 /*
@@ -38,6 +42,7 @@ void EnGSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGSwitch_DrawRupee(Actor* thisx, GlobalContext* globalCtx);
 void EnGSwitch_DrawPot(Actor* thisx, GlobalContext* globalCtx);
+void EnGSwitch_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnGSwitch_SilverRupeeTracker(EnGSwitch* this, GlobalContext* globalCtx);
 void EnGSwitch_SilverRupeeIdle(EnGSwitch* this, GlobalContext* globalCtx);
@@ -88,7 +93,12 @@ const ActorInit En_G_Switch_InitVars = {
     (ActorFunc)EnGSwitch_Destroy,
     (ActorFunc)EnGSwitch_Update,
     NULL,
+    (ActorFunc)EnGSwitch_OnLoad,
 };
+
+void EnGSwitch_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sCollectedCount = 0;
+}
 
 void EnGSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

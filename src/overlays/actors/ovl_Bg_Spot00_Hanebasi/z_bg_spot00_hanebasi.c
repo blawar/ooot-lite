@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_SPOT00_HANEBASI_Z_BG_SPOT00_HANEBASI_C
 #include "actor_common.h"
 #include "z_kankyo.h"
@@ -36,6 +40,7 @@ void BgSpot00Hanebasi_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot00Hanebasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot00Hanebasi_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot00Hanebasi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgSpot00Hanebasi_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgSpot00Hanebasi_DrawbridgeWait(BgSpot00Hanebasi* this, GlobalContext* globalCtx);
 void BgSpot00Hanebasi_DrawbridgeRiseAndFall(BgSpot00Hanebasi* this, GlobalContext* globalCtx);
@@ -51,6 +56,7 @@ const ActorInit Bg_Spot00_Hanebasi_InitVars = {
     (ActorFunc)BgSpot00Hanebasi_Destroy,
     (ActorFunc)BgSpot00Hanebasi_Update,
     (ActorFunc)BgSpot00Hanebasi_Draw,
+    (ActorFunc)BgSpot00Hanebasi_OnLoad,
 };
 
 static f32 sTorchFlameScale = 0.0f;
@@ -61,6 +67,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 5000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
+
+void BgSpot00Hanebasi_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sTorchFlameScale = 0.0f;
+}
 
 void BgSpot00Hanebasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgSpot00Hanebasi* this = (BgSpot00Hanebasi*)thisx;

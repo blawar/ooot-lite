@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_SPOT16_BOMBSTONE_Z_BG_SPOT16_BOMBSTONE_C
 #include "actor_common.h"
 #include "z_bg_spot16_bombstone.h"
@@ -24,6 +28,7 @@ void BgSpot16Bombstone_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot16Bombstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot16Bombstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpot16Bombstone_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgSpot16Bombstone_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808B5A94(BgSpot16Bombstone* this, GlobalContext* globalCtx);
 void func_808B5B04(BgSpot16Bombstone* this, GlobalContext* globalCtx);
@@ -133,6 +138,7 @@ const ActorInit Bg_Spot16_Bombstone_InitVars = {
     (ActorFunc)BgSpot16Bombstone_Destroy,
     (ActorFunc)BgSpot16Bombstone_Update,
     (ActorFunc)BgSpot16Bombstone_Draw,
+    (ActorFunc)BgSpot16Bombstone_OnLoad,
 };
 
 static InitChainEntry sInitChainBoulder[] = {
@@ -242,6 +248,11 @@ s32 func_808B4E58(BgSpot16Bombstone* this, GlobalContext* globalctx) {
 
     func_808B5AF0(this);
     return true;
+}
+
+void BgSpot16Bombstone_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sPlayerBomb = NULL;
+    sTimer = 0;
 }
 
 void BgSpot16Bombstone_Init(Actor* thisx, GlobalContext* globalCtx) {

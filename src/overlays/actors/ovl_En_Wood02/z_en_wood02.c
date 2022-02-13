@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_WOOD02_Z_EN_WOOD02_C
 #include "actor_common.h"
 /*
@@ -25,6 +29,7 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWood02_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWood02_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWood02_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 /**
  * WOOD_SPAWN_SPAWNER is also used by some individual trees: EnWood02_Update also checks for parent before running any
@@ -55,6 +60,7 @@ const ActorInit En_Wood02_InitVars = {
     (ActorFunc)EnWood02_Destroy,
     (ActorFunc)EnWood02_Update,
     (ActorFunc)EnWood02_Draw,
+    (ActorFunc)EnWood02_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -168,6 +174,11 @@ void EnWood02_SpawnOffspring(EnWood02* this, GlobalContext* globalCtx) {
             }
         }
     }
+}
+
+void EnWood02_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    sSpawnCos = 0;
+    sSpawnSin = 0;
 }
 
 void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx2) {
@@ -310,7 +321,7 @@ void EnWood02_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
+void __attribute__((no_sanitize("address"))) EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnWood02* this = (EnWood02*)thisx;
     f32 wobbleAmplitude;

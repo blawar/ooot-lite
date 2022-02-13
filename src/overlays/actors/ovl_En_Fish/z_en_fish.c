@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_FISH_Z_EN_FISH_C
 #include "actor_common.h"
 /*
@@ -24,6 +28,7 @@ void EnFish_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFish_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnFish_Respawning_SetupSlowDown(EnFish* this);
 void EnFish_Respawning_SlowDown(EnFish* this, GlobalContext* globalCtx);
@@ -84,6 +89,7 @@ const ActorInit En_Fish_InitVars = {
     (ActorFunc)EnFish_Destroy,
     (ActorFunc)EnFish_Update,
     (ActorFunc)EnFish_Draw,
+    (ActorFunc)EnFish_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -132,6 +138,12 @@ void EnFish_SetCutsceneData(EnFish* this) {
 }
 
 void EnFish_ClearCutsceneData(EnFish* this) {
+    D_80A17010 = NULL;
+    D_80A17014 = 0.0f;
+    D_80A17018 = 0.0f;
+}
+
+void EnFish_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
     D_80A17010 = NULL;
     D_80A17014 = 0.0f;
     D_80A17018 = 0.0f;

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_FU_Z_EN_FU_C
 #include "actor_common.h"
 /*
@@ -223,7 +227,7 @@ void EnFu_TeachSong(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void EnFu_WaitAdult(EnFu* this, GlobalContext* globalCtx) {
-    static s16 yawDiff;
+    s16 yawDiff;
     Player* player = GET_PLAYER(globalCtx);
 
     yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;

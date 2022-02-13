@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_DEMO_KANKYO_Z_DEMO_KANKYO_C
 #include "actor_common.h"
 #include "z_demo_kankyo.h"
@@ -28,6 +32,7 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoKankyo_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void DemoKankyo_SetupType(DemoKankyo* this, GlobalContext* globalCtx);
 void DemoKankyo_UpdateClouds(DemoKankyo* this, GlobalContext* globalCtx);
@@ -68,6 +73,7 @@ const ActorInit Demo_Kankyo_InitVars = {
     (ActorFunc)DemoKankyo_Destroy,
     (ActorFunc)DemoKankyo_Update,
     (ActorFunc)DemoKankyo_Draw,
+    (ActorFunc)DemoKankyo_OnLoad,
 };
 
 static s16 sObjIds[] = {
@@ -194,6 +200,12 @@ static s16 D_8098CF84;
 
 void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
     this->actionFunc = actionFunc;
+}
+
+void DemoKankyo_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_8098CF80 = 0;
+    sRainScale = 0;
+    D_8098CF84 = 0;
 }
 
 void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {

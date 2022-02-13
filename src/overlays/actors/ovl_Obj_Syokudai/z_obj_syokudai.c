@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_OBJ_SYOKUDAI_Z_OBJ_SYOKUDAI_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSyokudai_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -39,6 +44,7 @@ const ActorInit Obj_Syokudai_InitVars = {
     (ActorFunc)ObjSyokudai_Destroy,
     (ActorFunc)ObjSyokudai_Update,
     (ActorFunc)ObjSyokudai_Draw,
+    (ActorFunc)ObjSyokudai_OnLoad,
 };
 
 static ColliderCylinderInit sCylInitStand = {
@@ -89,6 +95,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static s32 sLitTorchCount;
+
+void ObjSyokudai_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sLitTorchCount = 0;
+}
 
 void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     static u8 sColTypesStand[] = { 0x09, 0x0B, 0x0B };

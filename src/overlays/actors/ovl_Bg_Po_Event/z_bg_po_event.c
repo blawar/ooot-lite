@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_PO_EVENT_Z_BG_PO_EVENT_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void BgPoEvent_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgPoEvent_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgPoEvent_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgPoEvent_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgPoEvent_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgPoEvent_BlockWait(BgPoEvent* this, GlobalContext* globalCtx);
 void BgPoEvent_BlockShake(BgPoEvent* this, GlobalContext* globalCtx);
@@ -53,6 +58,7 @@ const ActorInit Bg_Po_Event_InitVars = {
     (ActorFunc)BgPoEvent_Destroy,
     (ActorFunc)BgPoEvent_Update,
     (ActorFunc)BgPoEvent_Draw,
+    (ActorFunc)BgPoEvent_OnLoad,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[2] = {
@@ -205,6 +211,11 @@ void BgPoEvent_InitBlocks(BgPoEvent* this, GlobalContext* globalCtx) {
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
+
+void BgPoEvent_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sBlocksAtRest = 0;
+    sPuzzleState = 0;
+}
 
 void BgPoEvent_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

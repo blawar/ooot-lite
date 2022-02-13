@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_INSECT_Z_EN_INSECT_C
 #include "actor_common.h"
 #include "kaleido.h"
@@ -25,6 +29,7 @@ void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnInsect_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A7C3A0(EnInsect* this);
 void func_80A7C3F4(EnInsect* this, GlobalContext* globalCtx);
@@ -56,6 +61,7 @@ const ActorInit En_Insect_InitVars = {
     (ActorFunc)EnInsect_Destroy,
     (ActorFunc)EnInsect_Update,
     (ActorFunc)EnInsect_Draw,
+    (ActorFunc)EnInsect_OnLoad,
 };
 
 static ColliderJntSphElementInit sColliderItemInit[1] = {
@@ -171,6 +177,12 @@ void func_80A7C058(EnInsect* this) {
     if (this->unk_31E < 2) {
         this->unk_31E = 2;
     }
+}
+
+void EnInsect_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    D_80A7DEB0 = 0.0f;
+    D_80A7DEB4 = 0;
+    D_80A7DEB8 = 0;
 }
 
 void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx2) {

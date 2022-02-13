@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_MAG_Z_EN_MAG_C
 #include "actor_common.h"
 /*
@@ -22,6 +26,7 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMag_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Mag_InitVars = {
     ACTOR_EN_MAG,
@@ -33,9 +38,14 @@ const ActorInit En_Mag_InitVars = {
     (ActorFunc)EnMag_Destroy,
     (ActorFunc)EnMag_Update,
     (ActorFunc)EnMag_Draw,
+    (ActorFunc)EnMag_OnLoad,
 };
 
 static s16 sDelayTimer = 0;
+
+void EnMag_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sDelayTimer = 0;
+}
 
 void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMag* this = (EnMag*)thisx;

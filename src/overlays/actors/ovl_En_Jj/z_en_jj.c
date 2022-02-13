@@ -53,8 +53,6 @@ const ActorInit En_Jj_InitVars = {
     (ActorFunc)EnJj_Draw,
 };
 
-static s32 sUnused = 0;
-
 #include "z_en_jj_cutscene_data.c" EARLY
 
 static s32 sUnused2[] = { 0, 0 };

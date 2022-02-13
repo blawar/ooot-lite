@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_DEMO_IM_Z_DEMO_IM_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@ void DemoIm_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoIm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoIm_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoIm_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoIm_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 void func_809856F8(DemoIm* this, GlobalContext* globalCtx);
 void func_80985718(DemoIm* this, GlobalContext* globalCtx);
 void func_80985738(DemoIm* this, GlobalContext* globalCtx);
@@ -114,6 +119,7 @@ const ActorInit Demo_Im_InitVars = {
     (ActorFunc)DemoIm_Destroy,
     (ActorFunc)DemoIm_Update,
     (ActorFunc)DemoIm_Draw,
+    (ActorFunc)DemoIm_OnLoad,
 };
 
 void func_80984BE0(DemoIm* this) {
@@ -1112,6 +1118,10 @@ void DemoIm_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
+}
+
+void DemoIm_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_8098783C = 0;
 }
 
 void DemoIm_Init(Actor* thisx, GlobalContext* globalCtx) {

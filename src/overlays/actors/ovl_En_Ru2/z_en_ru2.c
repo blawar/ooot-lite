@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_RU2_Z_EN_RU2_C
 #include "actor_common.h"
 /*
@@ -30,6 +34,7 @@ void EnRu2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRu2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRu2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRu2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRu2_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AF2CB4(EnRu2* this, GlobalContext* globalCtx);
 void func_80AF2CD4(EnRu2* this, GlobalContext* globalCtx);
@@ -76,7 +81,7 @@ static void* sEyeTextures[] = {
     gAdultRutoEyeClosedTex,
 };
 
-static UNK_TYPE D_80AF4118 = 0;
+static bool D_80AF4118 = false;
 
 #include "z_en_ru2_cutscene_data.c" EARLY
 
@@ -102,6 +107,7 @@ const ActorInit En_Ru2_InitVars = {
     (ActorFunc)EnRu2_Destroy,
     (ActorFunc)EnRu2_Update,
     (ActorFunc)EnRu2_Draw,
+    (ActorFunc)EnRu2_OnLoad,
 };
 
 void func_80AF2550(Actor* thisx, GlobalContext* globalCtx) {
@@ -161,20 +167,17 @@ void func_80AF26AC(EnRu2* this) {
 }
 
 void func_80AF26D0(EnRu2* this, GlobalContext* globalCtx) {
-    s32 one; // Needed to match
-
     if (globalCtx->csCtx.state == CS_STATE_IDLE) {
-        if (D_80AF4118 != 0) {
+        if (D_80AF4118) {
             if (this->actor.params == 2) {
                 func_80AF26AC(this);
             }
-            D_80AF4118 = 0;
+            D_80AF4118 = false;
             return;
         }
     } else {
-        one = 1;
-        if (D_80AF4118 == 0) {
-            D_80AF4118 = one;
+        if (!D_80AF4118) {
+            D_80AF4118 = true;
         }
     }
 }
@@ -777,6 +780,10 @@ void EnRu2_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
+}
+
+void EnRu2_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80AF4118 = false;
 }
 
 void EnRu2_Init(Actor* thisx, GlobalContext* globalCtx) {

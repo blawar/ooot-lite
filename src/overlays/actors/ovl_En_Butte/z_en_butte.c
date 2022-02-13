@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_BUTTE_Z_EN_BUTTE_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void EnButte_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnButte_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnButte_SetupFlyAround(EnButte* this);
 void EnButte_FlyAround(EnButte* this, GlobalContext* globalCtx);
@@ -72,6 +77,7 @@ const ActorInit En_Butte_InitVars = {
     (ActorFunc)EnButte_Destroy,
     (ActorFunc)EnButte_Update,
     (ActorFunc)EnButte_Draw,
+    (ActorFunc)EnButte_OnLoad,
 };
 
 typedef struct {
@@ -157,6 +163,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 20, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_STOP),
 };
+
+void EnButte_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sTransformationEffectScale = 0.0f;
+    sTransformationEffectAlpha = 0;
+}
 
 void EnButte_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnButte* this = (EnButte*)thisx;

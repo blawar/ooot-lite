@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MENKURI_EYE_Z_BG_MENKURI_EYE_C
 #include "actor_common.h"
 /*
@@ -20,6 +24,7 @@ void BgMenkuriEye_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMenkuriEye_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMenkuriEye_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMenkuriEye_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgMenkuriEye_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Bg_Menkuri_Eye_InitVars = {
     ACTOR_BG_MENKURI_EYE,
@@ -31,6 +36,7 @@ const ActorInit Bg_Menkuri_Eye_InitVars = {
     (ActorFunc)BgMenkuriEye_Destroy,
     (ActorFunc)BgMenkuriEye_Update,
     (ActorFunc)BgMenkuriEye_Draw,
+    (ActorFunc)BgMenkuriEye_OnLoad,
 };
 
 static s32 D_8089C1A0;
@@ -65,6 +71,10 @@ static ColliderJntSphInit sJntSphInit = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
+
+void BgMenkuriEye_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_8089C1A0 = 0;
+}
 
 void BgMenkuriEye_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMenkuriEye* this = (BgMenkuriEye*)thisx;

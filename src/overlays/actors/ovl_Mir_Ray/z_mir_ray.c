@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_MIR_RAY_Z_MIR_RAY_C
 #include "actor_common.h"
 /*
@@ -24,6 +28,7 @@ void MirRay_Init(Actor* thisx, GlobalContext* globalCtx);
 void MirRay_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void MirRay_Update(Actor* thisx, GlobalContext* globalCtx);
 void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx);
+void MirRay_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 pointz, s16 radiusA, s16 radiusB);
 
@@ -51,9 +56,10 @@ const ActorInit Mir_Ray_InitVars = {
     (ActorFunc)MirRay_Destroy,
     (ActorFunc)MirRay_Update,
     (ActorFunc)MirRay_Draw,
+    (ActorFunc)MirRay_OnLoad,
 };
 
-static u8 D_80B8E670 = 0;
+static bool D_80B8E670 = false;
 
 static ColliderQuadInit sQuadInit = {
     {
@@ -167,6 +173,10 @@ void MirRay_MakeShieldLight(MirRay* this, GlobalContext* globalCtx) {
         Lights_PointSetColorAndRadius(&this->lightInfo, dataEntry->color.r, dataEntry->color.g, dataEntry->color.b,
                                       this->lightPointRad);
     }
+}
+
+void MirRay_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80B8E670 = false;
 }
 
 void MirRay_Init(Actor* thisx, GlobalContext* globalCtx) {

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_DODOAGO_Z_BG_DODOAGO_C
 #include "actor_common.h"
 /*
@@ -27,6 +31,7 @@ void BgDodoago_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgDodoago_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDodoago_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDodoago_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgDodoago_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgDodoago_WaitExplosives(BgDodoago* this, GlobalContext* globalCtx);
 void BgDodoago_OpenJaw(BgDodoago* this, GlobalContext* globalCtx);
@@ -43,6 +48,7 @@ const ActorInit Bg_Dodoago_InitVars = {
     (ActorFunc)BgDodoago_Destroy,
     (ActorFunc)BgDodoago_Update,
     (ActorFunc)BgDodoago_Draw,
+    (ActorFunc)BgDodoago_OnLoad
 };
 
 static ColliderCylinderInit sColCylinderInitMain = {
@@ -85,13 +91,17 @@ static ColliderCylinderInit sColCylinderInitLeftRight = {
     { 50, 60, 280, { 0, 0, 0 } },
 };
 
-static s16 sFirstExplosiveFlag = false;
+static bool sFirstExplosiveFlag = false;
 
 static u8 sDisableBombCatcher;
 
-static u8 sUnused[90]; // unknown length
-
 static s32 sTimer;
+
+void BgDodoago_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sFirstExplosiveFlag = false;
+    sDisableBombCatcher = false;
+    sTimer = 0;
+}
 
 void BgDodoago_SetupAction(BgDodoago* this, BgDodoagoActionFunc actionFunc) {
     this->actionFunc = actionFunc;

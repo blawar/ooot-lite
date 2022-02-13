@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_HAKA_TUBO_Z_BG_HAKA_TUBO_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void BgHakaTubo_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaTubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaTubo_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaTubo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgHakaTubo_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgHakaTubo_Idle(BgHakaTubo* this, GlobalContext* globalCtx);
 void BgHakaTubo_DropCollectible(BgHakaTubo* this, GlobalContext* globalCtx);
@@ -42,6 +47,7 @@ const ActorInit Bg_Haka_Tubo_InitVars = {
     (ActorFunc)BgHakaTubo_Destroy,
     (ActorFunc)BgHakaTubo_Update,
     (ActorFunc)BgHakaTubo_Draw,
+    (ActorFunc)BgHakaTubo_OnLoad,
 };
 
 static ColliderCylinderInit sPotColliderInit = {
@@ -89,6 +95,10 @@ static s32 sPotsDestroyed = 0;
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
+
+void BgHakaTubo_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+     sPotsDestroyed = 0;
+}
 
 void BgHakaTubo_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaTubo* this = (BgHakaTubo*)thisx;

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_RU1_Z_EN_RU1_C
 #include "actor_common.h"
 /*
@@ -32,6 +36,7 @@ void EnRu1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRu1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRu1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRu1_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRu1_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AEC0B4(EnRu1* this, GlobalContext* globalCtx);
 void func_80AEC100(EnRu1* this, GlobalContext* globalCtx);
@@ -121,11 +126,9 @@ static void* sMouthTextures[] = {
     gRutoChildMouthOpenTex,
 };
 
-static s32 sUnused = 0;
-
 #include "z_en_ru1_cutscene_data.c" EARLY
 
-static u32 D_80AF1938 = 0;
+static bool D_80AF1938 = false;
 
 static EnRu1ActionFunc sActionFuncs[] = {
     func_80AEC0B4, func_80AEC100, func_80AEC130, func_80AEC17C, func_80AEC1D4, func_80AEC244, func_80AEC2C0,
@@ -159,6 +162,7 @@ const ActorInit En_Ru1_InitVars = {
     (ActorFunc)EnRu1_Destroy,
     (ActorFunc)EnRu1_Update,
     (ActorFunc)EnRu1_Draw,
+    (ActorFunc)EnRu1_OnLoad,
 };
 
 void func_80AEAC10(EnRu1* this, GlobalContext* globalCtx) {
@@ -1946,13 +1950,13 @@ void func_80AEF540(EnRu1* this) {
 void func_80AEF5B8(EnRu1* this) {
     f32 curFrame;
 
-    if (D_80AF1938 == 0) {
+    if (!D_80AF1938) {
         curFrame = this->skelAnime.curFrame;
         if (curFrame >= 60.0f) {
             EnRu1_SetEyeIndex(this, 3);
             EnRu1_SetMouthIndex(this, 0);
             func_80AED57C(this);
-            D_80AF1938 = 1;
+            D_80AF1938 = true;
         }
     }
 }
@@ -2232,6 +2236,10 @@ void EnRu1_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     sActionFuncs[this->action](this, globalCtx);
+}
+
+void EnRu1_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80AF1938 = false;
 }
 
 void EnRu1_Init(Actor* thisx, GlobalContext* globalCtx) {

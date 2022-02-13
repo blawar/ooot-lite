@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BOSS_VA_Z_BOSS_VA_C
 #include "actor_common.h"
 /*
@@ -135,6 +139,7 @@ void BossVa_Init(Actor* thisx, GlobalContext* globalCtx);
 void BossVa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossVa_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossVa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BossVa_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BossVa_UpdateEffects(GlobalContext* globalCtx);
 void BossVa_DrawEffects(BossVaEffect* effect, GlobalContext* globalCtx);
@@ -218,6 +223,7 @@ const ActorInit Boss_Va_InitVars = {
     (ActorFunc)BossVa_Destroy,
     (ActorFunc)BossVa_Update,
     (ActorFunc)BossVa_Draw,
+    (ActorFunc)BossVa_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -594,6 +600,19 @@ void BossVa_KillBari(BossVa* this, GlobalContext* globalCtx) {
     BossVa_SetupBariDeath(this);
 }
 
+void BossVa_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    sKillBari = 0;
+    /*sBodyBari = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };*/
+    memset(sBodyBari, 0, sizeof(sBodyBari));
+    sCsCamera = 0;
+    sBodyState = 0;
+    sFightPhase = 0;
+    sCsState = 0;
+    sDoorState = 0;
+    sPhase3StopMoving = 0;
+    sPhase2Timer = 0;
+    sPhase4HP = 0;
+}
 void BossVa_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     BossVa* this = (BossVa*)thisx;

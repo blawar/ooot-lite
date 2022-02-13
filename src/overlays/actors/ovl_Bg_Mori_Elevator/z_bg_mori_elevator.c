@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MORI_ELEVATOR_Z_BG_MORI_ELEVATOR_C
 #include "actor_common.h"
 #include "z_bg_mori_elevator.h"
@@ -17,6 +21,7 @@
 void BgMoriElevator_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriElevator_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriElevator_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgMoriElevator_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgMoriElevator_SetupWaitAfterInit(BgMoriElevator* this);
 void BgMoriElevator_WaitAfterInit(BgMoriElevator* this, GlobalContext* globalCtx);
@@ -28,7 +33,7 @@ void func_808A2008(BgMoriElevator* this, GlobalContext* globalCtx);
 void BgMoriElevator_MoveIntoGround(BgMoriElevator* this, GlobalContext* globalCtx);
 void BgMoriElevator_MoveAboveGround(BgMoriElevator* this, GlobalContext* globalCtx);
 
-static s16 sIsSpawned = false;
+static bool sIsSpawned = false;
 
 const ActorInit Bg_Mori_Elevator_InitVars = {
     ACTOR_BG_MORI_ELEVATOR,
@@ -40,6 +45,7 @@ const ActorInit Bg_Mori_Elevator_InitVars = {
     (ActorFunc)BgMoriElevator_Destroy,
     (ActorFunc)BgMoriElevator_Update,
     NULL,
+    (ActorFunc)BgMoriElevator_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -92,6 +98,10 @@ void func_808A18FC(BgMoriElevator* this, f32 distTo) {
     func_800F436C(&this->dyna.actor.projectedPos, NA_SE_EV_ELEVATOR_MOVE2 - SFX_FLAG, CLAMP(temp, 0.0f, 1.0f));
 }
 
+void BgMoriElevator_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsSpawned = false;
+}
+
 void BgMoriElevator_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMoriElevator* this = (BgMoriElevator*)thisx;
     s32 pad;
@@ -104,21 +114,18 @@ void BgMoriElevator_Init(Actor* thisx, GlobalContext* globalCtx) {
         // "Forest Temple obj elevator Bank Danger!"
         osSyncPrintf("Error : 森の神殿 obj elevator バンク危険！(%s %d)\n", "../z_bg_mori_elevator.c", 277);
     } else {
-        switch (sIsSpawned) {
-            case false:
-                // "Forest Temple elevator CT"
-                osSyncPrintf("森の神殿 elevator CT\n");
-                sIsSpawned = true;
-                this->dyna.actor.room = -1;
-                Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-                DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
-                CollisionHeader_GetVirtual(&gMoriElevatorCol, &colHeader);
-                this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
-                BgMoriElevator_SetupWaitAfterInit(this);
-                break;
-            case true:
-                Actor_Kill(thisx);
-                break;
+        if (!sIsSpawned) {
+            // "Forest Temple elevator CT"
+            osSyncPrintf("森の神殿 elevator CT\n");
+            sIsSpawned = true;
+            this->dyna.actor.room = -1;
+            Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+            DynaPolyActor_Init(&this->dyna, DPM_PLAYER);
+            CollisionHeader_GetVirtual(&gMoriElevatorCol, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, colHeader);
+            BgMoriElevator_SetupWaitAfterInit(this);
+        } else {
+            Actor_Kill(thisx);
         }
     }
 }

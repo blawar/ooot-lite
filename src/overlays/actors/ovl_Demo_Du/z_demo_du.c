@@ -16,8 +16,6 @@ void DemoDu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoDu_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoDu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-static s32 sUnused = 0;
-
 #include "z_demo_du_cutscene_data.c" EARLY
 #include "def/code_800F7260.h"
 #include "def/code_800FD970.h"
@@ -1056,4 +1054,5 @@ const ActorInit Demo_Du_InitVars = {
     (ActorFunc)DemoDu_Destroy,
     (ActorFunc)DemoDu_Update,
     (ActorFunc)DemoDu_Draw,
+    (ActorFunc)NULL,
 };

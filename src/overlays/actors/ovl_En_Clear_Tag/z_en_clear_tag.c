@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_CLEAR_TAG_Z_EN_CLEAR_TAG_C
 #include "actor_common.h"
 #include "z64bgcheck.h"
@@ -22,6 +26,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnClearTag_UpdateEffects(GlobalContext* globalCtx);
 void EnClearTag_DrawEffects(GlobalContext* globalCtx);
@@ -45,6 +50,7 @@ const ActorInit En_Clear_Tag_InitVars = {
     (ActorFunc)EnClearTag_Destroy,
     (ActorFunc)EnClearTag_Update,
     (ActorFunc)EnClearTag_Draw,
+    (ActorFunc)EnClearTag_OnLoad,
 };
 
 static u8 sIsEffectsInitialized = false;
@@ -235,6 +241,10 @@ void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnClearTag* this = (EnClearTag*)thisx;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
+}
+
+void EnClearTag_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsEffectsInitialized = false;
 }
 
 /**

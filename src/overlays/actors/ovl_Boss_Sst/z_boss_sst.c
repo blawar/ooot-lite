@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BOSS_SST_Z_BOSS_SST_C
 #include "actor_common.h"
 /*
@@ -74,6 +78,7 @@ void BossSst_DrawHand(Actor* thisx, GlobalContext* globalCtx);
 void BossSst_DrawHead(Actor* thisx, GlobalContext* globalCtx);
 void BossSst_UpdateEffect(Actor* thisx, GlobalContext* globalCtx);
 void BossSst_DrawEffect(Actor* thisx, GlobalContext* globalCtx);
+void BossSst_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BossSst_HeadSfx(BossSst* this, u16 sfxId);
 
@@ -264,6 +269,7 @@ const ActorInit Boss_Sst_InitVars = {
     (ActorFunc)BossSst_Destroy,
     (ActorFunc)BossSst_UpdateHand,
     (ActorFunc)BossSst_DrawHand,
+    (ActorFunc)BossSst_OnLoad,
 };
 
 #include "z_boss_sst_colchk.c"
@@ -282,6 +288,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
+
+void BossSst_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    sHead = NULL;
+    sFloor = NULL;
+    sCutsceneCamera = 0;
+    sBodyStatic = false;
+}
 
 void BossSst_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;

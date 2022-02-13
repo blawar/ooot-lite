@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_DEMO_SA_Z_DEMO_SA_C
 #include "actor_common.h"
 /*
@@ -25,6 +29,7 @@ void DemoSa_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoSa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoSa_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoSa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoSa_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8098EBB8(DemoSa* this, GlobalContext* globalCtx);
 void func_8098EBD8(DemoSa* this, GlobalContext* globalCtx);
@@ -103,6 +108,7 @@ const ActorInit Demo_Sa_InitVars = {
     (ActorFunc)DemoSa_Destroy,
     (ActorFunc)DemoSa_Update,
     (ActorFunc)DemoSa_Draw,
+    (ActorFunc)DemoSa_OnLoad,
 };
 
 void DemoSa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -763,6 +769,10 @@ void DemoSa_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     sActionFuncs[this->action](this, globalCtx);
+}
+
+void DemoSa_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80990108 = 0;
 }
 
 void DemoSa_Init(Actor* thisx, GlobalContext* globalCtx) {

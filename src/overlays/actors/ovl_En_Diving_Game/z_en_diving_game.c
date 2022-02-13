@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_DIVING_GAME_Z_EN_DIVING_GAME_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@ void EnDivingGame_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDivingGame_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDivingGame_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDivingGame_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDivingGame_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809EDCB0(EnDivingGame* this, GlobalContext* globalCtx);
 void EnDivingGame_Talk(EnDivingGame* this, GlobalContext* globalCtx);
@@ -59,10 +64,11 @@ const ActorInit En_Diving_Game_InitVars = {
     (ActorFunc)EnDivingGame_Destroy,
     (ActorFunc)EnDivingGame_Update,
     (ActorFunc)EnDivingGame_Draw,
+    (ActorFunc)EnDivingGame_OnLoad,
 };
 
 // used to ensure there's only one instance of this actor.
-static u8 D_809EF0B0 = false;
+static bool D_809EF0B0 = false;
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -89,6 +95,10 @@ static void* sEyeTextures[] = {
     gZoraEyeHalfTex,
     gZoraEyeClosedTex,
 };
+
+void EnDivingGame_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_809EF0B0 = false;
+}
 
 void EnDivingGame_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDivingGame* this = (EnDivingGame*)thisx;

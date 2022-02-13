@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_ZF_Z_EN_ZF_C
 #include "actor_common.h"
 /*
@@ -27,6 +31,7 @@ void EnZf_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnZf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZf_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnZf_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 s16 EnZf_FindPlatform(Vec3f* pos, s16 preferredIndex);
 void EnZf_SetupDropIn(EnZf* this);
@@ -123,6 +128,7 @@ const ActorInit En_Zf_InitVars = {
     (ActorFunc)EnZf_Destroy,
     (ActorFunc)EnZf_Update,
     (ActorFunc)EnZf_Draw,
+    (ActorFunc)EnZf_OnLoad,
 };
 
 static ColliderCylinderInit sBodyCylinderInit = {
@@ -284,6 +290,11 @@ s16 EnZf_SecondaryFloorCheck(EnZf* this, GlobalContext* globalCtx, f32 dist) {
     ret = !(this->actor.bgCheckFlags & 1);
     this->actor.bgCheckFlags = curBgCheckFlags;
     return ret;
+}
+
+void EnZf_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80B4A1B0 = 0;
+    D_80B4A1B4 = 1;
 }
 
 void EnZf_Init(Actor* thisx, GlobalContext* globalCtx) {

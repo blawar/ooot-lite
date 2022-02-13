@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_PO_FIELD_Z_EN_PO_FIELD_C
 #include "actor_common.h"
 /*
@@ -30,6 +34,7 @@ void EnPoField_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnPoField_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoField_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoField_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPoField_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnPoField_UpdateDead(Actor* thisx, GlobalContext* globalCtx);
 void EnPoField_DrawSoul(Actor* thisx, GlobalContext* globalCtx);
@@ -59,6 +64,7 @@ const ActorInit En_Po_Field_InitVars = {
     (ActorFunc)EnPoField_Destroy,
     (ActorFunc)EnPoField_Update,
     (ActorFunc)EnPoField_Draw,
+    (ActorFunc)EnPoField_OnLoad,
 };
 
 static ColliderCylinderInit D_80AD7080 = {
@@ -160,6 +166,10 @@ static Vec3f D_80AD714C = { 0.0f, 1400.0f, 0.0f };
 static Vec3s sSpawnPositions[10];
 static u8 sSpawnSwitchFlags[10];
 static MtxF sLimb7Mtx;
+
+void EnPoField_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sNumSpawned = 0;
+}
 
 void EnPoField_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoField* this = (EnPoField*)thisx;

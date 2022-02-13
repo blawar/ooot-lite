@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MIZU_MOVEBG_Z_BG_MIZU_MOVEBG_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void BgMizuMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMizuMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgMizuMovebg_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8089E318(BgMizuMovebg* this, GlobalContext* globalCtx);
 void func_8089E650(BgMizuMovebg* this, GlobalContext* globalCtx);
@@ -43,6 +48,7 @@ const ActorInit Bg_Mizu_Movebg_InitVars = {
     (ActorFunc)BgMizuMovebg_Destroy,
     (ActorFunc)BgMizuMovebg_Update,
     (ActorFunc)BgMizuMovebg_Draw,
+    (ActorFunc)BgMizuMovebg_OnLoad,
 };
 
 static f32 D_8089EB40[] = { -115.200005f, -115.200005f, -115.200005f, 0.0f };
@@ -84,6 +90,10 @@ s32 func_8089DC30(GlobalContext* globalCtx) {
         result = 1;
     }
     return result;
+}
+
+void BgMizuMovebg_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_8089EE40 = 0;
 }
 
 void BgMizuMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {

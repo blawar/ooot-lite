@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_JYA_BIGMIRROR_Z_BG_JYA_BIGMIRROR_C
 #include "actor_common.h"
 /*
@@ -20,8 +24,9 @@ void BgJyaBigmirror_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaBigmirror_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaBigmirror_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaBigmirror_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgJyaBigmirror_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
-static u8 sIsSpawned = false;
+static bool sIsSpawned = false;
 
 const ActorInit Bg_Jya_Bigmirror_InitVars = {
     ACTOR_BG_JYA_BIGMIRROR,
@@ -33,6 +38,7 @@ const ActorInit Bg_Jya_Bigmirror_InitVars = {
     (ActorFunc)BgJyaBigmirror_Destroy,
     (ActorFunc)BgJyaBigmirror_Update,
     (ActorFunc)BgJyaBigmirror_Draw,
+    (ActorFunc)BgJyaBigmirror_OnLoad,
 };
 
 typedef struct {
@@ -177,6 +183,10 @@ void BgJyaBigmirror_HandleMirRay(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     this->mirRayObjIndex = objBankIndex;
+}
+
+void BgJyaBigmirror_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsSpawned = false;
 }
 
 void BgJyaBigmirror_Init(Actor* thisx, GlobalContext* globalCtx) {

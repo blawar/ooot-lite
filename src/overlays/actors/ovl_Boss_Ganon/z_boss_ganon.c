@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BOSS_GANON_Z_BOSS_GANON_C
 #include "actor_common.h"
 #include "z_kankyo.h"
@@ -44,6 +48,7 @@ void BossGanon_Init(Actor* thisx, GlobalContext* globalCtx);
 void BossGanon_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossGanon_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossGanon_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BossGanon_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 void func_808E1EB4(Actor* thisx, GlobalContext* globalCtx); // update
 void func_808E2544(Actor* thisx, GlobalContext* globalCtx); // update
 void BossGanon_LightBall_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -84,6 +89,7 @@ const ActorInit Boss_Ganon_InitVars = {
     (ActorFunc)BossGanon_Destroy,
     (ActorFunc)BossGanon_Update,
     (ActorFunc)BossGanon_Draw,
+    (ActorFunc)BossGanon_OnLoad,
 };
 
 static ColliderCylinderInit sDorfCylinderInit = {
@@ -359,6 +365,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
+
+void BossGanon_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    EnGanonMant* sCape = NULL;
+    s32 sSeed1 = 0;
+    s32 sSeed2 = 0;
+    s32 sSeed3 = 0;
+    BossGanon* sGanondorf = NULL;
+    EnZl3* sZelda = NULL;
+}
 
 void BossGanon_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s16 i;

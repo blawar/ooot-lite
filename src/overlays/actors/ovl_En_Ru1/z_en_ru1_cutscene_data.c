@@ -2,6 +2,8 @@
 #include "z_en_ru1.h"
 #include "z64cutscene_commands.h"
 
+/* This is used somewhere.... */
+
 // clang-format off
 static CutsceneData D_80AF0880[] = {
     CS_BEGIN_CUTSCENE(15, 1306),

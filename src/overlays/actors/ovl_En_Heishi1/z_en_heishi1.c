@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_HEISHI1_Z_EN_HEISHI1_C
 #include "actor_common.h"
 /*
@@ -26,6 +30,7 @@ void EnHeishi1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi1_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHeishi1_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnHeishi1_SetupWait(EnHeishi1* this, GlobalContext* globalCtx);
 void EnHeishi1_SetupWalk(EnHeishi1* this, GlobalContext* globalCtx);
@@ -53,6 +58,7 @@ const ActorInit En_Heishi1_InitVars = {
     (ActorFunc)EnHeishi1_Destroy,
     (ActorFunc)EnHeishi1_Update,
     (ActorFunc)EnHeishi1_Draw,
+    (ActorFunc)EnHeishi1_OnLoad,
 };
 
 static f32 sAnimParamsInit[][8] = {
@@ -74,6 +80,10 @@ static s32 sCamDataIdxs[] = {
 };
 
 static s16 sWaypoints[] = { 0, 4, 1, 5, 2, 6, 3, 7 };
+
+void EnHeishi1_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sPlayerIsCaught = false;
+}
 
 void EnHeishi1_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

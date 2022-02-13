@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_TORCH2_Z_EN_TORCH2_C
 #include "actor_common.h"
 /*
@@ -66,6 +70,7 @@ void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTorch2_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
@@ -77,6 +82,7 @@ const ActorInit En_Torch2_InitVars = {
     (ActorFunc)EnTorch2_Destroy,
     (ActorFunc)EnTorch2_Update,
     (ActorFunc)EnTorch2_Draw,
+    (ActorFunc)EnTorch2_OnLoad,
 };
 
 static f32 sStickTilt = 0.0f;
@@ -134,6 +140,26 @@ static DamageTable sDamageTable = {
     /* Hammer jump   */ DMG_ENTRY(4, 0x0),
     /* Unknown 2     */ DMG_ENTRY(0, 0x0),
 };
+
+void EnTorch2_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    sStickTilt = 0.0f;
+    sStickAngle = 0;
+    sSwordJumpHeight = 0.0f;
+    sHoldShieldTimer = 0;
+    sZTargetFlag = false;
+    sDeathFlag = false;
+    sSwordJumpState = 0;
+    sJumpslashTimer = 0;
+    sJumpslashFlag = 0;
+    sActionState = 0;
+    sSwordJumpTimer = 0;
+    sCounterState = 0;
+    sDodgeRollState = 0;
+    sStaggerCount = 0;
+    sStaggerTimer = 0;
+    sLastSwordAnim = 0;
+    sAlpha = 0;
+}
 
 void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;

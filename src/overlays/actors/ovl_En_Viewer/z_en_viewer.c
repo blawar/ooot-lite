@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_VIEWER_Z_EN_VIEWER_C
 #include "actor_common.h"
 #include "z_kankyo.h"
@@ -39,6 +43,7 @@ void EnViewer_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnViewer_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnViewer_UpdatePosition(EnViewer* this, GlobalContext* globalCtx);
 void EnViewer_DrawFireEffects(EnViewer* this2, GlobalContext* globalCtx);
@@ -46,7 +51,8 @@ void EnViewer_UpdateGanondorfCape(GlobalContext* globalCtx, EnViewer* this);
 void EnViewer_InitImpl(EnViewer* this, GlobalContext* globalCtx);
 void EnViewer_UpdateImpl(EnViewer* this, GlobalContext* globalCtx);
 
-static u8 sHorseSfxPlayed = false;
+static bool sHorseSfxPlayed = false;
+static s16 sTimer = 0;
 
 const ActorInit En_Viewer_InitVars = {
     ACTOR_EN_VIEWER,
@@ -58,6 +64,7 @@ const ActorInit En_Viewer_InitVars = {
     (ActorFunc)EnViewer_Destroy,
     (ActorFunc)EnViewer_Update,
     (ActorFunc)EnViewer_Draw,
+    (ActorFunc)EnViewer_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -103,6 +110,11 @@ static Vec3f sGanondorfNeckWorldPos;
 
 void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc) {
     this->actionFunc = actionFunc;
+}
+
+void EnViewer_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sHorseSfxPlayed = false;
+    sTimer = 0;
 }
 
 void EnViewer_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -207,8 +219,6 @@ void EnViewer_InitImpl(EnViewer* this, GlobalContext* globalCtx) {
     sInitAnimFuncs[this->drawFuncIndex](this, globalCtx, initData->skeletonHeaderSeg, initData->anim);
     EnViewer_SetupAction(this, EnViewer_UpdateImpl);
 }
-
-static s16 sTimer = 0;
 
 void EnViewer_UpdateImpl(EnViewer* this, GlobalContext* globalCtx) {
     u8 type = this->actor.params >> 8;

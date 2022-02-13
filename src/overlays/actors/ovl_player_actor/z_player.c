@@ -522,7 +522,7 @@ static PlayerAgeProperties sAgeProperties[] = {
     },
 };
 
-static u32 D_808535D0 = false;
+static bool D_808535D0 = false;
 static f32 D_808535D4 = 0.0f;
 static s16 D_808535D8 = 0;
 static s16 D_808535DC = 0;
@@ -9107,6 +9107,31 @@ static void (*D_80854738[])(GlobalContext* globalCtx, Player* this) = {
 
 static Vec3f D_80854778 = { 0.0f, 50.0f, 0.0f };
 
+void Player_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    D_80858AA0 = 0;
+    D_80858AA4 = 0;
+    sControlInput = NULL;
+    D_808535D0 = false;
+    D_808535D4 = 0.0f;
+    D_808535D8 = 0;
+    D_808535DC = 0;
+    D_808535E0 = 0;
+    D_808535E4 = 0;
+    D_808535E8 = 1.0f;
+    D_808535EC = 1.0f;
+    D_808535F0 = 0;
+    D_808535F4 = 0;
+    D_808535F8 = 0;
+    D_808535FC = 0;
+    D_80853600 = 0.0f;
+    D_80853604 = 0;
+    D_80853608 = 0;
+    D_8085360C = 0;
+    D_80853610 = 0;
+    D_80853614 = 0;
+    D_80853618 = 0;
+}
+
 void Player_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Player* this = (Player*)thisx;
     GlobalContext* globalCtx = globalCtx2;
@@ -12592,7 +12617,7 @@ s32 func_8084FCAC(Player* this, GlobalContext* globalCtx) {
          CHECK_BTN_ALL(sControlInput->press.button, BTN_B)) ||
         (CHECK_BTN_ALL(sControlInput->cur.button, BTN_L) && CHECK_BTN_ALL(sControlInput->press.button, BTN_DRIGHT))) {
 
-        D_808535D0 ^= 1;
+        D_808535D0 = !D_808535D0;
 
         if (D_808535D0) {
             Camera_ChangeMode(Gameplay_GetCamera(globalCtx, 0), CAM_MODE_BOWARROWZ);

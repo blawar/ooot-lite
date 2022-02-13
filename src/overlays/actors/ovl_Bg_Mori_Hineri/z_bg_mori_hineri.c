@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MORI_HINERI_Z_BG_MORI_HINERI_C
 #include "actor_common.h"
 /*
@@ -30,6 +34,7 @@ void BgMoriHineri_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriHineri_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriHineri_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriHineri_DrawHallAndRoom(Actor* thisx, GlobalContext* globalCtx);
+void BgMoriHineri_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808A39FC(BgMoriHineri* this, GlobalContext* globalCtx);
 void func_808A3E54(BgMoriHineri* this, GlobalContext* globalCtx);
@@ -50,6 +55,7 @@ const ActorInit Bg_Mori_Hineri_InitVars = {
     (ActorFunc)BgMoriHineri_Destroy,
     (ActorFunc)BgMoriHineri_Update,
     NULL,
+    (ActorFunc)BgMoriHineri_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -62,6 +68,10 @@ static Gfx* sDLists[] = {
     object_mori_hineri2_DL_0020F0,
     object_mori_hineri2a_DL_002B70,
 };
+
+void BgMoriHineri_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sNextCamIdx = SUBCAM_NONE;
+}
 
 void BgMoriHineri_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMoriHineri* this = (BgMoriHineri*)thisx;

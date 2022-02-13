@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_PO_RELAY_Z_EN_PO_RELAY_C
 #include "actor_common.h"
 /*
@@ -82,7 +86,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 52, 0, { 0, 0, 0 } },
 };
 
-static s32 D_80AD8D24 = 0;
+static bool D_80AD8D24 = false;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(naviEnemyId, 0x4F, ICHAIN_CONTINUE),
@@ -101,9 +105,12 @@ static void* sEyesTextures[] = {
     gDampeEyeClosedTex,
 };
 
+void EnPoRelay_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80AD8D24 = false;
+}
+
 void EnPoRelay_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoRelay* this = (EnPoRelay*)thisx;
-    s32 temp;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 42.0f);
@@ -115,11 +122,11 @@ void EnPoRelay_Init(Actor* thisx, GlobalContext* globalCtx) {
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                               255, 255, 255, 200);
     this->lightColor.a = 255;
-    temp = 1;
-    if (D_80AD8D24 != 0) {
+
+    if (D_80AD8D24) {
         Actor_Kill(&this->actor);
     } else {
-        D_80AD8D24 = temp;
+        D_80AD8D24 = true;
         Actor_SetTextWithPrefix(globalCtx, &this->actor, 65);
         this->textId = this->actor.textId;
         EnPoRelay_SetupIdle(this);

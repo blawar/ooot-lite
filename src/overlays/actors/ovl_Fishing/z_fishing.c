@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_FISHING_Z_FISHING_C
 #include "actor_common.h"
 #include "z_kankyo.h"
@@ -47,6 +51,7 @@ void Fishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx);
 void Fishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx);
 void Fishing_DrawFish(Actor* thisx, GlobalContext* globalCtx);
 void Fishing_DrawOwner(Actor* thisx, GlobalContext* globalCtx);
+void Fishing_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
@@ -154,6 +159,7 @@ const ActorInit Fishing_InitVars = {
     (ActorFunc)Fishing_Destroy,
     (ActorFunc)Fishing_UpdateFish,
     (ActorFunc)Fishing_DrawFish,
+    (ActorFunc)Fishing_OnLoad,
 };
 
 static f32 D_80B7A650 = 0.0f;
@@ -170,7 +176,7 @@ static u8 sSinkingLureLocation = 0;
 
 static f32 D_80B7A670 = 0.0f;
 
-static u8 D_80B7A674 = true;
+static bool D_80B7A674 = true;
 
 static u16 D_80B7A678 = 0;
 
@@ -838,6 +844,95 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
+void Fishing_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+D_80B7A650 = 0.0f;
+D_80B7A654 = 0;
+D_80B7A658 = 0.0f;
+D_80B7A668 = 0.0f;
+sSinkingLureLocation = 0;
+D_80B7A670 = 0.0f;
+D_80B7A674 = true;
+D_80B7A678 = 0;
+D_80B7A67C = 0;
+D_80B7A680 = 0;
+D_80B7A684 = 0;
+D_80B7A688 = 0;
+D_80B7A68C = 0;
+D_80B7A690 = 0;
+D_80B7A694 = 0;
+D_80B7A6A4 = 0;
+D_80B7A6A8 = 0.0f;
+D_80B7A6AC = 0.0f;
+D_80B7A6B0 = 0.0f;
+D_80B7A6B4 = 0.0f;
+D_80B7A6B8 = 0.0f;
+D_80B7A6BC = 0.0f;
+D_80B7A6C0 = 0.0f;
+D_80B7A6C4 = 0;
+D_80B7A6C8 = 0;
+D_80B7A6CC = 0;
+D_80B7A6D0 = 0;
+D_80B7A6D4 = 0;
+D_80B7A898 = 0.0f;
+Fishing* sFishingMain = NULL;
+D_80B7E074 = 0;
+sLinkAge = 0;
+D_80B7E076 = 0;
+D_80B7E077 = 0;
+D_80B7E078 = 0;
+D_80B7E07C = 0;
+D_80B7E07D = 0;
+D_80B7E07E = 0;
+D_80B7E080 = 0;
+D_80B7E082 = 0;
+D_80B7E084 = 0;
+D_80B7E086 = 0;
+D_80B7E088 = 0;
+D_80B7E0A2 = 0;
+D_80B7E0A4 = 0;
+D_80B7E0A6 = 0;
+Fishing* sFishingHookedFish = NULL;
+D_80B7E0AC = 0;
+D_80B7E0AE = 0;
+D_80B7E0B0 = 0;
+D_80B7E0B2 = 0;
+D_80B7E0B4 = 0;
+D_80B7E0B6 = 0;
+D_80B7E104 = 0;
+D_80B7E108 = 0;
+D_80B7E10C = 0;
+D_80B7E110 = 0;
+D_80B7E114 = 0;
+D_80B7E116 = 0;
+D_80B7E118 = 0;
+D_80B7E11C = 0;
+D_80B7E120 = 0;
+D_80B7E122 = 0;
+D_80B7E124 = 0;
+D_80B7E134 = 0;
+D_80B7E138 = 0;
+D_80B7E13C = 0;
+D_80B7E140 = 0;
+D_80B7E144 = 0;
+D_80B7E148 = 0;
+D_80B7E14C = 0;
+D_80B7E150 = 0;
+D_80B7E154 = 0;
+D_80B7FDA8 = 0;
+D_80B7FEA0 = 0;
+sProjectedW = 0;
+sCameraId = 0;
+D_80B7FEC8 = 0;
+D_80B7FECC = 0;
+D_80B7FED0 = 0;
+D_80B7FEE4 = 0;
+sRandSeed0 = 0;
+sRandSeed1 = 0;
+sRandSeed2 = 0;
+sFishGroupAngle1 = 0;
+sFishGroupAngle2 = 0;
+sFishGroupAngle3 = 0;
+}
 void Fishing_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Fishing* this = (Fishing*)thisx;

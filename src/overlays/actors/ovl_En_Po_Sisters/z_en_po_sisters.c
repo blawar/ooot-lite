@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_PO_SISTERS_Z_EN_PO_SISTERS_C
 #include "actor_common.h"
 /*
@@ -32,6 +36,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPoSisters_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80ADA094(EnPoSisters* this, GlobalContext* globalCtx);
 void func_80ADA4A8(EnPoSisters* this, GlobalContext* globalCtx);
@@ -89,6 +94,7 @@ const ActorInit En_Po_Sisters_InitVars = {
     (ActorFunc)EnPoSisters_Destroy,
     (ActorFunc)EnPoSisters_Update,
     (ActorFunc)EnPoSisters_Draw,
+    (ActorFunc)EnPoSisters_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -190,6 +196,10 @@ static Color_RGBA8 D_80ADD7E8[4] = {
 };
 
 static Vec3f D_80ADD7F8 = { 1000.0f, -1700.0f, 0.0f };
+
+void EnPoSisters_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80ADD784 = 0;
+}
 
 void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoSisters* this = (EnPoSisters*)thisx;

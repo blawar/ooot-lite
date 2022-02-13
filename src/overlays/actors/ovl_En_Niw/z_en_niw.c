@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_NIW_Z_EN_NIW_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnNiw_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnNiw_ResetAction(EnNiw* this, GlobalContext* globalCtx);
 void func_80AB6324(EnNiw* this, GlobalContext* globalCtx);
@@ -47,7 +52,7 @@ void EnNiw_FeatherSpawn(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 s
 void EnNiw_FeatherUpdate(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_FeatherDraw(EnNiw* this, GlobalContext* globalCtx);
 
-static s16 D_80AB85E0 = 0;
+static bool D_80AB85E0 = false;
 
 const ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,
@@ -59,6 +64,7 @@ const ActorInit En_Niw_InitVars = {
     (ActorFunc)EnNiw_Destroy,
     (ActorFunc)EnNiw_Update,
     (ActorFunc)EnNiw_Draw,
+    (ActorFunc)EnNiw_OnLoad,
 };
 
 static f32 D_80AB8604[] = {
@@ -81,9 +87,9 @@ static s16 sKakarikoFlagList[] = {
     0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000,
 };
 
-static u8 sLowerRiverSpawned = false;
+static bool sLowerRiverSpawned = false;
 
-static u8 sUpperRiverSpawned = false;
+static bool sUpperRiverSpawned = false;
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
@@ -130,6 +136,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
+
+void EnNiw_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80AB85E0 = false;
+    sLowerRiverSpawned = false;
+    sUpperRiverSpawned = false;
+}
 
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;

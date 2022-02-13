@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_BW_Z_EN_BW_C
 #include "actor_common.h"
 /*
@@ -28,6 +32,7 @@ void EnBw_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBw_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBw_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809CE884(EnBw* this, GlobalContext* globalCtx);
 void func_809CE9A8(EnBw* this);
@@ -57,6 +62,7 @@ const ActorInit En_Bw_InitVars = {
     (ActorFunc)EnBw_Destroy,
     (ActorFunc)EnBw_Update,
     (ActorFunc)EnBw_Draw,
+    (ActorFunc)EnBw_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -138,6 +144,10 @@ static s32 sSlugGroup = 0;
 
 void EnBw_SetupAction(EnBw* this, EnBwActionFunc actionFunc) {
     this->actionFunc = actionFunc;
+}
+
+void EnBw_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sSlugGroup = 0;
 }
 
 void EnBw_Init(Actor* thisx, GlobalContext* globalCtx) {

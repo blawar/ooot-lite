@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_EG_Z_EN_EG_C
 #include "actor_common.h"
 /*
@@ -20,6 +24,7 @@ void EnEg_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEg_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809FFDC8(EnEg* this, GlobalContext* globalCtx);
 
@@ -39,6 +44,7 @@ const ActorInit En_Eg_InitVars = {
     (ActorFunc)EnEg_Destroy,
     (ActorFunc)EnEg_Update,
     (ActorFunc)EnEg_Draw,
+    (ActorFunc)EnEg_OnLoad,
 };
 
 void EnEg_PlayVoidOutSFX() {
@@ -46,6 +52,10 @@ void EnEg_PlayVoidOutSFX() {
 }
 
 void EnEg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void EnEg_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    voided = false;
 }
 
 void EnEg_Init(Actor* thisx, GlobalContext* globalCtx) {

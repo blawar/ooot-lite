@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_HEISHI3_Z_EN_HEISHI3_C
 #include "actor_common.h"
 /*
@@ -23,6 +27,7 @@ void EnHeishi3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi3_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHeishi3_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnHeishi3_SetupGuardType(EnHeishi3* this, GlobalContext* globalCtx);
 void EnHeishi3_StandSentinelInGrounds(EnHeishi3* this, GlobalContext* globalCtx);
@@ -32,7 +37,7 @@ void EnHeishi3_ResetAnimationToIdle(EnHeishi3* this, GlobalContext* globalCtx);
 void func_80A55D00(EnHeishi3* this, GlobalContext* globalCtx);
 void func_80A55BD4(EnHeishi3* this, GlobalContext* globalCtx);
 
-static s16 sPlayerCaught = 0;
+static bool sPlayerCaught = false;
 
 const ActorInit En_Heishi3_InitVars = {
     ACTOR_EN_HEISHI3,
@@ -44,6 +49,7 @@ const ActorInit En_Heishi3_InitVars = {
     (ActorFunc)EnHeishi3_Destroy,
     (ActorFunc)EnHeishi3_Update,
     (ActorFunc)EnHeishi3_Draw,
+    (ActorFunc)EnHeishi3_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -66,10 +72,14 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 70, 0, { 0, 0, 0 } },
 };
 
+void EnHeishi3_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sPlayerCaught = false;
+}
+
 void EnHeishi3_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHeishi3* this = (EnHeishi3*)thisx;
 
-    sPlayerCaught = 0;
+    sPlayerCaught = false;
     if (this->actor.params <= 0) {
         this->unk_278 = 0;
     } else {
@@ -138,8 +148,8 @@ void EnHeishi3_StandSentinelInGrounds(EnHeishi3* this, GlobalContext* globalCtx)
         }
     }
     if ((this->actor.xzDistToPlayer < sightRange) &&
-        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) && (sPlayerCaught == 0)) {
-        sPlayerCaught = 1;
+        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) && (!sPlayerCaught)) {
+        sPlayerCaught = true;
         Message_StartTextbox(globalCtx, 0x702D, &this->actor);
         func_80078884(NA_SE_SY_FOUND);
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 発見！ ☆☆☆☆☆ \n" VT_RST); // "Discovered!"
@@ -157,7 +167,7 @@ void EnHeishi3_StandSentinelInCastle(EnHeishi3* this, GlobalContext* globalCtx) 
     SkelAnime_Update(&this->skelAnime);
     if ((player->actor.world.pos.x < -190.0f) && (player->actor.world.pos.x > -380.0f) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) &&
-        (player->actor.world.pos.z < 1020.0f) && (player->actor.world.pos.z > 700.0f) && (sPlayerCaught == 0)) {
+        (player->actor.world.pos.z < 1020.0f) && (player->actor.world.pos.z > 700.0f) && (!sPlayerCaught)) {
         if (this->unk_278 == 1) {
             if ((player->actor.world.pos.x < -290.0f)) {
                 return;
@@ -167,7 +177,7 @@ void EnHeishi3_StandSentinelInCastle(EnHeishi3* this, GlobalContext* globalCtx) 
                 return;
             }
         }
-        sPlayerCaught = 1;
+        sPlayerCaught = true;
         Message_StartTextbox(globalCtx, 0x702D, &this->actor);
         func_80078884(NA_SE_SY_FOUND);
         osSyncPrintf(VT_FGCOL(GREEN) "☆☆☆☆☆ 発見！ ☆☆☆☆☆ \n" VT_RST); // "Discovered!"

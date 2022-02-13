@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_JYA_IRONOBJ_Z_BG_JYA_IRONOBJ_C
 #include "actor_common.h"
 /*
@@ -34,8 +38,6 @@ void func_808992E8(BgJyaIronobj* this, GlobalContext* globalCtx);
 void BgJyaIronobj_SpawnPillarParticles(BgJyaIronobj* this, GlobalContext* globalCtx, EnIk* enIk);
 void BgJyaIronobj_SpawnThoneParticles(BgJyaIronobj* this, GlobalContext* arg1, EnIk* enIk);
 
-static int sUnused = 0;
-
 const ActorInit Bg_Jya_Ironobj_InitVars = {
     ACTOR_BG_JYA_IRONOBJ,
     ACTORCAT_PROP,
@@ -46,6 +48,7 @@ const ActorInit Bg_Jya_Ironobj_InitVars = {
     (ActorFunc)BgJyaIronobj_Destroy,
     (ActorFunc)BgJyaIronobj_Update,
     (ActorFunc)BgJyaIronobj_Draw,
+    (ActorFunc)NULL,
 };
 
 static Gfx* sOpaDL[] = { gPillarDL, gThroneDL };

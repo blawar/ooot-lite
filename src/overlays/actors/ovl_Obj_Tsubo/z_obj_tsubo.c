@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_OBJ_TSUBO_Z_OBJ_TSUBO_C
 #include "actor_common.h"
 /*
@@ -27,6 +31,7 @@ void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjTsubo_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjTsubo_SpawnCollectible(ObjTsubo* this, GlobalContext* globalCtx);
 void ObjTsubo_ApplyGravity(ObjTsubo* this);
@@ -58,6 +63,7 @@ const ActorInit Obj_Tsubo_InitVars = {
     (ActorFunc)ObjTsubo_Destroy,
     (ActorFunc)ObjTsubo_Update,
     NULL,
+    (ActorFunc)ObjTsubo_OnLoad,
 };
 
 static s16 sObjectIds[] = { OBJECT_GAMEPLAY_DANGEON_KEEP, OBJECT_TSUBO };
@@ -136,6 +142,13 @@ void ObjTsubo_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
+}
+
+void ObjTsubo_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80BA1B50 = 0;
+    D_80BA1B54 = 0;
+    D_80BA1B58 = 0;
+    D_80BA1B5C = 0;
 }
 
 void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx) {

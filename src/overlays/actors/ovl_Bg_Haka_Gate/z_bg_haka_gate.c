@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_HAKA_GATE_Z_BG_HAKA_GATE_C
 #include "actor_common.h"
 /*
@@ -46,6 +50,7 @@ void BgHakaGate_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaGate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaGate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaGate_Draw(Actor* this, GlobalContext* globalCtx);
+void BgHakaGate_OnLoad(Actor* this, GlobalContext* globalCtx);
 
 void BgHakaGate_DoNothing(BgHakaGate* this, GlobalContext* globalCtx);
 void BgHakaGate_StatueInactive(BgHakaGate* this, GlobalContext* globalCtx);
@@ -74,11 +79,19 @@ const ActorInit Bg_Haka_Gate_InitVars = {
     (ActorFunc)BgHakaGate_Destroy,
     (ActorFunc)BgHakaGate_Update,
     (ActorFunc)BgHakaGate_Draw,
+    (ActorFunc)BgHakaGate_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
+
+void BgHakaGate_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sSkullOfTruthRotY = 0x100;
+    sPuzzleState = 1;
+    sStatueDistToPlayer = 0;
+    sStatueRotY = 0;
+}
 
 void BgHakaGate_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

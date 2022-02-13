@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BOSS_TW_Z_BOSS_TW_C
 #include "actor_common.h"
 #include "z_boss_tw.h"
@@ -83,6 +87,7 @@ void BossTw_Init(Actor* thisx, GlobalContext* globalCtx);
 void BossTw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossTw_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossTw_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BossTw_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BossTw_TwinrovaDamage(BossTw* this, GlobalContext* globalCtx, u8 arg2);
 void BossTw_TwinrovaSetupFly(BossTw* this, GlobalContext* globalCtx);
@@ -145,6 +150,7 @@ const ActorInit Boss_Tw_InitVars = {
     (ActorFunc)BossTw_Destroy,
     (ActorFunc)BossTw_Update,
     (ActorFunc)BossTw_Draw,
+    (ActorFunc)BossTw_OnLoad,
 };
 
 static Vec3f D_8094A7D0 = { 0.0f, 0.0f, 1000.0f };
@@ -464,6 +470,33 @@ void BossTw_AddShieldHitEffect(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
     }
 }
 
+void BossTw_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    sTwInitalized = false;
+    sEnvType = 0;
+    sGroundBlastType = 0;
+    sKotakePtr = NULL;
+    sKoumePtr = NULL;
+    sTwinrovaPtr = NULL;
+    sShieldFireCharge = 0;
+    sShieldIceCharge = 0;
+    D_8094C854 = 0;
+    D_8094C858 = 0;
+    sTwinrovaBlastType = 0;
+    sFixedBlastType = 0;
+    sFixedBlatSeq = 0;
+    sFreezeState = 0;
+    sShieldHitYaw = 0;
+    sBeamDivertTimer = 0;
+    D_8094C86F = 0;
+    D_8094C870 = 0;
+     D_8094C872 = 0;
+     D_8094C874 = 0;
+     D_8094C876 = 0;
+    D_8094C878 = 0;
+     D_8094C87A = 0;
+     D_8094C87C = 0;
+    D_8094C87E = 0;
+}
 void BossTw_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     BossTw* this = (BossTw*)thisx;

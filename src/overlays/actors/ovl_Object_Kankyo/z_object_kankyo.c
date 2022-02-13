@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_OBJECT_KANKYO_Z_OBJECT_KANKYO_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@ void ObjectKankyo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjectKankyo_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjectKankyo_SetupAction(ObjectKankyo* this, ObjectKankyoActionFunc func);
 void ObjectKankyo_Fairies(ObjectKankyo* this, GlobalContext* globalCtx);
@@ -71,13 +76,19 @@ const ActorInit Object_Kankyo_InitVars = {
     (ActorFunc)ObjectKankyo_Destroy,
     (ActorFunc)ObjectKankyo_Update,
     (ActorFunc)ObjectKankyo_Draw,
+    (ActorFunc)ObjectKankyo_OnLoad,
 };
 
-static u8 sIsSpawned = false;
+static bool sIsSpawned = false;
 static s16 sTrailingFairies = 0;
 
 void ObjectKankyo_SetupAction(ObjectKankyo* this, ObjectKankyoActionFunc action) {
     this->actionFunc = action;
+}
+
+void ObjectKankyo_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsSpawned = false;
+    sTrailingFairies = 0;
 }
 
 void ObjectKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {

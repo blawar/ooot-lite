@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_RELAY_OBJECTS_Z_BG_RELAY_OBJECTS_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@ void BgRelayObjects_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgRelayObjects_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgRelayObjects_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgRelayObjects_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgRelayObjects_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808A90F4(BgRelayObjects* this, GlobalContext* globalCtx);
 void func_808A91AC(BgRelayObjects* this, GlobalContext* globalCtx);
@@ -49,6 +54,7 @@ const ActorInit Bg_Relay_Objects_InitVars = {
     (ActorFunc)BgRelayObjects_Destroy,
     (ActorFunc)BgRelayObjects_Update,
     (ActorFunc)BgRelayObjects_Draw,
+    (ActorFunc)BgRelayObjects_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -56,8 +62,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+static u32 D_808A9508 = 0;
+
+void BgRelayObjects_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_808A9508 = 0;
+}
+
 void BgRelayObjects_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static u32 D_808A9508 = 0;
     BgRelayObjects* this = (BgRelayObjects*)thisx;
     s32 pad;
     CollisionHeader* colHeader = NULL;

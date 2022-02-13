@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_CROW_Z_EN_CROW_C
 #include "actor_common.h"
 #include "z_en_crow.h"
@@ -20,6 +24,7 @@ void EnCrow_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnCrow_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnCrow_SetupFlyIdle(EnCrow* this);
 void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx);
@@ -41,6 +46,7 @@ const ActorInit En_Crow_InitVars = {
     (ActorFunc)EnCrow_Destroy,
     (ActorFunc)EnCrow_Update,
     (ActorFunc)EnCrow_Draw,
+    (ActorFunc)EnCrow_OnLoad,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -117,6 +123,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static Vec3f sHeadVec = { 2500.0f, 0.0f, 0.0f };
+
+void EnCrow_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sDeathCount = 0;
+}
 
 void EnCrow_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnCrow* this = (EnCrow*)thisx;

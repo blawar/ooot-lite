@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_HINTNUTS_Z_EN_HINTNUTS_C
 #include "actor_common.h"
 /*
@@ -23,6 +27,7 @@ void EnHintnuts_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHintnuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHintnuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHintnuts_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHintnuts_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnHintnuts_SetupWait(EnHintnuts* this);
 void EnHintnuts_Wait(EnHintnuts* this, GlobalContext* globalCtx);
@@ -47,6 +52,7 @@ const ActorInit En_Hintnuts_InitVars = {
     (ActorFunc)EnHintnuts_Destroy,
     (ActorFunc)EnHintnuts_Update,
     (ActorFunc)EnHintnuts_Draw,
+    (ActorFunc)EnHintnuts_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -78,6 +84,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(naviEnemyId, 0x0A, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
+
+void EnHintnuts_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sPuzzleCounter = 0;
+}
 
 void EnHintnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHintnuts* this = (EnHintnuts*)thisx;

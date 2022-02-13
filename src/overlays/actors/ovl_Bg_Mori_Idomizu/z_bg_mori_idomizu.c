@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_MORI_IDOMIZU_Z_BG_MORI_IDOMIZU_C
 #include "actor_common.h"
 /*
@@ -21,13 +25,14 @@ void BgMoriIdomizu_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriIdomizu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriIdomizu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgMoriIdomizu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgMoriIdomizu_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgMoriIdomizu_SetupWaitForMoriTex(BgMoriIdomizu* this);
 void BgMoriIdomizu_WaitForMoriTex(BgMoriIdomizu* this, GlobalContext* globalCtx);
 void BgMoriIdomizu_SetupMain(BgMoriIdomizu* this);
 void BgMoriIdomizu_Main(BgMoriIdomizu* this, GlobalContext* globalCtx);
 
-static s16 sIsSpawned = false;
+static bool sIsSpawned = false;
 
 const ActorInit Bg_Mori_Idomizu_InitVars = {
     ACTOR_BG_MORI_IDOMIZU,
@@ -39,6 +44,7 @@ const ActorInit Bg_Mori_Idomizu_InitVars = {
     (ActorFunc)BgMoriIdomizu_Destroy,
     (ActorFunc)BgMoriIdomizu_Update,
     NULL,
+    (ActorFunc)BgMoriIdomizu_OnLoad,
 };
 
 void BgMoriIdomizu_SetupAction(BgMoriIdomizu* this, BgMoriIdomizuActionFunc actionFunc) {
@@ -51,6 +57,10 @@ void BgMoriIdomizu_SetWaterLevel(GlobalContext* globalCtx, s16 waterLevel) {
     waterBox[2].ySurface = waterLevel;
     waterBox[3].ySurface = waterLevel;
     waterBox[4].ySurface = waterLevel;
+}
+
+void BgMoriIdomizu_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsSpawned = false;
 }
 
 void BgMoriIdomizu_Init(Actor* thisx, GlobalContext* globalCtx) {

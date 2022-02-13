@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_BG_JYA_LIFT_Z_BG_JYA_LIFT_C
 #include "actor_common.h"
 /*
@@ -22,6 +26,7 @@ void BgJyaLift_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaLift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaLift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgJyaLift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgJyaLift_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void BgJyaLift_SetFinalPosY(BgJyaLift* this);
 void BgJyaLift_SetInitPosY(BgJyaLift* this);
@@ -29,7 +34,7 @@ void BgJyaLift_DelayMove(BgJyaLift* this, GlobalContext* globalCtx);
 void BgJyaLift_SetupMove(BgJyaLift* this);
 void BgJyaLift_Move(BgJyaLift* this, GlobalContext* globalCtx);
 
-static s16 sIsSpawned = false;
+static bool sIsSpawned = false;
 
 const ActorInit Bg_Jya_Lift_InitVars = {
     ACTOR_BG_JYA_LIFT,
@@ -41,6 +46,7 @@ const ActorInit Bg_Jya_Lift_InitVars = {
     (ActorFunc)BgJyaLift_Destroy,
     (ActorFunc)BgJyaLift_Update,
     (ActorFunc)BgJyaLift_Draw,
+    (ActorFunc)BgJyaLift_OnLoad,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -57,6 +63,10 @@ void BgJyaLift_InitDynapoly(BgJyaLift* this, GlobalContext* globalCtx, Collision
     DynaPolyActor_Init(&this->dyna, moveFlag);
     CollisionHeader_GetVirtual(collisionHeader, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+}
+
+void BgJyaLift_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sIsSpawned = false;
 }
 
 void BgJyaLift_Init(Actor* thisx, GlobalContext* globalCtx) {

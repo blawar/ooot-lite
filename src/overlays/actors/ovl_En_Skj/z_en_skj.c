@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_SKJ_Z_EN_SKJ_C
 #include "actor_common.h"
 #include "z_en_skj.h"
@@ -27,6 +31,7 @@ void EnSkj_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSkj_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSkj_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSkj_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSkj_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnSkj_SariasSongShortStumpUpdate(Actor* thisx, GlobalContext* globalCtx);
 void EnSkj_OcarinaMinigameShortStumpUpdate(Actor* thisx, GlobalContext* globalCtx);
@@ -189,6 +194,7 @@ const ActorInit En_Skj_InitVars = {
     (ActorFunc)EnSkj_Destroy,
     (ActorFunc)EnSkj_Update,
     (ActorFunc)EnSkj_Draw,
+    (ActorFunc)EnSkj_OnLoad,
 };
 
 static ColliderCylinderInitType1 D_80B01678 = {
@@ -383,6 +389,13 @@ void EnSkj_SetNaviId(EnSkj* this) {
             this->actor.naviEnemyId = 0x36; // Skull kid as adult
             break;
     }
+}
+
+void EnSkj_OnLoad(Actor* thisx, GlobalContext* globalCtx2) {
+    /*sSmallStumpSkullKid = { 0, NULL };
+    sOcarinaMinigameSkullKids[] = { { 0, NULL }, { 0, NULL } };*/
+    memset(&sSmallStumpSkullKid, 0, sizeof(sSmallStumpSkullKid));
+    memset(&sOcarinaMinigameSkullKids, 0, sizeof(sOcarinaMinigameSkullKids));
 }
 
 void EnSkj_Init(Actor* thisx, GlobalContext* globalCtx2) {

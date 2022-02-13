@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_OBJ_BEAN_Z_OBJ_BEAN_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjBean_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjBean_WaitForPlayer(ObjBean* this, GlobalContext* globalCtx);
 void ObjBean_Fly(ObjBean* this, GlobalContext* globalCtx);
@@ -98,6 +103,7 @@ const ActorInit Obj_Bean_InitVars = {
     (ActorFunc)ObjBean_Destroy,
     (ActorFunc)ObjBean_Update,
     (ActorFunc)ObjBean_Draw,
+    (ActorFunc)ObjBean_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -477,6 +483,10 @@ void ObjBean_Grown(ObjBean* this) {
     if (this->unk_1C2 <= 0) {
         ObjBean_SetupLeavesStill(this);
     }
+}
+
+void ObjBean_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80B90E30 = NULL;
 }
 
 void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx) {

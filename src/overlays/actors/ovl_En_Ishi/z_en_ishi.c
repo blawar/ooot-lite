@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_ISHI_Z_EN_ISHI_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnIshi_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnIshi_SetupWait(EnIshi* this);
 void EnIshi_Wait(EnIshi* this, GlobalContext* globalCtx);
@@ -56,6 +61,7 @@ const ActorInit En_Ishi_InitVars = {
     (ActorFunc)EnIshi_Destroy,
     (ActorFunc)EnIshi_Update,
     (ActorFunc)EnIshi_Draw,
+    (ActorFunc)EnIshi_OnLoad,
 };
 
 static f32 sRockScales[] = { 0.1f, 0.4f };
@@ -65,9 +71,10 @@ static f32 D_80A7FA28[] = { 0.0f, 0.005f };
 // the sizes of these arrays are very large and take up way more space than it needs to.
 // coincidentally the sizes are the same as the ID for NA_SE_EV_ROCK_BROKEN, which may explain a mistake that could
 // have been made here
-static u16 sBreakSounds[0x2852] = { NA_SE_EV_ROCK_BROKEN, NA_SE_EV_WALL_BROKEN };
+/* In light of above, both from size 0x2852 to 2 */
+static u16 sBreakSounds[2] = { NA_SE_EV_ROCK_BROKEN, NA_SE_EV_WALL_BROKEN };
 
-static u8 sBreakSoundDurations[0x2852] = { 20, 40 };
+static u8 sBreakSoundDurations[2] = { 20, 40 };
 
 static EnIshiEffectSpawnFunc sFragmentSpawnFuncs[] = { EnIshi_SpawnFragmentsSmall, EnIshi_SpawnFragmentsLarge };
 
@@ -318,6 +325,11 @@ static InitChainEntry sInitChains[][5] = {
         ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
     },
 };
+
+void EnIshi_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sRotSpeedX = 0;
+    sRotSpeedY = 0;
+}
 
 void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnIshi* this = (EnIshi*)thisx;

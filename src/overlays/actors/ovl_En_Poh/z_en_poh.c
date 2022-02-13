@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_POH_Z_EN_POH_C
 #include "actor_common.h"
 /*
@@ -31,6 +35,7 @@
 void EnPoh_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnPoh_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void EnPoh_UpdateLiving(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_UpdateDead(Actor* thisx, GlobalContext* globalCtx);
@@ -70,6 +75,7 @@ const ActorInit En_Poh_InitVars = {
     (ActorFunc)EnPoh_Destroy,
     (ActorFunc)EnPoh_Update,
     NULL,
+    (ActorFunc)EnPoh_OnLoad,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -198,6 +204,10 @@ static InitChainEntry sInitChain[] = {
 
 static Vec3f D_80AE1B60 = { 0.0f, 3.0f, 0.0f };
 static Vec3f D_80AE1B6C = { 0.0f, 0.0f, 0.0f };
+
+void EnPoh_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    D_80AE1A50 = 0;
+}
 
 void EnPoh_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

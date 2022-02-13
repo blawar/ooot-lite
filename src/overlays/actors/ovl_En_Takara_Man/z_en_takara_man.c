@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_ACTORS_OVL_EN_TAKARA_MAN_Z_EN_TAKARA_MAN_C
 #include "actor_common.h"
 /*
@@ -22,6 +26,7 @@ void EnTakaraMan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTakaraMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTakaraMan_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTakaraMan_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTakaraMan_OnLoad(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B176E0(EnTakaraMan* this, GlobalContext* globalCtx);
 void func_80B1778C(EnTakaraMan* this, GlobalContext* globalCtx);
@@ -40,11 +45,16 @@ const ActorInit En_Takara_Man_InitVars = {
     (ActorFunc)EnTakaraMan_Destroy,
     (ActorFunc)EnTakaraMan_Update,
     (ActorFunc)EnTakaraMan_Draw,
+    (ActorFunc)EnTakaraMan_OnLoad,
 };
 
-static u8 sTakaraIsInitialized = false;
+static bool sTakaraIsInitialized = false;
 
 void EnTakaraMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void EnTakaraMan_OnLoad(Actor* thisx, GlobalContext* globalCtx) {
+    sTakaraIsInitialized = false;
 }
 
 void EnTakaraMan_Init(Actor* thisx, GlobalContext* globalCtx) {
