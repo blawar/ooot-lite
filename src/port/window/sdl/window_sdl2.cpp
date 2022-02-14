@@ -205,16 +205,16 @@ namespace platform::window
 		Sdl(const char *game_name, bool start_in_fullscreen) : Base()
 		{
 			SDL_Init(SDL_INIT_VIDEO);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-			// SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+			//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-			// SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-			// SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+			//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+			//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 			char title[512];
 			int len = sprintf(title, "%s (%s)", game_name, GFX_API_NAME);

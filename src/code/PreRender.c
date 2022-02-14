@@ -402,7 +402,6 @@ void func_800C2500(PreRender* this, s32 x, s32 y) {
         } else if (y1 > (this->height - 1)) {
             y1 = this->height - 1;
         }
-
         pxIn.rgba = this->fbufSave[x1 + y1 * this->width];
         buffR[i] = (pxIn.r << 3) | (pxIn.r >> 2);
         buffG[i] = (pxIn.g << 3) | (pxIn.g >> 2);
@@ -492,12 +491,21 @@ void func_800C2FE4(PreRender* this) {
 
     for (y = 0; y < this->height; y++) {
         for (x = 0; x < this->width; x++) {
+        #if !defined(NATIVE)
             Color_RGBA16 pxIn;
 
             pxIn.rgba = this->fbufSave[x + y * this->width];
             buffR[x] = pxIn.r;
             buffG[x] = pxIn.g;
             buffB[x] = pxIn.b;
+        #else
+            Color_RGBA8_u32 pxIn;
+
+            pxIn.rgba = this->fbufSave[x + y * this->width];
+            buffR[x] = pxIn.r;
+            buffG[x] = pxIn.g;
+            buffB[x] = pxIn.b;
+        #endif
         }
 
         for (x = 1; x < this->width - 1; x++) {

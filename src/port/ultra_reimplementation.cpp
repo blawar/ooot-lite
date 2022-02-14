@@ -441,7 +441,7 @@ void osSyncPrintf(const char *fmt, ...)
 	// OutputDebugStringA(buffer);
 	OutputDebugStringW(s.c_str());
 #else
-	printf("%s", buffer);
+	//printf("%s", buffer);
 #endif
 }
 

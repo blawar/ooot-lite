@@ -291,8 +291,8 @@ void KaleidoScope_SetupPlayerPreRender(GlobalContext* globalCtx) {
 
 void KaleidoScope_ProcessPlayerPreRender(void) {
     Sleep_Msec(50);
-    //PreRender_Calc(&sPlayerPreRender);
-    //PreRender_Destroy(&sPlayerPreRender);
+    PreRender_Calc(&sPlayerPreRender);
+    PreRender_Destroy(&sPlayerPreRender);
 }
 
 Gfx* KaleidoScope_QuadTextureIA4(Gfx* gfx, void* texture, s16 width, s16 height, u16 point) {
@@ -2312,7 +2312,7 @@ void KaleidoScope_Draw(GlobalContext* globalCtx) {
 
         func_800949A8(globalCtx->state.gfxCtx);
         KaleidoScope_InitVertices(globalCtx, globalCtx->state.gfxCtx);
-        KaleidoScope_DrawPages(globalCtx, globalCtx->state.gfxCtx);
+        //KaleidoScope_DrawPages(globalCtx, globalCtx->state.gfxCtx);
 
         func_800949A8(globalCtx->state.gfxCtx);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
@@ -2321,7 +2321,7 @@ void KaleidoScope_Draw(GlobalContext* globalCtx) {
         KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
         if (!((pauseCtx->state >= 8) && (pauseCtx->state <= 0x11))) {
-            KaleidoScope_DrawInfoPanel(globalCtx);
+            //KaleidoScope_DrawInfoPanel(globalCtx);
         }
     }
 
