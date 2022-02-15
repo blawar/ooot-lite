@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef Z64_ANIMATION_H
 #define Z64_ANIMATION_H
 

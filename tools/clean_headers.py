@@ -6,7 +6,9 @@ import sys
 
 magic = '// GENERATED'
 includeHeader = '#include "asset_common.h"'
-removeHeaders = ['#include "z64animation.h"', '#include "z64bgcheck.h"', '#include "asset_common.h"']
+removeHeaders = ['#include "z64animation.h"', '#include "z64bgcheck.h"', '#include "asset_common.h"',
+									'#include "z64.h"', '#include "macros.h"']
+
 noLuts = ['gameplay_keep', 'gameplay_dangeon', 'gameplay_field']
 
 def writeFile(path, buffer):
@@ -95,7 +97,7 @@ for path in files:
 		resultC = resultC.replace(i + '\n', '')
 
 	if includeHeader not in resultC:
-		resultC = resultC.replace('#include "ultra64.h"', '#include "ultra64.h"\n' + includeHeader)
+		resultC = resultC.replace('#include "ultra64.h"', includeHeader)
 
 	if '_scene.c' in c_path:
 		resultC = resultC.replace('#include "z64cutscene.h"', '')

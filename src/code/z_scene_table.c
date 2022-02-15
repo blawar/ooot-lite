@@ -65,8 +65,11 @@ extern Gfx gEmptyDL[];
 #include "scenes/indoors/bowling/bowling_scene.h"
 #include "scenes/indoors/mahouya/mahouya_scene.h"
 #include "scenes/indoors/hakasitarelay/hakasitarelay_scene.h"
+#if defined(ROM_DEBUG)
 #include "scenes/indoors/hairal_niwa2/hairal_niwa2_scene.h"
-
+#elif defined(ROM_RETAIL)
+#include "scenes/indoors/hairal_niwa_n/hairal_niwa_n_scene.h"
+#endif
 #include "scenes/misc/entra_n/entra_n_scene.h"
 #include "scenes/misc/enrui/enrui_scene.h"
 #include "scenes/misc/market_alley/market_alley_scene.h"
@@ -126,6 +129,7 @@ extern Gfx gEmptyDL[];
 #include "scenes/dungeons/ganon_demo/ganon_demo_scene.h"
 #include "scenes/dungeons/ganon_tou/ganon_tou_scene.h"
 
+#if defined(ROM_DEBUG)
 #include "scenes/test_levels/test01/test01_scene.h"
 #include "scenes/test_levels/besitu/besitu_scene.h"
 #include "scenes/test_levels/depth_test/depth_test_scene.h"
@@ -134,6 +138,7 @@ extern Gfx gEmptyDL[];
 #include "scenes/test_levels/sutaru/sutaru_scene.h"
 #include "scenes/test_levels/sasatest/sasatest_scene.h"
 #include "scenes/test_levels/testroom/testroom_scene.h"
+#endif
 
 #include "overlays/actors/ovl_Bg_Dodoago/z_bg_dodoago.h"
 #include "z_scene_table_assets.h"
@@ -1176,6 +1181,7 @@ SceneTableEntry gSceneTable[] = {
     TITLED_SCENE(spot18_scene, g_pn_41, 0, 16, 0),
     TITLED_SCENE(spot20_scene, g_pn_42, 0, 17, 0),
     TITLED_SCENE(ganon_tou_scene, g_pn_43, 0, 36, 0),
+#if defined(ROM_DEBUG)
     UNTITLED_SCENE(test01_scene, 0, 47, 0),
     UNTITLED_SCENE(besitu_scene, 0, 49, 0),
     UNTITLED_SCENE(depth_test_scene, 0, 0, 0),
@@ -1185,6 +1191,7 @@ SceneTableEntry gSceneTable[] = {
     TITLED_SCENE(hairal_niwa2_scene, g_pn_12, 0, 35, 0),
     UNTITLED_SCENE(sasatest_scene, 0, 0, 0),
     UNTITLED_SCENE(testroom_scene, 0, 0, 0),
+#endif
 };
 
 Gfx sDefaultDisplayList[] = {

@@ -263,8 +263,8 @@ namespace platform::window
 			SDL_GetDesktopDisplayMode(SDL_GetWindowDisplayIndex(wnd), mode);
 			if( mode->refresh_rate == 0 ){
 				mode->refresh_rate = 60;
-				return 60;
 			}
+			return mode->refresh_rate;
 		}
 
 		void set_fullscreen(bool on, bool call_callback)

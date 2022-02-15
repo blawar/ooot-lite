@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
+import sys
 import argparse, os, shutil, time
 from itertools import repeat
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 
-def ExtractFile(xmlPath: Path, outputPath: Path, outputSourcePath: Path, unaccounted: bool):
+def ExtractFile(xmlPath: Path, outputPath: Path, outputSourcePath: Path, unaccounted: bool, zapdConfig:Path):
     # Create target folder recursivly, ignore error if it already exists
     Path.mkdir(Path(outputSourcePath), parents=True, exist_ok = True)
 
     zapd = Path("tools/ZAPD/ZAPD.out")
-    zapdConfig = Path("tools/ZAPDConfigs/MqDbg/Config.xml")
     execStr = f"{zapd} e -i {xmlPath} -b baserom -o {outputPath} -osf {outputSourcePath} -gsf 1 -rconf {zapdConfig} -lut"
 
     # Use error handler only if non-windows environment, because it's not supported in windows
@@ -35,7 +35,7 @@ def ExtractFile(xmlPath: Path, outputPath: Path, outputSourcePath: Path, unaccou
 
 
 
-def ExtractFunc(fullPath: Path, force: bool, unaccounted: bool):
+def ExtractFunc(fullPath: Path, force: bool, unaccounted: bool, asset_suffix: str, zapdConfig:Path):
     # Ensure that file exists. It can happen that files don't exist if paths are manually passed
     if fullPath.exists() == False:
         return ("failed", f"File cannot be found: {fullPath}")
@@ -43,7 +43,7 @@ def ExtractFunc(fullPath: Path, force: bool, unaccounted: bool):
     # Remove xml directory and suffix in path to use as output directory
     # Example: assets/xml/objects/object_example.xml -> assets/objects/object_bdoor
     parts = list(fullPath.parts)
-    parts.remove('xml')
+    parts.remove(f"xml{asset_suffix}")
     outPath = Path(*parts).with_suffix('')
 
     # If output is more recent than source file: skip extraction
@@ -53,9 +53,9 @@ def ExtractFunc(fullPath: Path, force: bool, unaccounted: bool):
 
     # Delete target folder before extraction, ignore errors in case there is no folder to delete
     shutil.rmtree(outPath, ignore_errors=True)
-    return ExtractFile(fullPath, outPath, outPath, unaccounted)
+    return ExtractFile(fullPath, outPath, outPath, unaccounted, zapdConfig)
 
-def ExtractText(force: bool):
+def ExtractText(force: bool, args:argparse.ArgumentParser):
     extract_text_path = Path("assets/text/message_data.h")
     extract_staff_text_path = Path("assets/text/message_data_staff.h")
     # Ensure target folder exists
@@ -72,10 +72,10 @@ def ExtractText(force: bool):
     if extract_text_path is not None or extract_staff_text_path is not None:
         print("Start Extracting text")
         from tools import msgdis
-        msgdis.extract_all_text(extract_text_path, extract_staff_text_path)
+        msgdis.extract_all_text(extract_text_path, extract_staff_text_path, args)
         print("Finished extracting text")
 
-def ExtractXMLAssets(xmlFiles, force: bool, unaccounted: bool):
+def ExtractXMLAssets(xmlFiles, force: bool, unaccounted: bool, asset_suffix: str, zapdConfig:Path):
     thread_count = os.cpu_count() or 1
     print(f"Start extracting {len(xmlFiles)} assets with %d threads" % thread_count)
     success = skipped = failed = 0
@@ -83,7 +83,7 @@ def ExtractXMLAssets(xmlFiles, force: bool, unaccounted: bool):
     # Multithreading instead of multiprocessing, because of IO heavy operation
     with ThreadPoolExecutor(max_workers = thread_count) as executor:
         with tqdm(total=len(xmlFiles)) as progress:
-            for result in executor.map(ExtractFunc, xmlFiles, repeat(force), repeat(unaccounted)):
+            for result in executor.map(ExtractFunc, xmlFiles, repeat(force), repeat(unaccounted), repeat(asset_suffix), repeat(zapdConfig)):
                 progress.update()
                 # Parsing of results
                 status = result[0]
@@ -107,21 +107,38 @@ def main():
     parser.add_argument("assets", help="asset path(s) relative to assets/xml/, e.g. objects/gameplay_keep. Passing nothing will extract entire assets/xml/ tree", nargs="*", default=None)
     parser.add_argument("-f", "--force", help="Force the extraction of every asset instead of only recently modified", action="store_true", default=False)
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true", default=False)
+    parser.add_argument("-mq", "--debug", help="Uses debug masterquest rom for Assets", action="store_true", default=False)
+    parser.add_argument("-eu", "--retail", help="Uses retail pal 1.0 rom for Assets", action="store_true", default=False)
     args = parser.parse_args()
+
+    if not args.debug and not args.retail:
+        args.debug = True
+
+    if args.debug and args.retail:
+        print("Error: Both retail and debug flags set, only 1 allowed")
+        sys.exit(1)
+
+    if args.debug:
+        asset_suffix = "_mq"
+        zapdConfig = Path("tools/ZAPDConfigs/MqDbg/Config.xml")
+    if args.retail:
+        asset_suffix = "_eu"
+        zapdConfig = Path("tools/ZAPDConfigs/RetailEU/Config.xml")
 
     # List of xml files for extraction
     xmlFiles = None
     if args.assets:
         # Generate list of Paths by transforming asset inputs into full Path structure
         # Example: objects/gameplay_keep  -->  assets/xml/objects/gameplay_keep.xml
-        xmlFiles = [Path('assets/xml').joinpath(file).with_suffix('.xml') for file in args.assets]
+        xmlFiles = [Path(f"assets/xml{asset_suffix}").joinpath(file).with_suffix('.xml') for file in args.assets]
     else:
         # Get list of all xml files in assets/xml/ subdirectories recursivly
-        xmlFiles = sorted(Path('.').glob('assets/xml/**/*.xml'))
+        xmlFiles = sorted(Path('.').glob(f"assets/xml{asset_suffix}/**/*.xml"))
+    xmlFiles = sorted(Path('.').glob(f"assets/xml{asset_suffix}/**/*.xml"))
 
     start = time.perf_counter()
-    ExtractText(args.force)
-    ExtractXMLAssets(xmlFiles, args.force, args.unaccounted)
+    ExtractText(args.force, args)
+    ExtractXMLAssets(xmlFiles, args.force, args.unaccounted, asset_suffix, zapdConfig)
     finish = time.perf_counter()
     print(f"Finished extracting assets in {round(finish-start, 2)} seconds")
 

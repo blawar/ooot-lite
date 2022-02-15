@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef ULTRA64_H
 #define ULTRA64_H
 
@@ -10,6 +12,7 @@
 #include "stdlib.h"
 #include "math.h"
 
+#if !defined(IS_ASSET)
 #include "ultra64/exception.h"
 #include "ultra64/rcp.h"
 #include "ultra64/rdp.h"
@@ -28,5 +31,6 @@
 #include "ultra64/pfs.h"
 #include "ultra64/motor.h"
 #include "ultra64/r4300.h"
+#endif
 
 #endif

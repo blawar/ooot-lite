@@ -295,6 +295,7 @@ static SceneSelectEntry sScenes[] = {
     { "114: Grotto 13", Select_LoadGame, 0x05FC },
     // "115: Hyrule Cutscenes" (Cutscene Map)
     { "115: Cutscene Map", Select_LoadGame, 0x00A0 },
+#if defined(ROM_DEBUG)
     // "116: Special Room (Treasure Chest Warp)" (Ganondorf Test Room)
     { "116: Ganondorf Test Room", Select_LoadGame, 0x0520 },
     // "117: Sasaki Test" (Sasa Test)
@@ -315,6 +316,7 @@ static SceneSelectEntry sScenes[] = {
     { "124: Depth Test", Select_LoadGame, 0x00B6 },
     // "125: Hyrule Garden Game 2" (Early Hyrule Garden Game)
     { "125: Early Hyrule Garden Game", Select_LoadGame, 0x0076 },
+#endif
     // "title" (Title Screen)
     { "title", (void*)Select_LoadTitle, 0x0000 },
 };

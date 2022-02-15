@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "ultra64/types.h"
+#include "lut.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -95,13 +96,3 @@ typedef struct OverlayRelocationSection {
 
 #define NUM_SEGMENTS        (16)
 extern uintptr_t gSegments[NUM_SEGMENTS];
-
-typedef struct LutEntry {
-    /* 0x00 */ u8* data;
-    /* 0x04 */ size_t size;
-} LutEntry;
-
-typedef LutEntry LutInfo;
-
-size_t lutGetTotalSize(LutEntry *entries, size_t count);
-void lutDma(void* ram0, LutEntry *entries, size_t count, const char* file, s32 line);

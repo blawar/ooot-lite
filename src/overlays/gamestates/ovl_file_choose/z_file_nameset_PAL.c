@@ -875,9 +875,15 @@ void FileChoose_DrawOptionsImpl(GameState* thisx) {
     }
 
     if (gSaveContext.language == LANGUAGE_GER) {
+#if defined(ROM_DEBUG)
         gSPVertex(POLY_OPA_DISP++, D_80811E30, 32, 0);
     } else {
         gSPVertex(POLY_OPA_DISP++, D_80811D30, 32, 0);
+#elif defined(ROM_RETAIL)
+        gSPVertex(POLY_OPA_DISP++, &gOptionsMenuVtx[16], 32, 0);
+    } else {
+        gSPVertex(POLY_OPA_DISP++, &gOptionsMenuVtx[0], 32, 0);
+#endif
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
@@ -895,9 +901,15 @@ void FileChoose_DrawOptionsImpl(GameState* thisx) {
     }
 
     if (gSaveContext.language == LANGUAGE_GER) {
+#if defined(ROM_DEBUG)
         gSPVertex(POLY_OPA_DISP++, D_80812130, 32, 0);
     } else {
         gSPVertex(POLY_OPA_DISP++, D_80811F30, 32, 0);
+#elif defined(ROM_RETAIL)
+        gSPVertex(POLY_OPA_DISP++, &gOptionsMenuVtx[64], 32, 0);
+    } else {
+        gSPVertex(POLY_OPA_DISP++, &gOptionsMenuVtx[24], 32, 0);
+#endif
     }
 
     for (i = 0, vtx = 0; i < 4; i++, vtx += 4) {

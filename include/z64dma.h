@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef Z64_DMA_H
 #define Z64_DMA_H
 
@@ -13,12 +15,5 @@ typedef struct {
     /* 0x18 */ OSMesgQueue* notifyQueue; // Message queue for the notification message
     /* 0x1C */ OSMesg   notifyMsg;       // Completion notification message
 } DmaRequest; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ void* vromStart;
-    /* 0x04 */ void* vromEnd;
-    /* 0x08 */ void* romStart;
-    /* 0x0C */ void* romEnd;
-} DmaEntry;
 
 #endif

@@ -2,7 +2,6 @@
 
 import os
 from pathlib import Path
-#from tqdm import tqdm
 import re
 
 basedir = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__.replace('\\', '/'))), '../'))
@@ -38,13 +37,13 @@ subs = {
 
 for path in Path(os.path.join(basedir, 'assets/')).rglob('*.c'):
 	path = str(path)
-	
+
 	#if 'ovl_Boss_Sst.c' not in path:
 	#	continue
-	
+
 	with open(path, 'r', encoding='UTF8') as f:
 		buffer = f.read()
-		
+
 	for k, v in subs.items():
 		buffer = re.sub(k, v, buffer)
 
@@ -55,7 +54,7 @@ for path in Path(os.path.join(basedir, 'assets/')).rglob('*.c'):
 		size = m[2]
 		body = m[3]
 		offset = 0
-		
+
 		if size == None or size == '':
 			continue
 
@@ -63,10 +62,10 @@ for path in Path(os.path.join(basedir, 'assets/')).rglob('*.c'):
 		for line in body.split('\n'):
 			if 'SEGMENT_ADDRESS' in line:
 				offset += 1
-				
+
 		#print('%s %s => %d' % (symbol, size, offset))
-		
+
 		if offset > 0:
 			buffer = re.sub('%s\s*\[[^]]*\]' % symbol, '%s[%d+%d]' % (symbol, int(size.split('+')[0]), offset), buffer)
-		
+
 	writeFile(path, buffer)

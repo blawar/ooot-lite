@@ -3,6 +3,7 @@
 # message_data_static disassembler/decompiler
 #
 
+from argparse import ArgumentParser
 import re, struct
 from os import path
 
@@ -258,13 +259,6 @@ textbox_ypos = {
     3: "TEXTBOX_POS_MIDDLE",
 }
 
-# message entry tables vrom addresses
-nes_message_entry_table_addr = 0x00BC24C0
-ger_message_entry_table_addr = 0x00BC66E8
-fra_message_entry_table_addr = 0x00BC87F8
-staff_message_entry_table_addr = 0x00BCA908
-staff_message_entry_table_addr_end = 0x00BCAA90
-
 nes_message_entry_table = []
 ger_message_entry_table = []
 fra_message_entry_table = []
@@ -273,7 +267,7 @@ combined_message_entry_table = []
 
 staff_message_entry_table = []
 
-def read_tables():
+def read_tables(args:ArgumentParser):
     global nes_message_entry_table
     global ger_message_entry_table
     global fra_message_entry_table
@@ -282,8 +276,27 @@ def read_tables():
     global staff_message_entry_table
 
     baserom = None
-    with open("baserom.z64","rb") as infile:
+    if args.debug:
+        filename = "baserom.mq.z64"
+    if args.retail:
+        filename = "baserom.eu.z64"
+
+    with open(filename,"rb") as infile:
         baserom = infile.read()
+
+    # message entry tables vrom addresses
+    if args.debug:
+        nes_message_entry_table_addr = 0x00BC24C0
+        ger_message_entry_table_addr = 0x00BC66E8
+        fra_message_entry_table_addr = 0x00BC87F8
+        staff_message_entry_table_addr = 0x00BCA908
+        staff_message_entry_table_addr_end = 0x00BCAA90
+    if args.retail:
+        nes_message_entry_table_addr = 0x00B801DC
+        ger_message_entry_table_addr = 0x00B84404
+        fra_message_entry_table_addr = 0x00B86514
+        staff_message_entry_table_addr = 0x00B88624
+        staff_message_entry_table_addr_end = 0x00B887AC
 
     nes_message_entry_table = as_message_table_entry(baserom[nes_message_entry_table_addr:ger_message_entry_table_addr])
 
@@ -368,9 +381,9 @@ def dump_staff_text():
             messages.append((entry[0], entry[1], entry[2], "///END///"))
     return messages
 
-def extract_all_text(text_out, staff_text_out):
+def extract_all_text(text_out, staff_text_out, args:ArgumentParser):
     if text_out is not None or staff_text_out is not None:
-        read_tables()
+        read_tables(args)
 
     if text_out is not None:
         out = ""

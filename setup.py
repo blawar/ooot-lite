@@ -41,13 +41,13 @@ def clean():
         else:
             os.remove(path)
 
-def build():
+def build(rom_choice:str):
     print("Starting asset extraction and parsing")
     # sys.executable points to python executable
     # subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tqdm'])
-    subprocess.check_call([sys.executable, str('fixbaserom.py')])
-    subprocess.check_call([sys.executable, str('extract_baserom.py')])
-    subprocess.check_call([sys.executable, str('extract_assets.py')])
+    subprocess.check_call([sys.executable, str('fixbaserom.py'), rom_choice])
+    subprocess.check_call([sys.executable, str('extract_baserom.py'), rom_choice])
+    subprocess.check_call([sys.executable, str('extract_assets.py'), rom_choice])
     subprocess.check_call([sys.executable, str('tools/convert_assets.py')])
     Path.mkdir(Path('build/assets/text'), parents=True, exist_ok = True)
     subprocess.check_call([sys.executable, str('tools/msgenc.py'), str('assets/text/charmap.txt'), str('assets/text/message_data.h'), str('build/assets/text/message_data.enc.h')])
@@ -64,15 +64,29 @@ def main():
     parser = argparse.ArgumentParser(description="Setup")
     parser.add_argument("-c", "--clean", help="Cleans environment before asset extraction", action="store_true", default=False)
     parser.add_argument("-co", "--clean-only", help="Cleans environment without asset extraction", action="store_true", default=False)
+    parser.add_argument("-mq", "--debug", help="Uses debug masterquest rom for Assets", action="store_true", default=False)
+    parser.add_argument("-eu", "--retail", help="Uses retail pal 1.0 rom for Assets", action="store_true", default=False)
     args = parser.parse_args()
+
+    if not args.debug and not args.retail:
+        args.debug = True
+
+    if args.debug and args.retail:
+        print("Error: Both retail and debug flags set, only 1 allowed")
+        sys.exit(1)
+
+    if args.debug:
+        rom_choice = "-mq"
+    if args.retail:
+        rom_choice = "-eu"
 
     if args.clean == True:
         clean()
-        build()
+        build(rom_choice)
     elif args.clean_only == True:
         clean()
     else:
-        build()
+        build(rom_choice)
 
 if __name__ == "__main__":
     main()
