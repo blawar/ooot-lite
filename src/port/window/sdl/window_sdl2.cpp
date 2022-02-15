@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define GL_GLEXT_PROTOTYPES 1
 
 #if defined(__MINGW32__) || defined(USE_SDL2_INCLUDE_PATH_SHORT)
@@ -255,9 +259,16 @@ namespace platform::window
 			SDL_RaiseWindow(wnd);
 		}
 
+		int get_refresh_rate(SDL_DisplayMode *mode){
+			SDL_GetDesktopDisplayMode(SDL_GetWindowDisplayIndex(wnd), mode);
+			if( mode->refresh_rate == 0 ){
+				mode->refresh_rate = 60;
+				return 60;
+			}
+		}
+
 		void set_fullscreen(bool on, bool call_callback)
 		{
-#ifndef __SWITCH__
 			if (fullscreen_state == on)
 			{
 				return;
@@ -265,7 +276,7 @@ namespace platform::window
 			fullscreen_state = on;
 
 			SDL_DisplayMode mode;
-			SDL_GetDesktopDisplayMode(SDL_GetWindowDisplayIndex(wnd), &mode);
+			get_refresh_rate(&mode);
 
 			m_refreshInterval = std::chrono::microseconds(1000 * 1000 / mode.refresh_rate);
 
@@ -288,26 +299,13 @@ namespace platform::window
 			{
 				on_fullscreen_changed_callback(on);
 			}
-#endif
 		}
 
 		void set_vsync()
 		{
-			if (SDL_GetNumVideoDisplays() > 0)
-			{
-				SDL_DisplayMode mode;
-
-				if (SDL_GetDesktopDisplayMode(SDL_GetWindowDisplayIndex(wnd), &mode) == 0) // assume highest resolution display is the one in use
-				{
-					// m_refreshInterval = std::chrono::microseconds(1000 * 1000 / mode.refresh_rate);
-					m_refreshInterval = std::chrono::microseconds(1000 * 1000 / 60);
-					return;
-				}
-			}
-
-			m_refreshInterval = std::chrono::microseconds(1000 * 1000 / 60); // assume 60 fps
-
-			return;
+			SDL_DisplayMode mode;
+			get_refresh_rate(&mode);
+			m_refreshInterval = std::chrono::microseconds(1000 * 1000 / mode.refresh_rate);
 		}
 
 		void set_fullscreen_changed_callback(void (*on_fullscreen_changed)(bool is_now_fullscreen))

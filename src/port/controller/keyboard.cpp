@@ -22,6 +22,8 @@
 
 extern "C"
 {
+	#include "regs.h"
+	#include "z64game.h"
 	void set_fullscreen(bool value);
 }
 
@@ -63,6 +65,7 @@ namespace sm64::hid
 			case D_CBUTTONS: return "D_CBUTTONS";
 			case R_CBUTTONS: return "R_CBUTTONS";
 			case R_TRIG: return "R_TRIG";
+			case L_TRIG: return "L_TRIG";
 			case START_BUTTON: return "START_BUTTON";
 			case WALK_BUTTON: return "WALK_BUTTON";
 			}
@@ -83,6 +86,7 @@ namespace sm64::hid
 			if (input == "D_CBUTTONS") return D_CBUTTONS;
 			if (input == "R_CBUTTONS") return R_CBUTTONS;
 			if (input == "R_TRIG") return R_TRIG;
+			if (input == "L_TRIG") return L_TRIG;
 			if (input == "START_BUTTON") return START_BUTTON;
 			if (input == "WALK_BUTTON") return WALK_BUTTON;
 
@@ -114,6 +118,7 @@ namespace sm64::hid
 				m_keyBindings[SDL_SCANCODE_DOWN] = D_CBUTTONS;
 				m_keyBindings[SDL_SCANCODE_RIGHT] = R_CBUTTONS;
 				m_keyBindings[SDL_SCANCODE_V] = R_TRIG;
+				m_keyBindings[SDL_SCANCODE_X] = L_TRIG;
 				m_keyBindings[SDL_SCANCODE_RSHIFT] = R_TRIG;
 				m_keyBindings[SDL_SCANCODE_RETURN] = START_BUTTON;
 
@@ -290,6 +295,16 @@ namespace sm64::hid
 				bool walk = false;
 				int count = 0;
 				auto state = SDL_GetKeyboardState(&count);
+
+				if (state[SDL_SCANCODE_F8] && (m_lastKeyState[SDL_SCANCODE_F8] ^ state[SDL_SCANCODE_F8]))
+				{
+					KREG(0) = -100;
+				}
+
+				if (state[SDL_SCANCODE_F9] && (m_lastKeyState[SDL_SCANCODE_F9] ^ state[SDL_SCANCODE_F9]))
+				{
+					m_state.button |= U_JPAD | D_JPAD | L_JPAD | R_JPAD;
+				}
 
 				if (state[SDL_SCANCODE_F10] && (m_lastKeyState[SDL_SCANCODE_F10] ^ state[SDL_SCANCODE_F10]))
 				{
