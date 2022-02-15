@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2022 Hayden Kowalchuk 819028+mrneo240@users.noreply.github.com */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Note: The above applies to parts of this file modified by Hayden Kowalchuk only and not existing code */
+
 #define INTERNAL_SRC_OVERLAYS_MISC_OVL_KALEIDO_SCOPE_Z_KALEIDO_SCOPE_PAL_C
 #include "actor_common.h"
 #include "z_kaleido_scope.h"
@@ -907,6 +911,17 @@ void KaleidoScope_DrawPages(GlobalContext* globalCtx, GraphicsContext* gfxCtx) {
                 POLY_OPA_DISP =
                     KaleidoScope_QuadTextureIA8(POLY_OPA_DISP, sPromptChoiceTexs[gSaveContext.language][1], 48, 16, 16);
             }
+        } else if ((pauseCtx->state == 7) && (pauseCtx->unk_1EC == 5)) {
+            POLY_OPA_DISP =
+                KaleidoScope_QuadTextureIA8(POLY_OPA_DISP, sSaveConfirmationTexs[gSaveContext.language], 152, 16, 0);
+
+            gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0,
+                              0, PRIMITIVE, 0);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 100, 255, VREG(61));
+
+            gDPPipeSync(POLY_OPA_DISP++);
+            gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
         }
 
         gDPPipeSync(POLY_OPA_DISP++);
@@ -2312,7 +2327,7 @@ void KaleidoScope_Draw(GlobalContext* globalCtx) {
 
         func_800949A8(globalCtx->state.gfxCtx);
         KaleidoScope_InitVertices(globalCtx, globalCtx->state.gfxCtx);
-        //KaleidoScope_DrawPages(globalCtx, globalCtx->state.gfxCtx);
+        KaleidoScope_DrawPages(globalCtx, globalCtx->state.gfxCtx);
 
         func_800949A8(globalCtx->state.gfxCtx);
         gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
@@ -2321,7 +2336,7 @@ void KaleidoScope_Draw(GlobalContext* globalCtx) {
         KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
         if (!((pauseCtx->state >= 8) && (pauseCtx->state <= 0x11))) {
-            //KaleidoScope_DrawInfoPanel(globalCtx);
+            KaleidoScope_DrawInfoPanel(globalCtx);
         }
     }
 
