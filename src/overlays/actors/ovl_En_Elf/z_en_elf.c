@@ -1538,9 +1538,9 @@ void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             (u8)this->innerColor.b, (u8)(this->innerColor.a * alphaScale));
 
             if (this->fairyFlags & 4) {
-                gDPSetRenderMode(dListHead++, G_RM_PASS, G_RM_CLD_SURF2);
+                gDPSetRenderMode(dListHead++, G_RM_PASS, G_RM_ZB_XLU_SURF2);
             } else {
-                gDPSetRenderMode(dListHead++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
+                gDPSetRenderMode(dListHead++, G_RM_PASS, G_RM_ZB_XLU_SURF2);
             }
 
             gSPEndDisplayList(dListHead++);
