@@ -720,6 +720,14 @@ void Select_Main(GameState* thisx) {
 
     Select_UpdateMenu(this);
     Select_Draw(this);
+/* #define FORCE_WARP */
+#ifdef FORCE_WARP
+    this->currentScene = 72 - (1);
+     SceneSelectEntry* selectedScene = &this->scenes[this->currentScene];
+    if (selectedScene->loadFunc != NULL) {
+        selectedScene->loadFunc(this, selectedScene->entranceIndex);
+    }
+#endif
 }
 
 void Select_Destroy(GameState* thisx) {
