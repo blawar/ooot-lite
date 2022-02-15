@@ -491,21 +491,12 @@ void func_800C2FE4(PreRender* this) {
 
     for (y = 0; y < this->height; y++) {
         for (x = 0; x < this->width; x++) {
-        #if !defined(NATIVE)
             Color_RGBA16 pxIn;
 
             pxIn.rgba = this->fbufSave[x + y * this->width];
             buffR[x] = pxIn.r;
             buffG[x] = pxIn.g;
             buffB[x] = pxIn.b;
-        #else
-            Color_RGBA8_u32 pxIn;
-
-            pxIn.rgba = this->fbufSave[x + y * this->width];
-            buffR[x] = pxIn.r;
-            buffG[x] = pxIn.g;
-            buffB[x] = pxIn.b;
-        #endif
         }
 
         for (x = 1; x < this->width - 1; x++) {
@@ -556,6 +547,8 @@ void func_800C2FE4(PreRender* this) {
     }
 }
 
+static int frames = 0;
+#include <stdio.h>
 void PreRender_Calc(PreRender* this) {
     s32 x;
     s32 y;
@@ -569,11 +562,10 @@ void PreRender_Calc(PreRender* this) {
                 a >>= 5;
                 a++;
                 if (a != 8) {
-                    func_800C2500(this, x, y);
+                    /* func_800C2500(this, x, y); */ // No post process
                 }
             }
         }
-
         if (HREG(80) == 0xF ? HREG(81) : 0) {
             func_800C2FE4(this);
         }

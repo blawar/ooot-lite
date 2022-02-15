@@ -4097,8 +4097,8 @@ _DW({                                   \
         uls, ult, lrs, lrt, pal,                \
         cms, cmt, masks, maskt, shifts, shiftt)         \
 _DW({                                   \
-    gDPSetTextureImage(pkt, fmt, G_IM_SIZ_8b, ((width)>>1), timg);  \
-    gDPSetTile(pkt, fmt, G_IM_SIZ_8b,                   \
+    gDPSetTextureImage(pkt, fmt, G_IM_SIZ_4b, ((width)>>1), timg);  \
+    gDPSetTile(pkt, fmt, G_IM_SIZ_4b,                   \
            (((((lrs)-(uls)+1)>>1)+7)>>3), tmem,         \
            G_TX_LOADTILE, 0 , cmt, maskt, shiftt, cms, masks,   \
            shifts);                     \

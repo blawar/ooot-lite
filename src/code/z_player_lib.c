@@ -949,10 +949,13 @@ s32 func_8008FCC8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 s32 func_80090014(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     Player* this = (Player*)thisx;
+    int dListOffset = 0;
+    /* Replace all dlist offsets with the actual dlist */
 
     if (!func_8008FCC8(globalCtx, limbIndex, dList, pos, rot, thisx)) {
         if (limbIndex == PLAYER_LIMB_L_HAND) {
             Gfx** dLists = this->leftHandDLists;
+            //printf("dlist (1) start %08X -> %08X\n", (uintptr_t)dLists, (uintptr_t)*dLists);
 
             if ((D_80160014 == 4) && (gSaveContext.swordHealth <= 0.0f)) {
                 dLists += 4;
@@ -963,10 +966,12 @@ s32 func_80090014(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 dLists = &D_80125E18[gSaveContext.linkAge];
                 D_80160014 = 1;
             }
+            //printf("dlist (1) end %08X -> %08X\n", (uintptr_t)dLists, (uintptr_t)*dLists);
 
             *dList = dLists[sDListsLodOffset];
         } else if (limbIndex == PLAYER_LIMB_R_HAND) {
             Gfx** dLists = this->rightHandDLists;
+            //printf("dlist (2) start %08X -> %08X\n", (uintptr_t)dLists, (uintptr_t)*dLists);
 
             if (D_80160018 == 10) {
                 dLists += this->currentShield * 4;
@@ -974,28 +979,40 @@ s32 func_80090014(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 dLists = &D_80125E58[gSaveContext.linkAge];
                 D_80160018 = 9;
             }
+            #if 0
+            /* Figure out which array we want to truly be in */
+                if( (uintptr_t)dLists >= (uintptr_t)D_80125D28 + (sizeof(Gfx*)*16) ) {
+                    dListOffset = ((uintptr_t)(dLists) - ((uintptr_t)D_80125D28 + (sizeof(Gfx*)*16))) / sizeof(Gfx *);
+                    dLists = D_80125D68;
+                }
+            #endif
+            //printf("dlist (2) end %08X -> %08X\n", (uintptr_t)dLists, (uintptr_t)*dLists);
 
             *dList = dLists[sDListsLodOffset];
         } else if (limbIndex == PLAYER_LIMB_SHEATH) {
             Gfx** dLists = this->sheathDLists;
-            int dListOffset = 0;
+            //printf("dlist (3) start %08X -> %08X\n", (uintptr_t)dLists, (uintptr_t)*dLists);
+
 
             if ((this->sheathType == 18) || (this->sheathType == 19)) {
                 dLists += this->currentShield * 4;
                 if (!LINK_IS_ADULT && (this->currentShield < PLAYER_SHIELD_HYLIAN) &&
                     (gSaveContext.equips.buttonItems[0] != ITEM_SWORD_KOKIRI)) {
                     dLists += 16;
+                    #if 0
                     /* Figure out which array we want to truly be in */
                     if( (uintptr_t)dLists >= (uintptr_t)D_80125D28 + (sizeof(Gfx*)*16) ) {
                         dListOffset = ((uintptr_t)(dLists) - ((uintptr_t)D_80125D28 + (sizeof(Gfx*)*16))) / sizeof(Gfx *);
                         dLists = D_80125D68;
                     }
+                    #endif
+            //printf("dlist (3) end %08X -> %08X\n", (uintptr_t)dLists, (uintptr_t)*dLists);
                 }
             } else if (!LINK_IS_ADULT && ((this->sheathType == 16) || (this->sheathType == 17)) &&
                        (gSaveContext.equips.buttonItems[0] != ITEM_SWORD_KOKIRI)) {
                 dLists = D_80125D68;
             }
-            dList = dLists[sDListsLodOffset+dListOffset];
+            //dList = dLists[sDListsLodOffset+dListOffset];
             *dList = dLists[sDListsLodOffset];
         } else if (limbIndex == PLAYER_LIMB_WAIST) {
             *dList = this->waistDLists[sDListsLodOffset];

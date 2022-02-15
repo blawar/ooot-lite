@@ -11,7 +11,7 @@ typedef struct Color_RGBA8 {
 // only use when necessary for alignment purposes
 typedef union {
     struct {
-        u8 r, g, b, a;
+        u8 a, b, g, r;
     };
     u32 rgba;
 } Color_RGBA8_u32;

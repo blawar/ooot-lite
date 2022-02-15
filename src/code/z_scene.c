@@ -465,8 +465,13 @@ bool cmd_alternate_headers(GlobalContext* globalCtx, const SceneCmd* cmd) {
 
     if (gSaveContext.sceneSetupIndex != 0) {
         altHeader = ((SceneCmd**)SEGMENTED_TO_VIRTUAL(cmd->altHeaders.segment))[gSaveContext.sceneSetupIndex - 1];
-
-        if (1) {}
+        uintptr_t altPtr = (uintptr_t)altHeader;
+        size_t ptrMaxDistance = 1024*512; /* 512KB */
+        size_t curPtrDistance = abs((intptr_t)altPtr - (intptr_t)cmd);
+        if (curPtrDistance > ptrMaxDistance) {
+            printf("ERROR!: alt header corrupted %p , Crash prevented!\n");
+            altHeader = NULL;
+        }
 
         if (altHeader != NULL) {
             Scene_ExecuteCommands(globalCtx, SEGMENTED_TO_VIRTUAL(altHeader));

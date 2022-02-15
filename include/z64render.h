@@ -53,13 +53,8 @@ typedef struct PreRender {
     /* 0x04 */ s32 height;
     /* 0x08 */ s32 widthSave;
     /* 0x0C */ s32 heightSave;
-#if !defined(NATIVE)
     /* 0x10 */ u16* fbuf;
     /* 0x14 */ u16* fbufSave;
-#else
-    /* 0x10 */ u32* fbuf;
-    /* 0x14 */ u32* fbufSave;
-#endif
     /* 0x18 */ u8* cvgSave;
     /* 0x1C */ u16* zbuf;
     /* 0x20 */ u16* zbufSave;
